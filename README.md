@@ -20,5 +20,5 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter (mountet under th
 
 ![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-31.jpg)
 
-![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-32.jpg)
+![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-35.jpg)
 
