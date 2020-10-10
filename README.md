@@ -1,6 +1,6 @@
 # Abraxas_TP
 
-Basic is the Pojekt NMEA2000-TempPressure from @HOMBERGER with ESP32.
+Basic is the Pojekt NMEA2000-TempPressure from @HOMBERGER and AndrasSzep / NMEA0183-to-NMEA2000 with ESP32.
 
 This repository shows how to measure temperature and barometric pressure with a BMP280 sensor and send it to NMEA2000 network.
 Additional work a Gateway with inputs NMEA0183 TCP-Stream and Output to NMEA2000.
