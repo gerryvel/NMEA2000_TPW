@@ -16,7 +16,7 @@ The ESP32 in this project is an ESP32 NODE MCU from JoyIT. Pin layout for other 
 
 For the ESP32 CAN bus, I used the "Waveshare SN65HVD230 Can Board" as transceiver. It works well with the ESP32. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 
-The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter (mountet under the ESP). 12V DC comes from the N2k Bus Connector.
+The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter (mounted under the ESP). 12V DC comes from the N2k Bus Connector.
 
 ![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-31.jpg)
 
