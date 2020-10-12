@@ -16,7 +16,7 @@
 #define CL_SSID      "NoWa"
 #define CL_PASSWORD  "12345678"
 
-//Confuration Sensors
+//Configuration Sensors
 #define BMP_STA 21
 #define BMP_SCL 22
 float bmp280_temperature = 0;
