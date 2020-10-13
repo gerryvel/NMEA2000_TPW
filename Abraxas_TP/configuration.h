@@ -13,10 +13,11 @@
 #define HostName     "Abraxas_TP"
 
 //Configuration Client
-#define CL_SSID      "NoWa"
-#define CL_PASSWORD  "12345678"
+#define CL_SSID      "NoWa"					//"ABRAXAS"
+#define CL_PASSWORD  "12345678"				//"schmilka200"
+bool Connect_CL = 0;
 
-//Configuration Sensors
+//Confuration Sensors
 #define BMP_STA 21
 #define BMP_SCL 22
 float bmp280_temperature = 0;
@@ -31,6 +32,9 @@ double NMEA0183_WindAngle = 0;
 
 
 //Configuration NMEA0183
-#define SERVER_HOST_NAME "192.168.4.1"
-#define TCP_PORT 6666
+#define SERVER_HOST_NAME "192.168.4.1"		//"192.168.76.1"
+#define TCP_PORT 6666						//10110
 #define DNS_PORT 53
+
+//Configuration LED
+const int LEDBU = 2;

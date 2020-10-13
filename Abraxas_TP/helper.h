@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <time.h>
 #include "configuration.h"
@@ -6,16 +5,15 @@
 
 void ShowTime()
 {
-    time_t now = time(NULL) ;
-    struct tm tm_now ;
-    localtime_r(&now, &tm_now) ;
-    char buff[100] ;
-    strftime(buff, sizeof(buff), "%d-%m-%Y %H:%M:%S", &tm_now) ;
-    printf("Zeit: %s\n", buff) ;
+	time_t now = time(NULL);
+	struct tm tm_now;
+	localtime_r(&now, &tm_now);
+	char buff[100];
+	strftime(buff, sizeof(buff), "%d-%m-%Y %H:%M:%S", &tm_now);
+	printf("Zeit: %s\n", buff);
 }
 
 #define WEB_TITEL "ABRAXAS Wetterdaten"
-
 
 String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SSID, float temperature, float pressure, float altitude, String msg1, double WDirection, double WSpeed, String strBoardInfo)
 {
@@ -58,7 +56,7 @@ String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SS
   ptr += C_SSID;
   ptr += "</div>";
   ptr += "<div>";
-  ptr += "<br><b>NMEA0183 empfängt:</b><br>";
+  ptr += "<br><b>NMEA0183 empfï¿½ngt:</b><br>";
   ptr += "<br>Windrichtung: ";
   ptr += WDirection;
   ptr += "<br>Windgeschwindigkeit: ";
@@ -76,4 +74,3 @@ String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SS
   ptr +="</html>\n";
   return ptr;
 }
-

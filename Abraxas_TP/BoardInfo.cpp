@@ -114,4 +114,3 @@ void BoardInfo::ShowChipTemperature()
     Serial.printf("Temperatur Board: %i Fahrenheit\n", temp_farenheit);
     Serial.printf("Temperatur Board: %.1f °C\n", temp_celsius);
 }
-
