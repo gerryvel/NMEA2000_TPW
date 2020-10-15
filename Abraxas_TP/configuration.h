@@ -8,9 +8,9 @@
 #define PAGE_REFRESH 10 
 
 //Configuration AP 
-#define AP_SSID      "ABRAXAS_TP"
+#define AP_SSID      "ABRAXAS_TPW"
 #define AP_PASSWORD  "12345678"
-#define HostName     "Abraxas_TP"
+#define HostName     "Abraxas_TPW"
 
 //Configuration Client
 #define CL_SSID      "NoWa"					//"ABRAXAS"
@@ -25,15 +25,16 @@ float bmp280_pressure = 0;
 float bmp280_altitude = 0;
 
 //Definiton NMEA0183 MWV
-double NMEA0183_WindDirectionT = 0;
-double NMEA0183_WindDirectionM = 0;
-double NMEA0183_WindSpeedM = 0;
-double NMEA0183_WindAngle = 0;
-
+double MWV_WindDirectionT = 0;
+double MWV_WindSpeedM = 0;
+double VWR_WindDirectionM = 0;
+double VWR_WindAngle = 0;
+double VWR_WindSpeedkn = 0;
+double VWR_WindSpeedms = 0;
 
 //Configuration NMEA0183
-#define SERVER_HOST_NAME "192.168.4.1"		//"192.168.76.1"
-#define TCP_PORT 6666						//10110
+#define SERVER_HOST_NAME "192.168.4.1"		//"192.168.76.34"
+#define TCP_PORT 6666						//6666
 #define DNS_PORT 53
 
 //Configuration LED

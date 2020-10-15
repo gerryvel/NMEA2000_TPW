@@ -1,5 +1,3 @@
-
-
 /*
   This code is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -13,18 +11,17 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-  NMEA2000 Temperature and Barometric Pressure with BMP280
-  Reads messages from NMEA0183 and forwards them to the N2k bus
- The messages, which will be handled has been defined on NMEA0183Handlers.cpp
- on NMEA0183Handlers variable initialization. So this does not automatically
- handle all NMEA0183 messages. If there is no handler for some message you need,
- you have to write handler for it and add it to the NMEA0183Handlers variable
- initialization.
+  NMEA2000 Temperature and Barometric Pressure with BMP280.
+  Reads messages from NMEA0183 and forwards them to the N2k bus.
+  The messages, which will be handled has been defined on NMEA0183Handlers.cpp
+  on NMEA0183Handlers variable initialization. Use the MWD, MTW, DPT, MWV support
+  NMEA0183Handler from AndrasSzep. So this does not automatically
+  handle all NMEA0183 messages. If there is no handler for some message you need,
+  you have to write handler for it and add it to the NMEA0183Handlers variable
+  initialization.
 
- // Version 0.9, 13.10.2020, gerryvel Gerry Sebb
+  // Version 0.9, 13.10.2020, gerryvel Gerry Sebb
 */
-
-#include "configuration.h"
 
 #include <Arduino.h>
 #include <ArduinoOTA.h>
@@ -32,32 +29,35 @@
 #include <stdio.h>
 #include <iostream>
 #include "BoardInfo.h"
+#include "configuration.h"
+#include "helper.h"
 #include <Adafruit_BMP280.h>
 #include <esp.h>
 #include <Preferences.h>
 #include <WiFi.h>
-#include <WiFiMulti.h>
 #include <ESPAsyncWebServer.h>
+
 // N2k
 #include <N2kMsg.h>
 #include <NMEA2000.h>
 #include <N2kMessages.h>
+
 // NMEA0183
 #include <NMEA0183.h>
 #include <NMEA0183Msg.h>
 #include <NMEA0183Messages.h>
 #include <NMEA0183Handlers.h>
-#include <NMEA0183Msg.h>
+
 // Boat Date NMEA0183
 #include <BoatData.h>
+
 // Can Bus
 #include <NMEA2000_CAN.h>  // This will automatically choose right CAN library and create suitable NMEA2000 object
-
 
 // BMP 280
 Adafruit_BMP280 bmp280;
 
-// Set IP for WIFI-AP
+// Variables for WIFI-AP
 IPAddress IP = IPAddress(192, 168, 15, 1);
 IPAddress Gateway = IPAddress(192, 168, 15, 1);
 IPAddress NMask = IPAddress(255, 255, 255, 0);
@@ -103,10 +103,10 @@ static void replyToServer(void* arg)
 /************************ event callbacks ***************************/
 static void handleData(void* arg, AsyncClient* client, void *data, size_t len)
 {
-	//  Serial.printf("\n handleData: data received from IP %s \n", client->remoteIP().toString().c_str());
+	 // Serial.printf("\n handleData: data received from IP %s \n", client->remoteIP().toString().c_str());
 	 // Serial.printf("\n handleData: data received from Port %d \n", client->remotePort());
 	Serial.write((uint8_t*)data, len);
-	// Serial.printf("handleData: Len %i:\n", len);  
+	 // Serial.printf("handleData: Len %i:\n", len);  
 	Serial.write((uint8_t*)data, len);
 
 	uint8_t *pointer_to_int;
@@ -133,26 +133,12 @@ static void handleData(void* arg, AsyncClient* client, void *data, size_t len)
 			}
 		}
 	}
-
-
 	ets_timer_arm(&intervalTimer, 2000, true); // schedule for reply to server at next 2s
 }
 
 void onConnect(void* arg, AsyncClient* client)
 {
 	Serial.printf("\nNMEA0183 listener Status %i \n\n", client->state());
-
-	/* Serial.printf("\nNMEA0183 listener has been connected on Remote port %i \n", client->remotePort());// SERVER_HOST_NAME, TCP_PORT);
-	 IPAddress ipremote = client->remoteIP();
-	 Serial.print("NMEA0183 listener has been connected to Remote IP address: ");
-	 Serial.println(ipremote);
-
-	 Serial.printf("\nNMEA0183 listener has been connected on Local port %i \n", client->localPort());// SERVER_HOST_NAME, TCP_PORT);
-	 IPAddress ip = client->localIP();
-	 Serial.print("NMEA0183 listener has been connected to local IP address: ");
-	 Serial.println(ip);
-	*/
-	// replyToServer(client);
 }
 
 // formatted Output NMEA2000-Message
@@ -193,7 +179,7 @@ void SetNextUpdate(unsigned long & NextUpdate, unsigned long Period)
 	while (NextUpdate < millis()) NextUpdate += Period;
 }
 
-void SendN2kTempPressure(void)
+void SendN2kTempPressureWind(void)
 {
 	static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, TempSendOffset);
 	tN2kMsg N2kMsg;
@@ -204,17 +190,24 @@ void SendN2kTempPressure(void)
 
 		bmp280_temperature = bmp280.readTemperature();
 		bmp280_pressure = bmp280.readPressure();
-		NMEA0183_WindDirectionT = BoatData.WindDirectionT;
-		NMEA0183_WindDirectionM = BoatData.WindDirectionM;
-		NMEA0183_WindSpeedM = BoatData.WindSpeedM;
-		NMEA0183_WindAngle = BoatData.WindAngle;
+		MWV_WindDirectionT = BoatData.WindDirectionT;  // Wind Relativ
+		MWV_WindSpeedM = BoatData.WindSpeedM;
+		VWR_WindDirectionM = BoatData.WindDirectionM;
+		VWR_WindAngle = BoatData.WindAngle;
+		VWR_WindSpeedkn = BoatData.WindSpeedK;
+		VWR_WindSpeedkn = BoatData.WindSpeedK;
 
 		Serial.printf("Temperatur: %3.1f °C - Luftdruck: %6.0f Pa\n", bmp280_temperature, bmp280_pressure);
-		Serial.printf("WindT: %d ° - WindM: %d - SpeedM: %d - Angle: %d Pa\n", NMEA0183_WindDirectionT, NMEA0183_WindDirectionM, NMEA0183_WindSpeedM, NMEA0183_WindAngle);
-
+		Serial.printf("WindT: %d ° - WindM: %d - SpeedM: %d - Angle: %d Pa\n", MWV_WindDirectionT, VWR_WindDirectionM, MWV_WindSpeedM, VWR_WindAngle);
 
 		SetN2kPGN130310(N2kMsg, 0, N2kDoubleNA, CToKelvin(bmp280_temperature), bmp280_pressure);
 		NMEA2000.SendMsg(N2kMsg);
+		SetN2kPGN130306(N2kMsg, 0, MWV_WindSpeedM, MWV_WindDirectionT,tN2kWindReference::N2kWind_Apparent);
+		NMEA2000.SendMsg(N2kMsg);
+		SetN2kPGN130306(N2kMsg, 0, VWR_WindSpeedms, VWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
+		NMEA2000.SendMsg(N2kMsg);
+
+		
 
 		Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
 
@@ -240,23 +233,18 @@ void SendN2kTempPressure(void)
 	}
 }
 
-void LEDblink() {
-	if (Connect_CL == 1) {
+void LEDblink() {	
 		digitalWrite(LEDBU, HIGH);   // turn the LED on (HIGH is the voltage level)
 		delay(500);                       // wait
 		digitalWrite(LEDBU, LOW);    // turn the LED off by making the voltage LOW
 		delay(500);                       // wait
 	}
-	if (Connect_CL == 0) {
-		digitalWrite(LEDBU, LOW);    // turn the LED off by making the voltage LOW
-	}
-}
 
 void LEDflash() {
 		digitalWrite(LEDBU, HIGH);   // turn the LED on (HIGH is the voltage level)
-		delay(100);                       // wait
+		delay(50);                       // wait
 		digitalWrite(LEDBU, LOW);    // turn the LED off by making the voltage LOW
-		delay(100);                       // wait
+		delay(50);                       // wait
 }
 
 void WiFiDiag(void) {
@@ -279,7 +267,7 @@ void WiFiDiag(void) {
 	Serial.println();
 }
 
-WiFiMulti wifiMulti;
+// WiFiMulti wifiMulti;
 AsyncClient* client;
 
 //===============================================SETUP==============================
@@ -287,13 +275,16 @@ void setup()
 {
 	Serial.begin(115200);
 
+	strBoardInfo = boardInfo.ShowChipIDtoString();
+
 	// LED init
 	pinMode(LEDBU, OUTPUT);
 	delay(20);
 
 	//WiFiServer AP starten
+	WiFi.mode(WIFI_AP_STA);
 	WiFi.softAP(AP_SSID, AP_PASSWORD);
-	// delay(1000);
+	delay(1000);
 	if (WiFi.softAPConfig(IP, Gateway, NMask))
 		Serial.println("IP config success");
 	else
@@ -308,8 +299,26 @@ void setup()
 
 	int count = 0;
 
-	// Anmelden mit WiFiMulti als Client an AP
-	wifiMulti.addAP(CL_SSID, CL_PASSWORD);
+	// Anmelden mit WiFi als Client an AP
+//	WiFi.mode(WIFI_STA);
+	WiFi.begin(CL_SSID, CL_PASSWORD);
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		delay(500);
+		Serial.print(".");
+		LEDflash();
+		count++;
+		if (count = 10) break;
+	}
+	if (WiFi.isConnected()) {
+	Connect_CL = 1;
+	Serial.println("Client Connection");
+}
+	else
+		Serial.println("Client Connection failed");
+
+
+/*	wifiMulti.addAP(CL_SSID, CL_PASSWORD);
 	while (wifiMulti.run() != WL_CONNECTED)
 	{
 		delay(500);
@@ -324,13 +333,11 @@ void setup()
 }
 	else
 		Serial.println("MultiClient Connection failed");
-
+*/
 	// Autoconnect
 	WiFi.setAutoConnect(true);
 	WiFi.persistent(true);
 	delay(500);
-
-	WiFiDiag();
 
 	client = new AsyncClient;
 	//client->onError(&handleError, NULL);
@@ -367,7 +374,7 @@ void setup()
 		else if (error == OTA_END_ERROR) Serial.println("End Failed");
 	});
 
-	ArduinoOTA.setHostname("Abraxas_TP");
+	ArduinoOTA.setHostname("Abraxas_TPW");
 	ArduinoOTA.begin();
 
 	// Setup NMEA2000 system
@@ -422,30 +429,26 @@ void setup()
 
 
 void loop() 
-
 {		// Reconnect Wifi
 		if (WiFi.status() == WL_CONNECTED)
 		{
 			if (Connect_CL == 0) {
 				Connect_CL = 1;
-				Serial.println("Wifi connencted!\n");
+				Serial.println("Wifi reconnencted!\n");
 			}
 			// and listen from NMEA0183 Stream
 			client->onData(&handleData, client);
 			client->onConnect(&onConnect, client);
 			client->connect(SERVER_HOST_NAME, TCP_PORT);
-
-			//SendSystemTime();
-
 			client->close();
 			delay(500);
 		}
 		else
 		{
-			Serial.println("Wifi connect failed!\n");
-			Connect_CL = 0;
-			// wifi down, reconnect here
-			WiFi.begin();
+			Serial.println("Wifi reconnect failed!\n");
+			Connect_CL = 0;			
+			WiFi.begin(CL_SSID, CL_PASSWORD);    // wifi down, reconnect here
+			delay(500);
 			int WLcount = 0;
 			int UpCount = 0;
 			while (WiFi.status() != WL_CONNECTED && WLcount < 100)
@@ -461,14 +464,18 @@ void loop()
 				++UpCount;
 				++WLcount;
 			}
+			WiFiDiag();
 		}
-	
-	LEDblink();
+
+		if (Connect_CL == 1) {
+			LEDblink();
+//			WiFiDiag();
+		}
+
+	ArduinoOTA.handle();
 
 	{
-		ArduinoOTA.handle();
-
-		SendN2kTempPressure();
+		SendN2kTempPressureWind();
 
 		NMEA2000.ParseMessages();
 		int SourceAddress = NMEA2000.GetN2kSource();
@@ -478,5 +485,50 @@ void loop()
 			preferences.end();
 			Serial.printf("Address Change: New Address=%d\n", SourceAddress);
 		}
+	}
+
+	WiFiClient client = server.available();   // Listen for incoming clients
+
+	if (client)
+	{                                                // If a new client connects,
+		Serial.println("New WebClient connected.");   // print a message out in the serial port
+		String currentLine = "";                     // make a String to hold incoming data from the client
+		while (client.connected())
+		{ // loop while the client's connected
+			if (client.available())
+			{
+				// IP Adresse Client
+				SELF_IP = client.remoteIP();
+				// BMP Altitude
+				bmp280_altitude = bmp280.readAltitude();
+
+				// if there's bytes to read from the client,
+				char c = client.read();             // read a byte, then
+				Serial.write(c);                    // print it out the serial monitor
+				header += c;
+				if (c == '\n') {                    // if the byte is a newline character
+				  // if the current line is blank, you got two newline characters in a row.
+				  // that's the end of the client HTTP request, so send a response:
+					if (currentLine.length() == 0)
+					{
+						// HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+						// and a content-type so the client knows what's coming, then a blank line:
+						client.println(SendHTML(AP_IP, SELF_IP, CL_IP, CL_SSID, bmp280_temperature, bmp280_pressure, bmp280_altitude, NMEA_Info, MWV_WindDirectionT, MWV_WindSpeedM, strBoardInfo));						
+						client.println();  // The HTTP response ends with another blank line						
+						break; // Break out of the while loop
+					}
+					else {							// if you got a newline, then clear currentLine
+						currentLine = "";
+					}
+				}
+				else if (c != '\r') {				 // if you got anything else but a carriage return character,
+					currentLine += c;				 // add it to the end of the currentLine
+				}
+			}
+		}		
+		header = "";								// Clear the header variable		
+		client.stop();								// Close the connection
+		Serial.println("WebClient disconnected.");
+		Serial.println("");
 	}
 }

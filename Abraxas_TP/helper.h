@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <time.h>
-#include "configuration.h"
 #include <Arduino.h>
 
 void ShowTime()
@@ -13,7 +12,7 @@ void ShowTime()
 	printf("Zeit: %s\n", buff);
 }
 
-#define WEB_TITEL "ABRAXAS Wetterdaten"
+#define WEB_TITEL "ABRAXAS TPW"
 
 String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SSID, float temperature, float pressure, float altitude, String msg1, double WDirection, double WSpeed, String strBoardInfo)
 {
@@ -56,11 +55,13 @@ String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SS
   ptr += C_SSID;
   ptr += "</div>";
   ptr += "<div>";
-  ptr += "<br><b>NMEA0183 empf�ngt:</b><br>";
+  ptr += "<br><b>NMEA0183 empf&auml;ngt:</b><br>";
   ptr += "<br>Windrichtung: ";
   ptr += WDirection;
+  ptr += " &deg;";
   ptr += "<br>Windgeschwindigkeit: ";
   ptr += WSpeed;
+  ptr += " kn";
   ptr += "</div>";
   ptr += "<div>";
   ptr += "<br><b>NMEA2000 sendet:</b><br>";
