@@ -159,12 +159,6 @@ const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environme
 // Time between CAN Messages sent
 #define SlowDataUpdatePeriod 1000  
 
-// Send time offsets
-#define TempSendOffset 0
-// Time between CAN Messages sent
-#define SlowDataUpdatePeriod 1000  
-
-
 bool IsTimeToUpdate(unsigned long NextUpdate)
 {
 	return (NextUpdate < millis());
@@ -197,8 +191,8 @@ void SendN2kTempPressureWind(void)
 		VWR_WindSpeedkn = BoatData.WindSpeedK;
 		VWR_WindSpeedkn = BoatData.WindSpeedK;
 
-		Serial.printf("Temperatur: %3.1f °C - Luftdruck: %6.0f Pa\n", bmp280_temperature, bmp280_pressure);
-		Serial.printf("WindT: %d ° - WindM: %d - SpeedM: %d - Angle: %d Pa\n", MWV_WindDirectionT, VWR_WindDirectionM, MWV_WindSpeedM, VWR_WindAngle);
+		Serial.printf("Temperatur: %3.1f Â°C - Luftdruck: %6.0f Pa\n", bmp280_temperature, bmp280_pressure);
+		Serial.printf("WindT: %d Â° - WindM: %d - SpeedM: %d - Angle: %d Pa\n", MWV_WindDirectionT, VWR_WindDirectionM, MWV_WindSpeedM, VWR_WindAngle);
 
 		SetN2kPGN130310(N2kMsg, 0, N2kDoubleNA, CToKelvin(bmp280_temperature), bmp280_pressure);
 		NMEA2000.SendMsg(N2kMsg);
@@ -211,7 +205,7 @@ void SendN2kTempPressureWind(void)
 
 		Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
 
-		// Ausgabe für HTML-Seite zusammenstellen
+		// Ausgabe fÃ¼r HTML-Seite zusammenstellen
 		NMEA_Info = "<br>";
 		NMEA_Info += "Data: ";
 		NMEA_Info += (char*)N2kMsg.Data;
