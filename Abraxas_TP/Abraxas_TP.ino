@@ -311,23 +311,6 @@ void setup()
 	else
 		Serial.println("Client Connection failed");
 
-
-/*	wifiMulti.addAP(CL_SSID, CL_PASSWORD);
-	while (wifiMulti.run() != WL_CONNECTED)
-	{
-		delay(500);
-		Serial.print(".");
-		LEDflash();
-		count++;
-		if (count = 10) break;
-	}
-	if (WiFi.isConnected()) {
-	Connect_CL = 1;
-	Serial.println("MultiClient Connection");
-}
-	else
-		Serial.println("MultiClient Connection failed");
-*/
 	// Autoconnect
 	WiFi.setAutoConnect(true);
 	WiFi.persistent(true);
