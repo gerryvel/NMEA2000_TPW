@@ -292,7 +292,7 @@ void setup()
 	server.begin();
 
 	int count = 0;
-
+	
 	// Anmelden mit WiFi als Client an AP
 //	WiFi.mode(WIFI_STA);
 	WiFi.begin(CL_SSID, CL_PASSWORD);
@@ -307,7 +307,7 @@ void setup()
 	if (WiFi.isConnected()) {
 	Connect_CL = 1;
 	Serial.println("Client Connection");
-}
+	}
 	else
 		Serial.println("Client Connection failed");
 
