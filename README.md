@@ -18,6 +18,8 @@ For the ESP32 CAN bus, I used the "Waveshare SN65HVD230 Can Board" as transceive
 
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter (mounted under the ESP). 12V DC comes from the N2k Bus Connector.
 
+![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/ESP32%20Bootselektronik.pdf)
+
 ![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-31.jpg)
 
 ![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-35.jpg)
