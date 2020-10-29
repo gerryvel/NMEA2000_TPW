@@ -205,7 +205,7 @@ void SendN2kTempPressureWind(void)
 
 //		Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
 
-		// Ausgabe f�r HTML-Seite zusammenstellen
+		// Collect output for Website
 		NMEA_Info = "<br>";
 		NMEA_Info += "Data: ";
 		NMEA_Info += (char*)N2kMsg.Data;
@@ -520,7 +520,7 @@ void loop()
 		Serial.printf("[MAIN] Free heap: %d bytes\n", ESP.getFreeHeap());
 	}
 
-	//Reconnect
+	//Reconnect or restart
 	WLcount = 0;
 	while ((WiFi.status() != WL_CONNECTED) && (WLcount < 10)) {
 		WLcount++;
