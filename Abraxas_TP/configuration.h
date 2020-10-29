@@ -13,8 +13,8 @@
 #define HostName     "Abraxas_TPW"
 
 //Configuration Client
-#define CL_SSID      "NoWa"					//"ABRAXAS"
-#define CL_PASSWORD  "12345678"				//"schmilka200"
+#define CL_SSID      "NoWa"					
+#define CL_PASSWORD  "12345678"			
 bool Connect_CL = 0;
 bool bClientConnected = 0;
 
