@@ -38,8 +38,8 @@ String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SS
   ptr +=temperature;
   ptr +=" &deg;C</p>";
   ptr +="<p>Luftdruck: ";
-  ptr +=pressure;
-  ptr +=" Pa</p>";
+  ptr +=pressure/100;
+  ptr +=" mbar</p>";
   ptr +="<p>H&ouml;he: ";
   ptr +=altitude;
   ptr +=" Meter</p>";

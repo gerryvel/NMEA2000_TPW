@@ -13,9 +13,10 @@
 #define HostName     "Abraxas_TPW"
 
 //Configuration Client
-#define CL_SSID      "NoWa"					
-#define CL_PASSWORD  "12345678"				
+#define CL_SSID      "NoWa"					//"ABRAXAS"
+#define CL_PASSWORD  "12345678"				//"schmilka200"
 bool Connect_CL = 0;
+bool bClientConnected = 0;
 
 //Confuration Sensors
 #define BMP_STA 21
@@ -33,9 +34,6 @@ double VWR_WindSpeedkn = 0;
 double VWR_WindSpeedms = 0;
 
 //Configuration NMEA0183
-#define SERVER_HOST_NAME "192.168.4.1"		
-#define TCP_PORT 6666						
+#define SERVER_HOST_NAME "192.168.4.1"		//IP Windmesser NoWa
+#define TCP_PORT 6666						//Port Windmeser Nowa
 #define DNS_PORT 53
-
-//Configuration LED
-const int LEDBU = 2;
