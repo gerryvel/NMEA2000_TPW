@@ -8,7 +8,7 @@
 #define PAGE_REFRESH 10 
 
 //Configuration AP 
-#define AP_SSID      "ABRAXAS_TPW"
+#define AP_SSID      "NMEA2000_TPW"
 #define AP_PASSWORD  "12345678"
 #define HostName     "NMEA2000_TPW"
 
