@@ -13,8 +13,8 @@
 #define HostName     "NMEA2000_TPW"
 
 //Configuration Client (Network Data Windsensor)
-#define CL_SSID      "NoWa"					//"ABRAXAS"
-#define CL_PASSWORD  "12345678"				//"schmilka200"
+#define CL_SSID      "NoWa"					
+#define CL_PASSWORD  "12345678"				
 bool Connect_CL = 0;
 
 //Confuration Sensors
