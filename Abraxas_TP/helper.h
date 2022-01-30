@@ -12,7 +12,7 @@ void ShowTime()
 	printf("Zeit: %s\n", buff);
 }
 
-#define WEB_TITEL "ABRAXAS TPW"
+#define WEB_TITEL "NMEA2000 TPW"
 
 String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SSID, float temperature, float pressure, float altitude, String msg1, double WDirection, double WSpeed, String strBoardInfo)
 {
@@ -38,8 +38,8 @@ String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SS
   ptr +=temperature;
   ptr +=" &deg;C</p>";
   ptr +="<p>Luftdruck: ";
-  ptr +=pressure/100;
-  ptr +=" mbar</p>";
+  ptr +=pressure;
+  ptr +=" Pa</p>";
   ptr +="<p>H&ouml;he: ";
   ptr +=altitude;
   ptr +=" Meter</p>";

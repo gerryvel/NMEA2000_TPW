@@ -8,6 +8,11 @@
 //Configuration LED
 const int LEDBU = 2;
 
+void LEDinit() {
+	pinMode(LEDBU, OUTPUT);
+	delay(20);
+}
+
 void LEDblinkslow() {
 	digitalWrite(LEDBU, HIGH);   // turn the LED on (HIGH is the voltage level)
 	delay(500);                       // wait
