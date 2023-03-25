@@ -32,3 +32,6 @@ In construction: The new PCB for new Case with
 - Case Wago 789
 
 ![TPW N2k](https://user-images.githubusercontent.com/17195231/201548865-527490c7-9898-4cfb-8c67-161541537aac.jpg)
+
+![grafik](https://user-images.githubusercontent.com/17195231/227721635-994e5d76-131b-49b2-9e4c-9c372bde4454.png)
+
