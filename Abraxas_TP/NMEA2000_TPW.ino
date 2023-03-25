@@ -56,14 +56,6 @@
 // BMP 280
 Adafruit_BMP280 bmp280;
 
-// Variables for WIFI-AP
-IPAddress IP = IPAddress(192, 168, 15, 1);
-IPAddress Gateway = IPAddress(192, 168, 15, 1);
-IPAddress NMask = IPAddress(255, 255, 255, 0);
-IPAddress AP_IP;
-IPAddress CL_IP;
-IPAddress SELF_IP;
-
 // Set web server port number to 80
 WiFiServer server(80);
 
