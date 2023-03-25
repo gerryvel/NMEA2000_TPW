@@ -248,8 +248,8 @@ void setup()
   strBoardInfo = boardInfo.ShowChipIDtoString();
 
   // LED init
-  pinMode(LEDBU, OUTPUT);
-  delay(20);
+  LEDInit();
+  LEDoff();
 
   //WiFiServer AP starten
   WiFi.mode(WIFI_AP_STA);
@@ -276,7 +276,6 @@ void setup()
   {
     delay(500);
     Serial.print(".");
-    LEDflash();
     count++;
     if (count = 10) break;
   }
@@ -286,31 +285,14 @@ void setup()
   }
   else
     Serial.println("Client Connection failed");
+    digitalWrite(LED(Red), HIGH);
 
-
-  /*	wifiMulti.addAP(CL_SSID, CL_PASSWORD);
-  	while (wifiMulti.run() != WL_CONNECTED)
-  	{
-  		delay(500);
-  		Serial.print(".");
-  		LEDflash();
-  		count++;
-  		if (count = 10) break;
-  	}
-  	if (WiFi.isConnected()) {
-  	Connect_CL = 1;
-  	Serial.println("MultiClient Connection");
-    }
-  	else
-  		Serial.println("MultiClient Connection failed");
-  */
   // Autoconnect
   WiFi.setAutoConnect(true);
   WiFi.persistent(true);
   delay(500);
 
   client = new AsyncClient;
-  //client->onError(&handleError, NULL);
   client->onData(&handleData, client);
   client->onConnect(&onConnect, client);
   client->connect(SERVER_HOST_NAME, TCP_PORT);
@@ -409,6 +391,7 @@ void loop()
     client->onConnect(&onConnect, client);
     client->connect(SERVER_HOST_NAME, TCP_PORT);
     client->close();
+    digitalWrite(LED(Green), HIGH);
     delay(500);
   }
   else
@@ -423,7 +406,7 @@ void loop()
     {
       delay(100);
       Serial.printf(".");
-      LEDflash();
+      LEDflash(LED(Red));
       if (UpCount >= 60)  // just keep terminal from scrolling sideways
       {
         UpCount = 0;
@@ -436,8 +419,7 @@ void loop()
   }
 
   if (Connect_CL == 1) {
-    LEDblinkslow();
-    //			WiFiDiag();
+  		WiFiDiag();
   }
 
   ArduinoOTA.handle();
