@@ -24,4 +24,6 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter (mounted under th
 
 ![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-35.jpg)
 
-https://github.com/gerryvel/NMEA2000_TPW/issues/6#issue-1447127838
+The new PCB for new Case:
+
+![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-35.jpg)
