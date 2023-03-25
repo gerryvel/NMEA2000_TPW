@@ -28,7 +28,7 @@ In construction: The new PCB for new Case with
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)
 - Traco-Power TSR 1-2450 for 12V / 5V
 - RGB LED 
-- Waveshare SN65HVD230 Can Board 
+- Waveshare SN65HVD230 Can Board (adapted, cutted without connector)
 - Case Wago 789
 
 ![TPW N2k](https://user-images.githubusercontent.com/17195231/201548865-527490c7-9898-4cfb-8c67-161541537aac.jpg)
