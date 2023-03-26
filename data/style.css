@@ -6,7 +6,10 @@ html {
 }
 
 body {
-    font-family: "Gill Sans Extrabold", Helvetica, sans-serif
+    font-family: "Gill Sans Extrabold", Helvetica, sans-serif;
+    /*max-width: 600px;*/
+    margin: 0px auto;
+    /* padding-bottom: 25px;*/
 }
 
 h1 {
@@ -14,20 +17,24 @@ h1 {
     padding: 2vh;
     margin: 50px auto 30px;
 }
-p{
-  font-size: 1.5rem;
+p {
+    font-size: 1.5rem;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    margin-right: 0;
 }
 .button {
-  display: inline-block;
-  background-color: #008CBA;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  padding: 16px 40px;
-  text-decoration: none;
-  font-size: 30px;
-  margin: 2px;
-  cursor: pointer;
+    display: inline-block;
+    background-color: #2f3e46;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 2px 16px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin: 0px;
+    cursor: pointer;
 }
 .button2 {
   background-color: #f44336;
@@ -39,16 +46,50 @@ a.button {
 a.button:active {
         border: 2px inset #CCCCCC;
     }
-body {
-    margin: 0;
+
+/*Setupeingaben*/
+.label {
+    font-size: 1.2rem;
+    padding: 2px 8px;
+    width: 400px;
+    margin: 6px auto;
+    background-color: #CAD2C5;
+    border: 1px solid #84A98C;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
+
+.CInput {
+    font-size: 1.2rem;
+    padding: 2px 8px;
+    width: 400px;
+    margin: 6px auto;
+    background-color: #CAD2C5;
+    border: 1px solid #84A98C;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input {
+    font-size: 1.1rem;
+    padding: 1px 8px;
+    background-color: #f5f3f4;
+    border: 1px solid #84A98C;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/*Navigaton unten*/ 
 
 ul.bottomnav {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #355;
+    background-color: #354F52;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
     ul.bottomnav li {
@@ -64,11 +105,11 @@ ul.bottomnav {
         }
 
             ul.bottomnav li a:hover:not(.active) {
-                background-color: #003333;
+                background-color: #2F3E46;
             }
 
             ul.bottomnav li a.active {
-                background-color: #008080;
+                background-color: #52796F;
             }
 
         ul.bottomnav li.right {
