@@ -24,7 +24,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter (mounted under th
 
 ![Schematics](https://github.com/gerryvel/Abraxas_TP/blob/master/photo_2020-10-10_19-02-35.jpg)
 
-#In construction: The new PCB for new Case with
+# In construction: The new PCB for new Case with
 
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)
 - Traco-Power TSR 1-2450 for 12V / 5V
