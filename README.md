@@ -26,3 +26,8 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 - RGB LED 
 - Waveshare SN65HVD230 Can Board (adapted, cutted without connector)
 - Case Wago 789
+
+![TPW N2k](https://user-images.githubusercontent.com/17195231/201548865-527490c7-9898-4cfb-8c67-161541537aac.jpg)
+
+![grafik](https://user-images.githubusercontent.com/17195231/227721635-994e5d76-131b-49b2-9e4c-9c372bde4454.png)
+
