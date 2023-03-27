@@ -11,6 +11,7 @@ The project requires the NMEA2000 and the NMEA2000_esp32 libraries from Timo Lap
 Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-dev/AsyncTCP and the changed NMEA0183 äLibrary and BoatData (not the Original @Lappalainen!) @Andras Szep.
 
 For the BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
+For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. Pin layout for other ESP32 devices might differ.
 
