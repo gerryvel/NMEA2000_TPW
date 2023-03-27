@@ -301,6 +301,9 @@ void setup()
   server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/index.html", String(), false, replaceVariable);
 	});
+	server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest* request) {
+		request->send(SPIFFS, "/favicon.ico");
+	});
 	server.on("/system.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/system.html", String(), false, replaceVariable);
 	});
