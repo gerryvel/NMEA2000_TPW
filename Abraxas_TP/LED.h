@@ -47,7 +47,3 @@ void LEDoff() {
   digitalWrite(LED(Red), 0);
 }
 
-
-
-
-
