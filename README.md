@@ -15,7 +15,7 @@ For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB conector.
 
-For the ESP32 CAN bus, i used the "Waveshare SN65HVD230 Can Board" as transceiver. For small place i cut the connector and mount this board upward. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
+For the ESP32 CAN bus, i used the "Waveshare SN65HVD230 Can Board" as transceiver. For small space i cut the connectors and mount this board upside down. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.
 
