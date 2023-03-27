@@ -21,8 +21,8 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)
 - Traco-Power TSR 1-2450 for 12V / 5V
-- RGB LED 
-- Waveshare SN65HVD230 Can Board (adapted, cutted without connector)
+- RGB LED Kingbright L-154A4SURKQBDZGW
+- Waveshare SN65HVD230 Can Board (adapted, cutted the (also without) connector)
 - Case Wago 789
 
 ![TPW N2k](https://user-images.githubusercontent.com/17195231/201548865-527490c7-9898-4cfb-8c67-161541537aac.jpg)
