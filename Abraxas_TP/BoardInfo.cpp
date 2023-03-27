@@ -19,11 +19,10 @@ uint8_t temprature_sens_read();
 BoardInfo::BoardInfo()
 {
     // Konstruktor der Klasse
-
     // ChipID auslesen
     //The chip ID is essentially its MAC address(length: 6 bytes).
     m_chipid = 0;
-    m_chipid=ESP.getEfuseMac(); //The chip ID is essentially its MAC address(length: 6 bytes).
+    m_chipid = ESP.getEfuseMac(); //The chip ID is essentially its MAC address(length: 6 bytes).
     // Chip - Info auslesen
     esp_chip_info(&m_chipinfo);
 }
@@ -114,3 +113,4 @@ void BoardInfo::ShowChipTemperature()
     Serial.printf("Temperatur Board: %i Fahrenheit\n", temp_farenheit);
     Serial.printf("Temperatur Board: %.1f °C\n", temp_celsius);
 }
+
