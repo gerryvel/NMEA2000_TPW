@@ -20,7 +20,7 @@
   you have to write handler for it and add it to the NMEA0183Handlers variable
   initialization.
 
-// Version 1.1, 28.01.2022, gerryvel Gerry Sebb
+// Version 1.2, 28.01.2022, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
