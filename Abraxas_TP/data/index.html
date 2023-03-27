@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Winddaten</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src='gauge.min.js'></script>
+    <meta http-equiv="refresh" content="5">
+</head>
+<body>
+    <p>Temperatur: %sTemp% °C</p>
+    <p>Luftdruck: %sPress% mbar</p>
+    <p>Windgeschwindigkeit: %sWSpeed% m/s</p>
+    <canvas data-type="radial-gauge"
+            data-width="300"
+            data-height="300"
+            data-units="Grad"
+            data-title="Windrichtung"
+            data-min-value="0"
+            data-start-angle="180"
+            data-ticks-angle="360"
+            data-value-box="true"
+            data-max-value="360"
+            data-major-ticks="N,020,040,060,080,100,120,140,160,180,200,220,240,260,280,300,320,340,N"
+            data-minor-ticks="5"
+            data-stroke-ticks="yes"
+            data-highlights='[
+        {"from": 20, "to": 60, "color": "rgba(0, 255, 0, 1)"},
+        {"from": 130, "to": 230, "color": "rgba(140, 180, 60, 1)"},
+        {"from": 300, "to": 340, "color": "rgba(255, 01, 0, 1)"}
+    ]'
+            data-color-plate="#777"
+            data-color-major-ticks="#ddd"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#eee"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-plate="#222"
+            data-border-shadow-width="0"
+            data-borders="yes"
+            data-needle-type="arrow"
+            data-needle-width="3"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-value-text='%sWDirection% °'
+            data-value='%sWGaugeDirection%'></canvas>
+    <ul class="bottomnav">
+        <li><a class="active" href="index.html">Home</a></li>
+        <li><a href="system.html">System</a></li>
+        <li class="right"><a href="ueber.html">About</a></li>
+    </ul>
+</body>
+</html>
