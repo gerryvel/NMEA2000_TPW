@@ -18,9 +18,6 @@ For the ESP32 CAN bus, I used the "Waveshare SN65HVD230 Can Board" as transceive
 
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.
 
-
-# In construction: The new PCB for new Case with
-
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)
 - Traco-Power TSR 1-2450 for 12V / 5V
 - RGB LED 
