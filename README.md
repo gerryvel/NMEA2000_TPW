@@ -1,6 +1,6 @@
-# NMEA2000_TPW
+# NMEA2000_TPW Version 1.3
 
-Basics for this Pojekt is "NMEA2000-TempPressure" from @HOMBERGER and "NMEA0183-to-NMEA2000" with ESP32 @AndrasSzep.
+Basics for this Pojekt is "NMEA2000-TempPressure" from @HOMBERGER and "NMEA0183-to-NMEA2000" with ESP32 @AndrasSzap.
 
 This repository shows how to measure temperature and barometric pressure with a BMP280 sensor and send it to NMEA2000 network.
 Additional work a Gateway with inputs NMEA0183 TCP-Stream and Output to same NMEA2000.
@@ -8,7 +8,7 @@ Additional work a Gateway with inputs NMEA0183 TCP-Stream and Output to same NME
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
 The project requires the NMEA2000 and the NMEA2000_esp32 libraries from Timo Lappalainen: https://github.com/ttlappalainen. Both libraries have to be downloaded and installed.
-Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-dev/AsyncTCP and the changed NMEA0183 Library and BoatData (not the Original @Lappalainen!) @Andras Szep.
+Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-dev/AsyncTCP and the changed NMEA0183 äLibrary and BoatData (not the Original @Lappalainen!) @Andras Szep.
 
 For the BMP280 the Adafruit BMP280 library has to be installed via the library manager.
 
