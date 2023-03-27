@@ -1,5 +1,5 @@
-#ifndef __TASKMACRO__H__
-#define __TASKMACRO__H__
+#ifndef _TASK_H_
+#define _TASK_H_
 
 
 // grundlegene Worte um einen Task Bereich einzugrenzen
