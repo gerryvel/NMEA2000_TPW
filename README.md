@@ -31,3 +31,4 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 ![image](https://user-images.githubusercontent.com/17195231/227989873-d6256e00-5c0f-4283-a65b-ce08e13113d3.jpeg)
 
+![image](https://user-images.githubusercontent.com/17195231/228036198-5dd91f80-0a2a-475a-9819-7a0e74eb7e1d.jpeg)
