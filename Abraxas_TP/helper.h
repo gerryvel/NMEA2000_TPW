@@ -1,9 +1,17 @@
+#ifndef _HELPER_H_
+#define _HELPER_H_
+
+
 #include <stdio.h>
 #include <time.h>
 #include <Arduino.h>
+#include <LITTLEFS.h>
+#include <FS.h>
+#include <Wire.h>
+#include <WiFi.h>
+#include "configuration.h"
 
-void ShowTime()
-{
+void ShowTime(){
 	time_t now = time(NULL);
 	struct tm tm_now;
 	localtime_r(&now, &tm_now);
@@ -14,64 +22,137 @@ void ShowTime()
 
 #define WEB_TITEL "NMEA2000 TPW"
 
-String SendHTML(IPAddress AP_IP, IPAddress SELF_IP, IPAddress CL_IP, String C_SSID, float temperature, float pressure, float altitude, String msg1, double WDirection, double WSpeed, String strBoardInfo)
-{
-  String ptr = "<!DOCTYPE html> <html>\n";
-  ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  ptr +="<meta http-equiv=\"refresh\" content=\"";
-  ptr += PAGE_REFRESH;
-  ptr += "\">\n";
-  ptr +="<title>";
-  ptr += WEB_TITEL; 
-  ptr += "</title>\n";
-  ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: left;}\n";
-  ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;}\n";
-  ptr +="p {font-size: 24px;color: #444444;margin-bottom: 10px;}\n";
-  ptr +="</style>\n";
-  ptr +="</head>\n";
-  ptr +="<body >\n";
-  ptr +="<div id=\"webpage\">\n";
-  ptr +="<h1>";
-  ptr += WEB_TITEL;
-  ptr += "</h1>\n";
-  ptr +="<p>Temperatur: ";
-  ptr +=temperature;
-  ptr +=" &deg;C</p>";
-  ptr +="<p>Luftdruck: ";
-  ptr +=pressure;
-  ptr +=" Pa</p>";
-  ptr +="<p>H&ouml;he: ";
-  ptr +=altitude;
-  ptr +=" Meter</p>";
-  ptr +="</div>\n\n\n";
-  ptr +="<div>";
-  ptr += "<br>AP IP-Adresse: ";
-  ptr += AP_IP.toString();
-  ptr += "<br>Eigene IP-Adresse: ";
-  ptr += SELF_IP.toString();
-  ptr += "<br>Client IP-Adresse: ";
-  ptr += CL_IP.toString();
-  ptr += " an AP: ";
-  ptr += C_SSID;
-  ptr += "</div>";
-  ptr += "<div>";
-  ptr += "<br><b>NMEA0183 empf&auml;ngt:</b><br>";
-  ptr += "<br>Windrichtung: ";
-  ptr += WDirection;
-  ptr += " &deg;";
-  ptr += "<br>Windgeschwindigkeit: ";
-  ptr += WSpeed;
-  ptr += " kn";
-  ptr += "</div>";
-  ptr += "<div>";
-  ptr += "<br><b>NMEA2000 sendet:</b><br>";
-  ptr += msg1;
-  ptr +="</div>";
-  ptr +="<div>";
-  ptr += "<br><br><b>Informationen zum ESP32 - Board:</b><br><br>";
-  ptr += strBoardInfo;
-  ptr +="</div>\n";
-  ptr +="</body>\n";
-  ptr +="</html>\n";
-  return ptr;
+void freeHeapSpace(){
+	static unsigned long last = millis();
+	if (millis() - last > 5000) {
+		last = millis();
+		Serial.printf("\n[MAIN] Free heap: %d bytes\n", ESP.getFreeHeap());
+	}
 }
+
+void WiFiDiag(void) {
+  Serial.println("\nWifi-Diag:");
+  AP_IP = WiFi.softAPIP();
+  CL_IP = WiFi.localIP();
+  Serial.print("AP IP address: ");
+  Serial.println(AP_IP.toString());
+  Serial.print("Client IP address: ");
+  Serial.println(CL_IP.toString());
+  WiFi.printDiag(Serial);
+  Serial.print("\nScan AP's "); 
+  {
+    // WiFi.scanNetworks will return the number of networks found
+    int n = WiFi.scanNetworks();
+    Serial.println("scan done");
+    if (n == 0) {
+        Serial.println("no networks found");
+    } else {
+        Serial.print(n);
+        Serial.println(" networks found");
+        for (int i = 0; i < n; ++i) 
+        {
+          // Print SSID and RSSI for each network found
+          Serial.print(i + 1);
+          Serial.print(": ");
+          Serial.print(WiFi.SSID(i));
+          Serial.print(" (");
+          Serial.print(WiFi.RSSI(i));
+          Serial.print(")");
+          Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+          delay(10);
+        }
+    }
+  }
+}
+
+void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
+    Serial.printf("Listing directory: %s\r\n", dirname);
+
+    File root = fs.open(dirname);
+    if(!root){
+        Serial.println("- failed to open directory");
+        return;
+    }
+    if(!root.isDirectory()){
+        Serial.println(" - not a directory");
+        return;
+    }
+
+    File file = root.openNextFile();
+    while(file){
+        if(file.isDirectory()){
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+            if(levels){
+                listDir(fs, file.path(), levels -1);
+            }
+        } else {
+            Serial.print("  FILE: ");
+            Serial.print(file.name());
+            Serial.print("\tSIZE: ");
+            Serial.println(file.size());
+        }
+        file = root.openNextFile();
+    }
+}
+
+void I2C_scan(void){
+  byte error, address;
+  int nDevices;
+  Serial.println("Scanning...");
+  nDevices = 0;
+  for(address = 1; address < 127; address++ ) 
+  {
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+    if (error == 0) 
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address<16) 
+      {
+        Serial.print("0");
+      }
+      Serial.println(address,HEX);
+      nDevices++;
+    }
+    else if (error==4) 
+    {
+      Serial.print("Unknow error at address 0x");
+      if (address<16) 
+      {
+        Serial.print("0");
+      }
+      Serial.println(address,HEX);
+      nDevices++;
+    }
+    else if (error==4) {
+      Serial.print("Unknow error at address 0x");
+      if (address<16) {
+        Serial.print("0");
+      }
+      Serial.println(address,HEX);
+    }    
+  }
+  if (nDevices == 0) {
+    Serial.println("No I2C devices found\n");
+  }
+  else {
+    Serial.println("done\n");
+  }
+}
+
+String sWifiStatus(int Status)
+{
+  switch(Status){
+    case WL_IDLE_STATUS:return "Warten";
+    case WL_NO_SSID_AVAIL:return "Keine SSID vorhanden";
+    case WL_SCAN_COMPLETED:return "Scan komlett";
+    case WL_CONNECTED:return "Verbunden";
+    case WL_CONNECT_FAILED:return "Verbindung fehlerhaft";
+    case WL_CONNECTION_LOST:return "Verbindung verloren";
+    case WL_DISCONNECTED:return "Nicht verbunden";
+    default:return "unbekannt";
+  }
+}
+
+#endif   
