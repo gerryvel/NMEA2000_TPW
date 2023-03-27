@@ -9,9 +9,9 @@
     <meta http-equiv="refresh" content="5">
 </head>
 <body>
-    <p>Temperatur: %sTemp% °C</p>
-    <p>Luftdruck: %sPress% mbar</p>
-    <p>Windgeschwindigkeit: %sWSpeed% m/s</p>
+    <p class="label">Temperatur: %sTemp% &deg;C</p>
+    <p class="label">Luftdruck: %sPress% mbar</p>
+    <p class="label">Windgeschwindigkeit: %sWSpeed% m/s</p>
     <canvas data-type="radial-gauge"
             data-width="300"
             data-height="300"
@@ -46,7 +46,7 @@
             data-needle-circle-inner="false"
             data-animation-duration="1500"
             data-animation-rule="linear"
-            data-value-text='%sWDirection% °'
+            data-value-text='%sWDirection% &Deg;'
             data-value='%sWGaugeDirection%'></canvas>
     <ul class="bottomnav">
         <li><a class="active" href="index.html">Home</a></li>
