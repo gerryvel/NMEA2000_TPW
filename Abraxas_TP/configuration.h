@@ -26,8 +26,8 @@ IPAddress CL_IP;
 IPAddress SELF_IP;
 
 //Configuration Client (Network Data Windsensor)
-#define CL_SSID      "NoWa"					//"ABRAXAS"
-#define CL_PASSWORD  "12345678"				//"schmilka200"
+#define CL_SSID      "NoWa"				
+#define CL_PASSWORD  "12345678"				
 int iSTA_on = 0;                            // Status STA-Mode
 int bConnect_CL = 0;
 bool bClientConnected = 0;
