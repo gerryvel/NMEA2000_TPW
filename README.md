@@ -8,7 +8,7 @@ Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "No
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
 The project requires the NMEA2000 and the NMEA2000_esp32 libraries from Timo Lappalainen: https://github.com/ttlappalainen. Both libraries have to be downloaded and installed.
-Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-dev/AsyncTCP and the changed NMEA0183 äLibrary and BoatData (not the Original @Lappalainen!) @Andras Szep.
+Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-dev/AsyncTCP and the changed NMEA0183 Library and BoatData (not the Original @Lappalainen!) @Andras Szep.
 
 For the BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
