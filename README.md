@@ -43,6 +43,6 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # Plotter
 
-![image](https://4D66DF48-2554-485A-8C2A-650865C1BDE5.jpeg
+![image](https://github.com/gerryvel/NMEA2000_TPW/blob/89836d41f83f9eaae73e8502d0ef879308bd933f/4DEDE642-D2EE-429E-9A56-A173FFFC7A6C.jpeg)
 
 
