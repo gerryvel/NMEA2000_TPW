@@ -13,7 +13,7 @@ Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-d
 For the BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
-The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB conector.
+The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
 
 For the ESP32 CAN bus, i used the "Waveshare SN65HVD230 Can Board" as transceiver. For small space i cut the connectors and mount this board upside down. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 
