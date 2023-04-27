@@ -1,0 +1,124 @@
+html {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    display: inline-block;
+    margin: 0px auto;
+    text-align: center;
+}
+
+body {
+    font-family: "Gill Sans Extrabold", Helvetica, sans-serif;
+    /*max-width: 600px;*/
+    margin: 0px auto;
+    /* padding-bottom: 25px;*/
+}
+
+h1 {
+    color: #00ff00;
+    padding: 2vh;
+    margin: 50px auto 30px;
+}
+p {
+    font-size: 1.5rem;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    margin-right: 0;
+}
+.button {
+    display: inline-block;
+    background-color: #2f3e46;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 2px 16px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin: 0px;
+    cursor: pointer;
+}
+.button2 {
+  background-color: #f44336;
+}
+a.button {
+    background-color: #CCCCCC;
+    border: 2px outset #CCCCCC;
+}
+a.button:active {
+        border: 2px inset #CCCCCC;
+    }
+
+/*Setupeingaben*/
+.label {
+    font-size: 1.2rem;
+    padding: 2px 8px;
+    width: 400px;
+    margin: 6px auto;
+    background-color: #CAD2C5;
+    border: 1px solid #84A98C;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.CInput {
+    font-size: 1.2rem;
+    padding: 2px 8px;
+    width: 400px;
+    margin: 6px auto;
+    background-color: #CAD2C5;
+    border: 1px solid #84A98C;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input {
+    font-size: 1.1rem;
+    padding: 1px 8px;
+    background-color: #f5f3f4;
+    border: 1px solid #84A98C;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/*Navigaton unten*/ 
+
+ul.bottomnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #354F52;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+    ul.bottomnav li {
+        float: left;
+    }
+
+        ul.bottomnav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+            ul.bottomnav li a:hover:not(.active) {
+                background-color: #2F3E46;
+            }
+
+            ul.bottomnav li a.active {
+                background-color: #52796F;
+            }
+
+        ul.bottomnav li.right {
+            float: right;
+        }
+
+@media screen and (max-width: 600px) {
+    ul.bottomnav li.right,
+    ul.bottomnav li {
+        float: none;
+    }
+}
