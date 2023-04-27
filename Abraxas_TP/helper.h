@@ -141,7 +141,7 @@ void I2C_scan(void){
   }
 }
 
-String sWifiStatus(int Status)
+String sWifiStatus(int Status) // Status als String
 {
   switch(Status){
     case WL_IDLE_STATUS:return "Warten";
