@@ -27,7 +27,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # Schaltplan
 
-![grafik](https://user-images.githubusercontent.com/17195231/228666974-7ecb2b85-ea2b-4d19-b73a-715880c24c6a.png)
+[SchaltplanTPW_kiCad.pdf](https://github.com/gerryvel/NMEA2000_TPW/files/11401880/SchaltplanTPW_kiCad.pdf)
 
 # Hardware
 
