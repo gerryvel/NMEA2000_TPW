@@ -23,7 +23,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 - Traco-Power TSR 1-2450 for 12V / 5V
 - RGB LED Kingbright L-154A4SURKQBDZGW
 - Waveshare SN65HVD230 Can Board (adapted, cutted the (also without) connector)
-- Case Wago 789
+- Case Wago 789-905
 
 # Schaltplan
 
