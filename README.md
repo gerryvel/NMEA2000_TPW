@@ -25,7 +25,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 - Waveshare SN65HVD230 Can Board (adapted, cutted the (also without) connector)
 - Case Wago 789-905
 
-# Schaltplan
+# Wiring diagram
 
 [SchaltplanTPW_kiCad.pdf](https://github.com/gerryvel/NMEA2000_TPW/files/11401880/SchaltplanTPW_kiCad.pdf)
 
