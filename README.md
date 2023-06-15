@@ -41,11 +41,6 @@ Aisler PCB Layout https://aisler.net/p/NZFHAMAJ
 
 ![grafik](https://user-images.githubusercontent.com/17195231/227721635-994e5d76-131b-49b2-9e4c-9c372bde4454.png)
 
-![image](https://user-images.githubusercontent.com/17195231/227989873-d6256e00-5c0f-4283-a65b-ce08e13113d3.jpeg)
-
-![image](https://user-images.githubusercontent.com/17195231/228036198-5dd91f80-0a2a-475a-9819-7a0e74eb7e1d.jpeg)
-
-![image](https://user-images.githubusercontent.com/17195231/229289756-e99d60ca-26d9-4dae-9ddc-732938938918.jpeg)
 
 # Website
 
