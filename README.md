@@ -35,7 +35,9 @@ Aisler PCB Layout https://aisler.net/p/NZFHAMAJ
 
 # Hardware
 
-![TPW N2k](https://user-images.githubusercontent.com/17195231/201548865-527490c7-9898-4cfb-8c67-161541537aac.jpg)
+![PNG-Bild](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/3f11f60e-832c-4a33-9e59-35a974e494bd)
+
+![_com apple Pasteboard dirmnK](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/51dbb481-9931-4788-9c1b-f460ad98ce15)
 
 ![grafik](https://user-images.githubusercontent.com/17195231/227721635-994e5d76-131b-49b2-9e4c-9c372bde4454.png)
 
