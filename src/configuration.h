@@ -2,8 +2,8 @@
 #define __configuration__H__
 
 // Configuration N2k
-#define ESP32_CAN_TX_PIN GPIO_NUM_5  // Set CAN TX port to 5 
-#define ESP32_CAN_RX_PIN GPIO_NUM_4  // Set CAN RX port to 4
+#define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 5 
+#define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 4
 #define N2K_SOURCE 15
 
 //Configuration Refresh Page x Sec.
@@ -41,13 +41,14 @@ float fbmp_pressure = 0;
 float fbmp_altitude = 0;
 String sBMP_Status = "";
 
-//Definiton NMEA0183 MWV
+//Definiton NMEA0183
 double dMWV_WindDirectionT = 0;
 double dMWV_WindSpeedM = 0;
 double dVWR_WindDirectionM = 0;
 double dVWR_WindAngle = 0;
 double dVWR_WindSpeedkn = 0;
 double dVWR_WindSpeedms = 0;
+double dXDR_Kraengung = 0;
 
 //Configuration NMEA0183
 #define SERVER_HOST_NAME "192.168.4.1"		//"192.168.76.34"
