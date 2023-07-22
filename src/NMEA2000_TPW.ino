@@ -64,7 +64,7 @@ AsyncEventSource events("/events");
 BoardInfo boardInfo;
 String sBoardInfo;
 
-//Variables for websit
+//Variables for website
 String sCL_Status = sWifiStatus(WiFi.status());
 String replaceVariable(const String& var){
 	if (var == "sWDirection")return String(dMWV_WindDirectionT,1);
@@ -152,11 +152,15 @@ int NodeAddress = 0; // To store last Node Address
 Preferences preferences; // Nonvolatile storage on ESP32 - To store LastDeviceAddress
 // Set the information for other bus devices, which messages we support
 const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environmental parameters
+                                                   130312L, // Temperature
+                                                   130314L, // Pressure
                                                    130306L, // Wind
                                                    0
                                                  };
 
 #define TempSendOffset 0 // Send time offsets
+#define PressSendOffset 50 // Send time offsets
+#define WindSendOffset 100 // Send time offsets
 #define SlowDataUpdatePeriod 1000 // Time between CAN Messages sent
 
 bool IsTimeToUpdate(unsigned long NextUpdate){
@@ -170,8 +174,20 @@ void SetNextUpdate(unsigned long & NextUpdate, unsigned long Period){
   while (NextUpdate < millis()) NextUpdate += Period;
 }
 
-void SendN2kTempPressureWind(void){
-  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, TempSendOffset);
+void CheckSourceAddressChange() {
+  int SourceAddress = NMEA2000.GetN2kSource();
+
+  if (SourceAddress != NodeAddress) { // Save potentially changed Source Address to NVS memory
+    NodeAddress = SourceAddress;      // Set new Node Address (to save only once)
+    preferences.begin("nvs", false);
+    preferences.putInt("LastNodeAddress", SourceAddress);
+    preferences.end();
+    Serial.printf("Address Change: New Address=%d\n", SourceAddress);
+  }
+}
+
+void SendN2kWind(void){
+  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, WindSendOffset);
   tN2kMsg N2kMsg;
 
   if (IsTimeToUpdate(SlowDataUpdated)){
@@ -181,16 +197,46 @@ void SendN2kTempPressureWind(void){
     dMWV_WindSpeedM = BoatData.WindSpeedM;
     dVWR_WindDirectionM = BoatData.WindDirectionM;
     dVWR_WindAngle = BoatData.WindAngle;
-    dVWR_WindSpeedkn = BoatData.WindSpeedK;
+    dVWR_WindSpeedms = BoatData.WindSpeedM;
 
-    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
     Serial.printf("WindT: %f ° - WindM: %f - SpeedM: %f - Angle: %f °\n", dMWV_WindDirectionT, dVWR_WindDirectionM, dMWV_WindSpeedM, dVWR_WindAngle);
 
-    SetN2kPGN130310(N2kMsg, 0, N2kDoubleNA, CToKelvin(fbmp_temperature), fbmp_pressure);
+    SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedms, dVWR_WindAngle ,tN2kWindReference::N2kWind_Apparent);
     NMEA2000.SendMsg(N2kMsg);
-    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeedM, dMWV_WindDirectionT, tN2kWindReference::N2kWind_Apparent);
+    //SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedkn, dVWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
+    //NMEA2000.SendMsg(N2kMsg);
+
+    Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
+  }
+}
+
+
+void SendN2kTemperatur(void){
+  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, TempSendOffset);
+  tN2kMsg N2kMsg;
+
+  if (IsTimeToUpdate(SlowDataUpdated)){
+    SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
+
+    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
+
+    SetN2kPGN130312(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
     NMEA2000.SendMsg(N2kMsg);
-    SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedkn, dVWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
+
+    Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
+  }
+}
+
+void SendN2kPressure(void){
+  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, PressSendOffset);
+  tN2kMsg N2kMsg;
+
+  if (IsTimeToUpdate(SlowDataUpdated)){
+    SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
+
+    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
+
+    SetN2kPGN130314(N2kMsg, 0, 0, N2kps_Atmospheric, (fbmp_pressure));
     NMEA2000.SendMsg(N2kMsg);
 
     Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
@@ -204,7 +250,7 @@ void setup()
 {
   Serial.begin(115200);
 
-//Filesystem prepare for Webfiles
+//Filesystem
 	if (!LittleFS.begin(true)) {
 		Serial.println("An Error has occurred while mounting LittleFS");
 		return;
@@ -244,60 +290,9 @@ void setup()
       ESP.restart();
   }
   
-/*
-  server.on("/heap", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", String(ESP.getFreeHeap()));
-  });
-
-  server.serveStatic("/", LittleFS, "/").setDefaultFile("index.htm");
-
-  server.onNotFound([](AsyncWebServerRequest *request)
-  {
-    Serial.printf("NOT_FOUND: ");
-    if(request->method() == HTTP_GET)
-      Serial.printf("GET");
-    else if(request->method() == HTTP_POST)
-      Serial.printf("POST");
-    else if(request->method() == HTTP_DELETE)
-      Serial.printf("DELETE");
-    else if(request->method() == HTTP_PUT)
-      Serial.printf("PUT");
-    else if(request->method() == HTTP_PATCH)
-      Serial.printf("PATCH");
-    else if(request->method() == HTTP_HEAD)
-      Serial.printf("HEAD");
-    else if(request->method() == HTTP_OPTIONS)
-      Serial.printf("OPTIONS");
-    else
-      Serial.printf("UNKNOWN");
-    Serial.printf(" http://%s%s\n", request->host().c_str(), request->url().c_str());
-
-    if(request->contentLength()){
-      Serial.printf("_CONTENT_TYPE: %s\n", request->contentType().c_str());
-      Serial.printf("_CONTENT_LENGTH: %u\n", request->contentLength());
-    }
-   int headers = request->headers();
-    int i;
-    for(i=0;i<headers;i++){
-      AsyncWebHeader* h = request->getHeader(i);
-      Serial.printf("_HEADER[%s]: %s\n", h->name().c_str(), h->value().c_str());
-    }
-
-    int params = request->params();
-    for(i=0;i<params;i++){
-      AsyncWebParameter* p = request->getParam(i);
-      if(p->isFile()){
-        Serial.printf("_FILE[%s]: %s, size: %u\n", p->name().c_str(), p->value().c_str(), p->size());
-      } else if(p->isPost()){
-        Serial.printf("_POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
-      } else {
-        Serial.printf("_GET[%s]: %s\n", p->name().c_str(), p->value().c_str());
-      }
-    }
-
-    request->send(404);
-  });
-*/
+  server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(LittleFS, "/favicon.ico", "image/x-icon");
+	});
   server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/index.html", String(), false, replaceVariable);
 	});
@@ -348,7 +343,7 @@ void setup()
   ets_timer_disarm(&intervalTimer);
   ets_timer_setfn(&intervalTimer, &replyToServer, client);
 
-// BMP388 begin & setup
+// BMP38x begin & setup
   if (!bmp.begin_I2C())
   {
     Serial.println("Could not find a valid BMP3 sensor, check wiring!");
@@ -390,7 +385,7 @@ ArduinoOTA
   MDNS.begin(HostName);
   MDNS.addService("http", "tcp", 80);
 
-  // Setup NMEA2000 system
+  //***********************************************Setup NMEA2000 system*******************************************
   // Reserve enough buffer for sending all messages. This does not work on small memory devices like Uno or Mega
   NMEA2000.SetN2kCANMsgBufSize(8);
   NMEA2000.SetN2kCANReceiveFrameBufSize(250);
@@ -466,11 +461,11 @@ void loop()
       delay(500);
       int WLcount = 0;
       int UpCount = 0;
-      while (WiFi.status() != WL_CONNECTED && WLcount < 100){
+      while (WiFi.status() != WL_CONNECTED && WLcount < 50){
         delay(500);
         Serial.printf(".");
         LEDflash(LED(Red));
-        if (UpCount >= 60)  // just keep terminal from scrolling sideways
+        if (UpCount >= 20)  // just keep terminal from scrolling sideways
         {
           UpCount = 0;
           Serial.printf("\n");
@@ -520,16 +515,10 @@ void loop()
     delay(500);
 
   //N2K
-    SendN2kTempPressureWind();
-
+    SendN2kWind();
+    SendN2kPressure();
+    SendN2kTemperatur();
     NMEA2000.ParseMessages();
-    int SourceAddress = NMEA2000.GetN2kSource();
-    if (SourceAddress != NodeAddress)
-    { // Save potentially changed Source Address to NVS memory
-      preferences.begin("nvs", false);  // NVS=EEPROM
-      preferences.putInt("LastNodeAddress", SourceAddress);
-      preferences.end();
-      Serial.printf("Address Change: New Address=%d\n", SourceAddress);
-    }
+    CheckSourceAddressChange();
   
 }
