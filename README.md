@@ -1,7 +1,7 @@
 # NMEA2000_TPW Version 1.4
 
 Basics for this Pojekt is "NMEA2000-TempPressure" from @HOMBERGER and "NMEA0183-to-NMEA2000" with ESP32 @AndrasSzep.
-Please work with teh chanched Files for NMEA0183.h and NMEA0183.cpp in Directory /NMEA0183
+Please work with Files for NMEA0183.h and NMEA0183.cpp in Directory /NMEA0183
 
 This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
 Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" and Output to same NMEA2000.
