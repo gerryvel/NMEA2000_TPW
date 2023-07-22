@@ -1,0 +1,120 @@
+= NMEA0183 library for Arduino, Teensy and RPi =
+
+# NMEA0183
+NMEA0183 library for Arduino, Teensy and RPi
+
+Object oriented NMEA0183 library for Arduino, Teensy and RPi
+
+Library gives you a e.g. easy way to make NMEA0183->NMEA2000 interface like Actisense device.
+
+Currently there are most common NMEA0183 messages parser/create function.
+
+To compile example NMEA0183ToN2k or NMEA2000ToNMEA0183 you need also 
+NMEA2000 library https://github.com/ttlappalainen/NMEA2000 and board dependent
+driver libraries. See more on NMEA2000 library document.
+
+*Note for Arduino DUE users!*
+
+Currently code uses availableForWrite on writing serial. You have to modify next files and add availableForWrite to them. 
+Note also that paths are version depended and here 1.6.11.
+
+"C:\Users<your username>\AppData\Local\Arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino\Print.h"
+----
+    virtual size_t write(uint8_t) = 0;
+    virtual int availableForWrite(void) = 0;
+    size_t write(const char *str) {
+----
+"C:\Users\lappalai\AppData\Local\Arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino\HardwareSerial.h"
+----
+    virtual operator bool() = 0;
+    virtual int availableForWrite(void)=0;
+----
+
+== Changes ==
+
+20.05.2023
+
+- Added NMEA0183SetRMC possibility to use FAA mode indicator and nav status.
+
+- Added AddStrField to NMEA0183Msg module.
+
+- Updated copyright year.
+
+- Below thanks to Andrei Errapart
+
+- Added #include <cstdlib> to compile with MSVC
+
+- Changed include #include "NMEA0183Msg.h" to double colons on NMEA0183Messages.h
+
+- NMEA0183SetSHR: New function to format pitch, roll, heave and heading in RT300 format.
+
+- Fixed NMEA0183ParseAPB_nc APB.xte *= nmTom;
+
+- NMEA0183SetDPT: added optional parameter DepthFormat to allow higher resolution on message.
+
+- Added first unit tests for SetDPT/ParseDPT
+
+- Added SetZDA.
+
+07.04.2022
+
+- Fixed use of breaktime on NMEA0183Messages.cpp to tNMEA0183Msg::breakTime and added
+  inline bool NMEA0183IsTimeNA(time_t v) to NMEA0183Msgs.h. Thanks to debbia.
+
+23.02.2022
+
+- Added _FieldCount checking to NMEA0183Msg.cpp tNMEA0183Msg::SetMessage. Thanks to Andreas Vogel.
+
+- Updated changes to GitHub. Several changes has been in use on own code, which were not published. E.g.,
+  NMEA0183GetDouble has been changed to replace atof.
+  
+- Updated copyright.
+
+15.02.2022
+
+- Add parser for DPT by mjsneijders.
+
+21.08.2021
+
+- Thanks to sailingfree. Added GSV parser.
+
+- Thanks to orca-hydromancer. Accepts lowercase hex in checksum.
+
+- Changed some value parsers to use NMEA0183GetDouble instead of directly atof.
+
+- Fixed month handling in case of TimeLib.h has been used. On tmElements_t month starts from 1.
+
+- Empty values returns now NA.
+
+- Added GetMessageStream for tNMEA0183.
+
+08.04.2021
+
+- Thanks to lsoltero. Fixed logic error on NMEA0183Msg.cpp tNMEA0183Msg::Init "if ( _Sender==0 &&..." -> "if ( _Sender==0 ||...".
+
+- Added Status for ParseRMC.
+
+- Thanks to BerndCirotzki, issue #22. Added missing iBuf++ to tNMEA0183::SendBuf.
+
+- Added Changes to README.
+
+== License ==
+
+Copyright (c) 2015-2022 Timo Lappalainen, Kave Oy, www.kave.fi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
