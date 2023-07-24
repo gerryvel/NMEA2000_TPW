@@ -197,11 +197,10 @@ void SendN2kWind(void){
     dMWV_WindSpeedM = BoatData.WindSpeedM;
     dVWR_WindDirectionM = BoatData.WindDirectionM;
     dVWR_WindAngle = BoatData.WindAngle;
-    dVWR_WindSpeedms = BoatData.WindSpeedM;
 
     Serial.printf("WindT: %f ° - WindM: %f - SpeedM: %f - Angle: %f °\n", dMWV_WindDirectionT, dVWR_WindDirectionM, dMWV_WindSpeedM, dVWR_WindAngle);
 
-    SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedms, dVWR_WindAngle ,tN2kWindReference::N2kWind_Apparent);
+    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeedM, dVWR_WindAngle ,tN2kWindReference::N2kWind_Apparent);
     NMEA2000.SendMsg(N2kMsg);
     //SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedkn, dVWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
     //NMEA2000.SendMsg(N2kMsg);
@@ -218,7 +217,7 @@ void SendN2kTemperatur(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
 
-    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
+    Serial.printf("Temperatur: %3.1f °C\n", fbmp_temperature);
 
     SetN2kPGN130312(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
     NMEA2000.SendMsg(N2kMsg);
@@ -234,7 +233,7 @@ void SendN2kPressure(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
 
-    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
+    Serial.printf("Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_pressure/100, fbmp_altitude);
 
     SetN2kPGN130314(N2kMsg, 0, 0, N2kps_Atmospheric, (fbmp_pressure));
     NMEA2000.SendMsg(N2kMsg);
@@ -512,7 +511,7 @@ void loop()
     fbmp_temperature = bmp.readTemperature();
     fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
     LEDflash(LED(Blue));
-    delay(500);
+    delay(50);
 
   //N2K
     SendN2kWind();
