@@ -86,7 +86,7 @@ tBoatData BoatData;
 tNMEA0183 NMEA0183_TCP;
 
 static ETSTimer intervalTimer;
-char next_line[81]; //NMEA0183 message buffer
+char nmea_line[81]; //NMEA0183 message buffer
 size_t i = 0, j = 1;                          //indexers
 uint8_t *pointer_to_int;                  //pointer to void *data (!)
 
@@ -119,21 +119,21 @@ static void handleData(void* arg, AsyncClient* client, void *data, size_t len)
 
   if (len == 1)
   { //in case just one byte was received for whatever reason
-    next_line[0] = pointer_to_int[0];
+    nmea_line[0] = pointer_to_int[0];
     j = 1;
-    Serial.printf("%c;", next_line[0]);
+    Serial.printf("%c;", nmea_line[0]);
   }
   else
   {
     for (i = 0; i < len; i++)
     {
-      next_line[j++] = pointer_to_int[i];
+      nmea_line[j++] = pointer_to_int[i];
       if (pointer_to_int[i - 1] == 13 && pointer_to_int[i] == 10)
       {
-        next_line[j] = 0;
-        Serial.printf("%s", next_line);    //here we got the full line ending CRLF
-        NMEA2000.ParseMessages();
-        NMEA0183_TCP.ParseTCPMessages(next_line, j);   //let's parse it (next_line, j)
+        nmea_line[j] = 0;
+        Serial.printf("%s", nmea_line);    //here we got the full line ending CRLF
+        // NMEA2000.ParseMessages();
+        NMEA0183_TCP.ParseTCPMessages(nmea_line, j);   //let's parse it (next_line, j) 
         j = 0;
       }
     }
@@ -193,15 +193,14 @@ void SendN2kWind(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
 
-    dMWV_WindDirectionT = BoatData.WindDirectionT;  // Wind Relativ
+    dMWV_WindDirectionT = BoatData.WindDirectionT;  
     dMWV_WindSpeedM = BoatData.WindSpeedM;
-    dVWR_WindDirectionM = BoatData.WindDirectionM;
-    dVWR_WindAngle = BoatData.WindAngle;
-    dVWR_WindSpeedms = BoatData.WindSpeedM;
+    dVWR_WindDirectionM = BoatData.WindDirectionM;  
+    dVWR_WindSpeedkn = BoatData.WindSpeedM;        
 
-    Serial.printf("WindT: %f ° - WindM: %f - SpeedM: %f - Angle: %f °\n", dMWV_WindDirectionT, dVWR_WindDirectionM, dMWV_WindSpeedM, dVWR_WindAngle);
+    Serial.printf("MWV Windrichtung: %f ° - MWV Windgeschw: %f - SpeedM: %f - Angle: %f °\n", dMWV_WindDirectionT, dMWV_WindSpeedM, dVWR_WindDirectionM, dVWR_WindSpeedkn);
 
-    SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedms, dVWR_WindAngle ,tN2kWindReference::N2kWind_Apparent);
+    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeedM, dMWV_WindDirectionT ,tN2kWindReference::N2kWind_Apparent);
     NMEA2000.SendMsg(N2kMsg);
     //SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedkn, dVWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
     //NMEA2000.SendMsg(N2kMsg);
@@ -218,7 +217,7 @@ void SendN2kTemperatur(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
 
-    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
+    Serial.printf("Temperatur: %3.1f °C\n", fbmp_temperature);
 
     SetN2kPGN130312(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
     NMEA2000.SendMsg(N2kMsg);
@@ -234,7 +233,7 @@ void SendN2kPressure(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
 
-    Serial.printf("Temperatur: %3.1f °C - Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_temperature, fbmp_pressure/100, fbmp_altitude);
+    Serial.printf("Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_pressure/100, fbmp_altitude);
 
     SetN2kPGN130314(N2kMsg, 0, 0, N2kps_Atmospheric, (fbmp_pressure));
     NMEA2000.SendMsg(N2kMsg);
@@ -287,7 +286,7 @@ void setup()
       Serial.println("Starting AP failed.");
       digitalWrite(LED(Red), HIGH);  
       delay(1000); 
-      ESP.restart();
+      // ESP.restart();
   }
   
   server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -330,30 +329,9 @@ void setup()
   else
     Serial.println("Client Connection failed");
     WiFi.reconnect();
-    
-// Start TCP (HTTP) server
-	server.begin();
-	Serial.println("TCP server started");
 
-  client = new AsyncClient;
-  client->onData(&handleData, client);
-  client->onConnect(&onConnect, client);
-  client->connect(SERVER_HOST_NAME, TCP_PORT);
-
-  ets_timer_disarm(&intervalTimer);
-  ets_timer_setfn(&intervalTimer, &replyToServer, client);
-
-// BMP38x begin & setup
-  if (!bmp.begin_I2C())
-  {
-    Serial.println("Could not find a valid BMP3 sensor, check wiring!");
-  }
-    bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-    bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-    bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3); 
-
-
-ArduinoOTA
+// Start OTA
+  ArduinoOTA
     .onStart([]() {
       String type;
       if (ArduinoOTA.getCommand() == U_FLASH)
@@ -380,6 +358,27 @@ ArduinoOTA
     });
 
   ArduinoOTA.begin();
+
+// Start TCP (HTTP) server
+	server.begin();
+	Serial.println("TCP server started");
+
+  client = new AsyncClient;
+  client->onData(&handleData, client);
+  client->onConnect(&onConnect, client);
+  client->connect(SERVER_HOST_NAME, TCP_PORT);
+
+  ets_timer_disarm(&intervalTimer);
+  ets_timer_setfn(&intervalTimer, &replyToServer, client);
+
+// BMP38x begin & setup
+  if (!bmp.begin_I2C())
+  {
+    Serial.println("Could not find a valid BMP3 sensor, check wiring!");
+  }
+    bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+    bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+    bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3); 
 
 
   MDNS.begin(HostName);
@@ -488,7 +487,7 @@ void loop()
     }
   }
 
-  ArduinoOTA.handle();
+ArduinoOTA.handle();
 
 // Status AP 
   Serial.printf("Stationen mit AP verbunden = %d\n", WiFi.softAPgetStationNum());
@@ -512,7 +511,7 @@ void loop()
     fbmp_temperature = bmp.readTemperature();
     fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
     LEDflash(LED(Blue));
-    delay(500);
+    delay(50);
 
   //N2K
     SendN2kWind();

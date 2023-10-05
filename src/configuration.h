@@ -2,8 +2,8 @@
 #define __configuration__H__
 
 // Configuration N2k
-#define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 5 
-#define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 4
+#define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 
+#define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 5
 #define N2K_SOURCE 15
 
 //Configuration Refresh Page x Sec.
@@ -15,7 +15,7 @@
 #define AP_PASSWORD     "12345678"    // SSID Password - Set to NULL to have an open AP
 const int   channel        = 10;                // WiFi Channel number between 1 and 13
 const bool  hide_SSID      = false;             // To disable SSID broadcast -> SSID will not appear in a basic WiFi scan
-const int   max_connection = 2;                 // Maximum simultaneous connected clients on the AP
+const int   max_connection = 4;                 // Maximum simultaneous connected clients on the AP
 
 // Variables for WIFI-AP
 IPAddress IP = IPAddress(192, 168, 15, 1);
@@ -42,12 +42,13 @@ float fbmp_altitude = 0;
 String sBMP_Status = "";
 
 //Definiton NMEA0183
-double dMWV_WindDirectionT = 0;
+double dMWV_WindDirectionT = 0; // Windrichtung in Grad (wahrer Norden)
 double dMWV_WindSpeedM = 0;
-double dVWR_WindDirectionM = 0;
-double dVWR_WindAngle = 0;
-double dVWR_WindSpeedkn = 0;
-double dVWR_WindSpeedms = 0;
+double dVWR_WindDirectionM = 0; // Relative Windrichtung in Grad (zur Schiffsnase)
+double dVWR_WindAngle = 0;      // relativer Wind
+double dVWR_WindSpeedkn = 0;    // Relative Windgeschwindigkeit in Knoten
+double dVWR_WindSpeedms = 0;    // Relative Windgeschwindigkeit in m/s
+double dVWR_WindSpeedkm = 0;    // Relative Windgeschwindigkeit in km/h
 double dXDR_Kraengung = 0;
 
 //Configuration NMEA0183
