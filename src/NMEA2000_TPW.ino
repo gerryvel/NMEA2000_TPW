@@ -19,7 +19,7 @@
   you have to write handler for it and add it to the NMEA0183Handlers variable
   initialization. NMEA0183.h add ParseTCPMessage function from Andras Szap.
 
-  // Version 1.3, 24.03.2023, gerryvel Gerry Sebb
+  // Version 2.0, 24.06.2024, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
@@ -47,13 +47,11 @@
 #include "NMEA0183.h"
 #include <NMEA0183Msg.h>
 #include <NMEA0183Messages.h>
-#include "NMEA0183handlers.h"
-#include <BoatData.h>
 
 // Can Bus
 #include <NMEA2000_CAN.h>  // This will automatically choose right CAN library and create suitable NMEA2000 object
 
-// BMP 300
+// BMP 388
 Adafruit_BMP3XX bmp;
 
 // Set web server port number to 80
@@ -82,70 +80,61 @@ String replaceVariable(const String& var){
   return "NoVariable";
 }
 
-tBoatData BoatData;
-tNMEA0183 NMEA0183_TCP;
+// NMEA 0183 Stream
+WiFiClient nmeaclient;
+char buffer[128]; // Puffer zur Speicherung der empfangenen Daten
+int bufferIndex = 0;
 
 static ETSTimer intervalTimer;
-char nmea_line[81]; //NMEA0183 message buffer
-size_t i = 0, j = 1;                          //indexers
-uint8_t *pointer_to_int;                  //pointer to void *data (!)
 
-static void replyToServer(void* arg)
-{
-  AsyncClient* client = reinterpret_cast<AsyncClient*>(arg);
-
-  // send reply
-  if (client->space() > 32 && client->canSend())
-  {
-    char message[50];
-    sprintf(message, "this is from %s", WiFi.localIP().toString().c_str());
-    client->add(message, strlen(message));
-    client->send();
-    Serial.println(message);
-    Serial.printf("\nReplyToServer: data received from %s \n", client->remoteIP().toString().c_str());
-  }
-}
 
 /************************ event callbacks ***************************/
-static void handleData(void* arg, AsyncClient* client, void *data, size_t len)
+void read_nmea0183()
 {
-  Serial.printf("\n handleData: data received from IP %s \n", client->remoteIP().toString().c_str());
-  Serial.printf("\n handleData: data received from Port %d \n", client->remotePort());
-  Serial.write((uint8_t*)data, len);
-  // Serial.printf("handleData: Len %i:\n", len);
+  if (nmeaclient.connected()) {
+    while (nmeaclient.available()) {
+      char c = nmeaclient.read();
+      Serial.write(c);
 
-  uint8_t *pointer_to_int;
-  pointer_to_int = (uint8_t *)data;
+      if (c == '\n' || bufferIndex >= sizeof(buffer) - 1) {
+        buffer[bufferIndex] = '\0'; // Abschluss der Zeichenkette
 
-  if (len == 1)
-  { //in case just one byte was received for whatever reason
-    nmea_line[0] = pointer_to_int[0];
-    j = 1;
-    Serial.printf("%c;", nmea_line[0]);
-  }
-  else
-  {
-    for (i = 0; i < len; i++)
-    {
-      nmea_line[j++] = pointer_to_int[i];
-      if (pointer_to_int[i - 1] == 13 && pointer_to_int[i] == 10)
-      {
-        nmea_line[j] = 0;
-        Serial.printf("%s", nmea_line);    //here we got the full line ending CRLF
-        // NMEA2000.ParseMessages();
-        NMEA0183_TCP.ParseTCPMessages(nmea_line, j);   //let's parse it (next_line, j) 
-        j = 0;
+        // Überprüfen, ob es sich um eine VWR-Nachricht handelt
+        if (strstr(buffer, "VWR") != NULL) {
+          // Beispiel: "$IIVWR,090.0,R,005.5,N,002.8,M,009.0,K*50"
+       
+          float windDirection = 0.0;
+          float windSpeed = 0.0;
+          sscanf(buffer, "$%*[^,],%f,R,%f,N", &windDirection, &windSpeed);
+
+          // Speichern Daten in Variablen
+          Serial.print("Windrichtung: ");
+          Serial.println(windDirection);
+          Serial.print("Windgeschwindigkeit: ");
+          Serial.println(windSpeed);
+          dVWR_WindDirectionM = windDirection;
+          dVWR_WindSpeedkn = windSpeed;
+        }
+
+        // Puffer zurücksetzen
+        bufferIndex = 0;
+      } else {
+        buffer[bufferIndex++] = c;
       }
     }
+  } else {
+    Serial.println("Verbindung zum NMEA-Server verloren");
+    nmeaclient.stop();
+
+    // Versuchen, die Verbindung wiederherzustellen
+    if (nmeaclient.connect(SERVER_HOST_NAME, TCP_PORT)) {
+      Serial.println("Verbunden mit NMEA-Server");
+    } else {
+      Serial.println("Verbindung zum NMEA-Server fehlgeschlagen");
+    }
   }
-  ets_timer_arm(&intervalTimer, 2000, true); // schedule for reply to server at next 2s
+  
 }
-
-void onConnect(void* arg, AsyncClient* client)
-{
-  Serial.printf("\nNMEA0183 listener Status %i \n\n", client->state());
-}
-
 
 String NMEA_Info; // formatted Output NMEA2000-Message
 int NodeAddress = 0; // To store last Node Address
@@ -191,24 +180,16 @@ void SendN2kWind(void){
   tN2kMsg N2kMsg;
 
   if (IsTimeToUpdate(SlowDataUpdated)){
-    SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
+    SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);      
+    Serial.print("N2k Wind Data: ");
+    Serial.printf("VWR Windrichtung: %f ° - VWR Windgeschw: %f kn\n", dVWR_WindDirectionM, dVWR_WindSpeedkn);
 
-    dMWV_WindDirectionT = BoatData.WindDirectionT;  
-    dMWV_WindSpeedM = BoatData.WindSpeedM;
-    dVWR_WindDirectionM = BoatData.WindDirectionM;  
-    dVWR_WindSpeedkn = BoatData.WindSpeedM;        
-
-    Serial.printf("MWV Windrichtung: %f ° - MWV Windgeschw: %f - SpeedM: %f - Angle: %f °\n", dMWV_WindDirectionT, dMWV_WindSpeedM, dVWR_WindDirectionM, dVWR_WindSpeedkn);
-
-    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeedM, dMWV_WindDirectionT ,tN2kWindReference::N2kWind_Apparent);
+    SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedkn, dVWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
     NMEA2000.SendMsg(N2kMsg);
-    //SetN2kPGN130306(N2kMsg, 0, dVWR_WindSpeedkn, dVWR_WindDirectionM, tN2kWindReference::N2kWind_Magnetic);
-    //NMEA2000.SendMsg(N2kMsg);
-
+    Serial.print("N2k sende Wind: ");
     Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
-
 
 void SendN2kTemperatur(void){
   static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, TempSendOffset);
@@ -216,12 +197,11 @@ void SendN2kTemperatur(void){
 
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
-
+    Serial.print("N2k Temperatur Data: ");
     Serial.printf("Temperatur: %3.1f °C\n", fbmp_temperature);
 
     SetN2kPGN130312(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
     NMEA2000.SendMsg(N2kMsg);
-
     Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
@@ -232,17 +212,15 @@ void SendN2kPressure(void){
 
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
-
+    Serial.print("N2k Pressure & Altitude Data: ");
     Serial.printf("Luftdruck: %3.2f hPa - Hoehe: %3.0f m\n", fbmp_pressure/100, fbmp_altitude);
 
     SetN2kPGN130314(N2kMsg, 0, 0, N2kps_Atmospheric, (fbmp_pressure));
     NMEA2000.SendMsg(N2kMsg);
-
+    Serial.print("N2k sende Pressure & Altitude: ");
     Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
-
-AsyncClient* client;
 
 //===============================================SETUP==============================
 void setup()
@@ -286,7 +264,7 @@ void setup()
       Serial.println("Starting AP failed.");
       digitalWrite(LED(Red), HIGH);  
       delay(1000); 
-      // ESP.restart();
+      ESP.restart();
   }
   
   server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -363,13 +341,12 @@ void setup()
 	server.begin();
 	Serial.println("TCP server started");
 
-  client = new AsyncClient;
-  client->onData(&handleData, client);
-  client->onConnect(&onConnect, client);
-  client->connect(SERVER_HOST_NAME, TCP_PORT);
-
-  ets_timer_disarm(&intervalTimer);
-  ets_timer_setfn(&intervalTimer, &replyToServer, client);
+// Mit dem NMEA-Server verbinden
+  if (nmeaclient.connect(SERVER_HOST_NAME, TCP_PORT)) {
+    Serial.println("Verbunden mit NMEA-Server");
+  } else {
+    Serial.println("Verbindung zum NMEA-Server fehlgeschlagen");
+  }
 
 // BMP38x begin & setup
   if (!bmp.begin_I2C())
@@ -419,18 +396,6 @@ void setup()
     Serial.println(" NMEA2000 Initialized");
   else
     Serial.println(" NMEA2000 Initialized failed");
-
-  // Setup NMEA0183 ports and handlers
-  InitNMEA0183Handlers(&NMEA2000, &BoatData);
-
-  NMEA0183_TCP.SetMsgHandler(HandleNMEA0183Msg);
-  NMEA0183_TCP.SetMessageStream(&Serial);   //just to have IsOpen() valid
-
-  if (NMEA0183_TCP.Open())
-    Serial.println(" NMEA0183 Initialized");
-  else
-    Serial.println(" NMEA0183 Initialized failed");
-  client->close();
   
 }
 //===============================================Loop==============================
@@ -445,10 +410,7 @@ void loop()
   { // Listen NMEA0183
     if (bConnect_CL == 1){ // Connected an listen
       Serial.printf("Wifi %s connencted!\n", CL_SSID);
-      client->onData(&handleData, client);
-      client->onConnect(&onConnect, client);
-      client->connect(SERVER_HOST_NAME, TCP_PORT);
-      client->close();
+      read_nmea0183();
       delay(500);
     }
     else{
@@ -489,29 +451,28 @@ void loop()
 
 ArduinoOTA.handle();
 
-// Status AP 
-  Serial.printf("Stationen mit AP verbunden = %d\n", WiFi.softAPgetStationNum());
-  Serial.printf("Soft-AP IP address = %s\n", WiFi.softAPIP().toString());
 
+// Status AP 
+  Serial.printf("Soft-AP IP address = %s\n", WiFi.softAPIP().toString());
   sCL_Status = sWifiStatus(WiFi.status());
 
+ delay(500);
 
  //Read BMP
      if (!bmp.performReading()) {
       Serial.println("Lesefehler BMP");
       sBMP_Status = "BMP Lesefehler";
       LEDflash(LED(Red));
-      delay(100);
+      delay(200);
       return;
     }
     else
       sBMP_Status = "BMP Lesen erfolgreich";
-
-    fbmp_pressure = bmp.readPressure();
-    fbmp_temperature = bmp.readTemperature();
-    fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+      fbmp_pressure = bmp.readPressure();
+      fbmp_temperature = bmp.readTemperature();
+      fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
     LEDflash(LED(Blue));
-    delay(50);
+    delay(100);
 
   //N2K
     SendN2kWind();
@@ -519,5 +480,4 @@ ArduinoOTA.handle();
     SendN2kTemperatur();
     NMEA2000.ParseMessages();
     CheckSourceAddressChange();
-  
 }

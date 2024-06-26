@@ -26,8 +26,8 @@ IPAddress CL_IP;
 IPAddress SELF_IP;
 
 //Configuration Client (Network Data Windsensor)
-#define CL_SSID      "NoWa"					//"ABRAXAS"
-#define CL_PASSWORD  "12345678"				//"schmilka200"
+#define CL_SSID      "NoWa"					
+#define CL_PASSWORD  "12345678"				
 int iSTA_on = 0;                            // Status STA-Mode
 int bConnect_CL = 0;
 bool bClientConnected = 0;
@@ -52,7 +52,7 @@ double dVWR_WindSpeedkm = 0;    // Relative Windgeschwindigkeit in km/h
 double dXDR_Kraengung = 0;
 
 //Configuration NMEA0183
-#define SERVER_HOST_NAME "192.168.4.1"		//"192.168.76.34"
+#define SERVER_HOST_NAME "192.168.5.1"		//"192.168.76.34"
 #define TCP_PORT 6666						//6666
 #define DNS_PORT 53
 
