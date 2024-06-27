@@ -40,10 +40,9 @@ float fbmp_temperature = 0;
 float fbmp_pressure = 0;
 float fbmp_altitude = 0;
 String sBMP_Status = "";
+String sI2C_Status = "";
 
 //Definiton NMEA0183
-double dMWV_WindDirectionT = 0; // Windrichtung in Grad (wahrer Norden)
-double dMWV_WindSpeedM = 0;
 double dVWR_WindDirectionM = 0; // Relative Windrichtung in Grad (zur Schiffsnase)
 double dVWR_WindAngle = 0;      // relativer Wind
 double dVWR_WindSpeedkn = 0;    // Relative Windgeschwindigkeit in Knoten

@@ -65,9 +65,9 @@ String sBoardInfo;
 //Variables for website
 String sCL_Status = sWifiStatus(WiFi.status());
 String replaceVariable(const String& var){
-	if (var == "sWDirection")return String(dMWV_WindDirectionT,1);
-	if (var == "sWGaugeDirection")return String(dMWV_WindDirectionT, 1);
-	if (var == "sWSpeed")return String(dMWV_WindSpeedM,1);
+	if (var == "sWDirection")return String(dVWR_WindDirectionM,1);
+	if (var == "sWGaugeDirection")return String(dVWR_WindDirectionM, 1);
+	if (var == "sWSpeed")return String(dVWR_WindSpeedkn,1);
 	if (var == "sTemp")return String(fbmp_temperature, 1);
   if (var == "sPress")return String(fbmp_pressure/100, 0);
 	if (var == "sBoardInfo")return sBoardInfo;
@@ -76,6 +76,7 @@ String replaceVariable(const String& var){
   if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
   if (var == "sCL_Addr")return WiFi.localIP().toString();
   if (var == "sCL_Status")return String(sCL_Status);
+  if (var == "sI2C_Status")return String(sI2C_Status);
   if (var == "sBMP_Status")return String(sBMP_Status);
   return "NoVariable";
 }
