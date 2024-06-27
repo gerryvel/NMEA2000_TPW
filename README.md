@@ -3,27 +3,27 @@
 Basics for this Pojekt is "NMEA2000-TempPressure" from @HOMBERGER and "NMEA0183-to-NMEA2000" with ESP32 @AndrasSzep.
 
 This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
-Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" and Output to same NMEA2000.
+Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" @norbert-walter and send also the Direction and Speed to NMEA2000.
 
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
 The project requires the NMEA2000 and the NMEA2000_esp32 libraries from Timo Lappalainen: https://github.com/ttlappalainen. Both libraries have to be downloaded and installed.
-Also you need the Async TCP Library for ESP32 Arduino https://github.com/me-no-dev/AsyncTCP and the changed NMEA0183 Library and BoatData (not the Original @Lappalainen!) @Andras Szep.
 
 For the BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
 
-For the ESP32 CAN bus, i used the "Waveshare SN65HVD230 Can Board" as transceiver. For small space i cut the connectors and mount this board upside down. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
+For the ESP32 CAN bus, i used the SN65HVD230 Chip as transceiver. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.
 
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)
 - Traco-Power TSR 1-2450 for 12V / 5V
 - RGB LED Kingbright L-154A4SURKQBDZGW
-- Waveshare SN65HVD230 Can Board (adapted, cutted the (also without) connector)
+- SN65HVD230 Can Chip
 - Case Wago 789
+- circuit board by Aisler: https://aisler.net/p/NZFHAMAJ
 
 # Schaltplan
 
