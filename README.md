@@ -1,9 +1,9 @@
-# NMEA2000_TPW Version 1.3
+# NMEA2000_TPW Version 2.0
 
 Basics for this Pojekt is "NMEA2000-TempPressure" from @HOMBERGER and "NMEA0183-to-NMEA2000" with ESP32 @AndrasSzep.
 
 This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
-Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" @norbert-walter and send also the Direction and Speed to NMEA2000.
+Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" @norbert-walter and send to NMEA2000.
 
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
@@ -14,32 +14,35 @@ For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
 
-For the ESP32 CAN bus, i used the SN65HVD230 Chip as transceiver. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
+For the ESP32 CAN bus, i used the SN65HVD230 chip as transceiver. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.
 
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)
 - Traco-Power TSR 1-2450 for 12V / 5V
 - RGB LED Kingbright L-154A4SURKQBDZGW
-- SN65HVD230 Can Chip
-- Case Wago 789
-- circuit board by Aisler: https://aisler.net/p/NZFHAMAJ
+- TI SMD-Chip SN65HVD230
+- Case Wago 789-905
 
-# Schaltplan
+# Wiring diagram
 
-![grafik](https://user-images.githubusercontent.com/17195231/228666974-7ecb2b85-ea2b-4d19-b73a-715880c24c6a.png)
+[SchaltplanTPW_kiCad.pdf](https://github.com/gerryvel/NMEA2000_TPW/files/11401880/SchaltplanTPW_kiCad.pdf)
+
+# PCB
+
+Aisler PCB Layout https://aisler.net/p/NZFHAMAJ
 
 # Hardware
 
-![TPW N2k](https://user-images.githubusercontent.com/17195231/201548865-527490c7-9898-4cfb-8c67-161541537aac.jpg)
+![PNG-Bild](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/3f11f60e-832c-4a33-9e59-35a974e494bd)
+![_com apple Pasteboard dirmnK](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/51dbb481-9931-4788-9c1b-f460ad98ce15)
 
-![grafik](https://user-images.githubusercontent.com/17195231/227721635-994e5d76-131b-49b2-9e4c-9c372bde4454.png)
+# Partlist:
 
-![image](https://user-images.githubusercontent.com/17195231/227989873-d6256e00-5c0f-4283-a65b-ce08e13113d3.jpeg)
-
-![image](https://user-images.githubusercontent.com/17195231/228036198-5dd91f80-0a2a-475a-9819-7a0e74eb7e1d.jpeg)
-
-![image](https://user-images.githubusercontent.com/17195231/229289756-e99d60ca-26d9-4dae-9ddc-732938938918.jpeg)
+- Adafruit Huzzah! ESP32 (for programming need USB-Adapter)[Link](https://www.exp-tech.de/plattformen/internet-of-things-iot/9350/adafruit-huzzah32-esp32-breakout-board)
+- SN65HVD230 [Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
+- Traco-Power TSR 1-2450 for 12V / 5V [Link](https://www.reichelt.de/dc-dc-wandler-tsr-1-1-w-5-v-1000-ma-sil-to-220-tsr-1-2450-p116850.html?search=tsr+1-24)
+- Case Wago 789
 
 # Website
 
@@ -52,6 +55,4 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 # Plotter
 
 ![image](https://github.com/gerryvel/NMEA2000_TPW/blob/89836d41f83f9eaae73e8502d0ef879308bd933f/4DEDE642-D2EE-429E-9A56-A173FFFC7A6C.jpeg)
-
-
 
