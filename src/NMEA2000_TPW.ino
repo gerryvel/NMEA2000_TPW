@@ -88,7 +88,6 @@ int bufferIndex = 0;
 
 static ETSTimer intervalTimer;
 
-
 /************************ event callbacks ***************************/
 void read_nmea0183()
 {
@@ -235,7 +234,6 @@ void setup()
 	}
 	Serial.println("Speicher LittleFS benutzt:");
 	Serial.println(LittleFS.usedBytes());
-
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
 
@@ -268,6 +266,8 @@ void setup()
       ESP.restart();
   }
   
+  WiFi.hostname(HostName);
+
   server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(LittleFS, "/favicon.ico", "image/x-icon");
 	});
@@ -287,27 +287,37 @@ void setup()
 		request->send(LittleFS, "/style.css", "text/css");
 	});
 
+WiFiDiag();
+
+if (WiFi.SSID() = "NoWa")
+{
+  CL_SSID = "NoWa";
+} else {
+  CL_SSID = "Yachta";
+}
+Serial.printf("Actual Client SSID: %s\n", CL_SSID);
+
 // Anmelden mit WiFi als Client an Windmesser
   WiFi.disconnect(true);
-    delay(1000);   
-    int count = 0; // Init Counter WFIConnect  
-  WiFi.begin(CL_SSID, CL_PASSWORD);
+  delay(1000);   
+  int count = 0; // Init Counter WFIConnect  
+WiFi.begin(CL_SSID, CL_PASSWORD);
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
     Serial.print(".");
     LEDflash(LED(Red));
-    count++;
+   count++;
     if (count = 10) break;
   }
   if (WiFi.isConnected()) {
-    bConnect_CL = 1;
+   bConnect_CL = 1;
     Serial.println("Client Connection");
     LEDflash(LED(Green));
   }
   else
     Serial.println("Client Connection failed");
-    WiFi.reconnect();
+    WiFi.reconnect(); 
 
 // Start OTA
   ArduinoOTA
@@ -358,7 +368,7 @@ void setup()
     bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
     bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3); 
 
-
+  MDNSResponder mdns;
   MDNS.begin(HostName);
   MDNS.addService("http", "tcp", 80);
 
@@ -405,26 +415,26 @@ void loop()
   LEDoff();
   // Listen NMEA0183 or reconnect Wifi
   bConnect_CL = WiFi.status() == WL_CONNECTED ? 1 : 0;
-  Serial.printf("WL Connection Status: %i\n", WL_CONNECTED);
-  Serial.printf("bConnect Client: %i\n", bConnect_CL);
-  //iSTA_on = WiFi.enableSTA(iSTA_on);
+  Serial.print("WL Connection Status: ");
+  Serial.println(WL_CONNECTED);
+  Serial.print("bConnect Client: ");
+  Serial.println(bConnect_CL);
   { // Listen NMEA0183
     if (bConnect_CL == 1){ // Connected an listen
       Serial.printf("Wifi %s connencted!\n", CL_SSID);
       read_nmea0183();
-      delay(500);
+      delay(100);
     }
     else{
       Serial.println("Wifi connect failed!\n");
       bConnect_CL = 0;
       Serial.printf("Reconnecting to %s\n", CL_SSID);
-      WiFi.disconnect();
       WiFi.reconnect();    // wifi down, reconnect here
       delay(500);
       int WLcount = 0;
-      int UpCount = 0;
+     int UpCount = 0;
       while (WiFi.status() != WL_CONNECTED && WLcount < 50){
-        delay(500);
+        delay(50);
         Serial.printf(".");
         LEDflash(LED(Red));
         if (UpCount >= 20)  // just keep terminal from scrolling sideways
@@ -452,7 +462,6 @@ void loop()
 
 ArduinoOTA.handle();
 
-
 // Status AP 
   Serial.printf("Soft-AP IP address = %s\n", WiFi.softAPIP().toString());
   sCL_Status = sWifiStatus(WiFi.status());
@@ -467,13 +476,14 @@ ArduinoOTA.handle();
       delay(200);
       return;
     }
-    else
+    else {
       sBMP_Status = "BMP Lesen erfolgreich";
       fbmp_pressure = bmp.readPressure();
       fbmp_temperature = bmp.readTemperature();
       fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-    LEDflash(LED(Blue));
-    delay(100);
+      LEDflash(LED(Blue));
+      delay(100);
+    }
 
   //N2K
     SendN2kWind();
