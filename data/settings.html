@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <br />
+    <p class="label">Windmesser SSID: %sCL_SSID%</br>
+    Aktuelles Passwort: %sCL_PASSWORD%</p>
+    %CONFIGPLACEHOLDER%
+    <script>
+        function formToJson(form) {
+            var xhr = new XMLHttpRequest();
+            var SSID = form.SSID.value;
+            var Password = form.Password.value;
+
+            var jsonFormInfo = JSON.stringify({
+                SSID: SSID,
+                Password: Password,
+            });
+
+            xhr.open("POST", "/settings.html?save=" + jsonFormInfo, true);
+            window.alert("Json function send end");
+            xhr.send();
+        }
+    </script>
+
+    <ul class="bottomnav">
+        <li><a href="/">Home</a></li>
+        <li><a class="active" href="settings.html">Settings</a></li>
+        <li><a href="system.html">System</a></li>
+        <li class="right"><a href="ueber.html">About</a></li>
+    </ul>
+</body>
+</html >

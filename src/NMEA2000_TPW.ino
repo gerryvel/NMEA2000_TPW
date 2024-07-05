@@ -72,12 +72,15 @@ String replaceVariable(const String& var){
   if (var == "sPress")return String(fbmp_pressure/100, 0);
 	if (var == "sBoardInfo")return sBoardInfo;
   if (var == "sFS_Space")return String(LittleFS.usedBytes());
-	if (var == "sAP_IP")return AP_IP.toString();
+	if (var == "sAP_IP")return WiFi.softAPIP().toString();
   if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
   if (var == "sCL_Addr")return WiFi.localIP().toString();
   if (var == "sCL_Status")return String(sCL_Status);
   if (var == "sI2C_Status")return String(sI2C_Status);
   if (var == "sBMP_Status")return String(sBMP_Status);
+  if (var == "sCL_SSID")return String(CL_SSID);
+  if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
+  if (var == "CONFIGPLACEHOLDER")return processor(var);
   return "NoVariable";
 }
 
@@ -88,7 +91,7 @@ int bufferIndex = 0;
 
 static ETSTimer intervalTimer;
 
-/************************ event callbacks ***************************/
+/***************************** Funktionen **************************/
 void read_nmea0183()
 {
   if (nmeaclient.connected()) {
@@ -222,7 +225,7 @@ void SendN2kPressure(void){
   }
 }
 
-//===============================================SETUP==============================
+//================================== SETUP ==============================//
 void setup()
 {
   Serial.begin(115200);
@@ -236,6 +239,10 @@ void setup()
 	Serial.println(LittleFS.usedBytes());
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
+  readConfig("/config.json");
+	CL_SSID = tAP_Config.wAP_SSID;
+	CL_PASSWORD = tAP_Config.wAP_Password;
+  Serial.println("Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD);
 
   freeHeapSpace();
 
@@ -254,10 +261,8 @@ void setup()
   if(WiFi.softAP(AP_SSID, AP_PASSWORD, channel, hide_SSID, max_connection)){
     WiFi.softAPConfig(IP, Gateway, NMask);
     Serial.println("");
-    IPAddress myIP = WiFi.softAPIP();
     Serial.println("Network " + String(AP_SSID) + " running");
-    Serial.print("AP IP address: ");
-    Serial.println(myIP);
+//    Serial.println("AP IP address: " + WiFi.softAPIP());
     delay(1000);
   } else {
       Serial.println("Starting AP failed.");
@@ -267,6 +272,7 @@ void setup()
   }
   
   WiFi.hostname(HostName);
+  Serial.println("Set Hostname done");
 
   server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(LittleFS, "/favicon.ico", "image/x-icon");
@@ -277,6 +283,9 @@ void setup()
 	server.on("/system.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/system.html", String(), false, replaceVariable);
 	});
+  server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest* request) {
+		request->send(LittleFS, "/settings.html", String(), false, replaceVariable);
+	});
 	server.on("/ueber.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/ueber.html", String(), false, replaceVariable);
 	});
@@ -286,18 +295,29 @@ void setup()
 	server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/style.css", "text/css");
 	});
+  server.on("/settings.html", HTTP_POST, [](AsyncWebServerRequest *request)
+	{
+		int count = request->params();
+		Serial.printf("Anzahl: %i\n", count);
+		for (int i = 0;i < count;i++)
+		{
+			AsyncWebParameter* p = request->getParam(i);
+			Serial.print("PWerte von der Internet - Seite: ");
+			Serial.print("Param name: ");
+			Serial.println(p->name());
+			Serial.print("Param value: ");
+			Serial.println(p->value());
+			Serial.println("------");
+			// p->value in die config schreiben
+			writeConfig(p->value());
+		}
+		request->send(200, "text/plain", "Daten gespeichert");
+	});
 
 WiFiDiag();
 
-if (WiFi.SSID() = "NoWa")
-{
-  CL_SSID = "NoWa";
-} else {
-  CL_SSID = "Yachta";
-}
-Serial.printf("Actual Client SSID: %s\n", CL_SSID);
-
 // Anmelden mit WiFi als Client an Windmesser
+Serial.println("Client Connection");
   WiFi.disconnect(true);
   delay(1000);   
   int count = 0; // Init Counter WFIConnect  
@@ -312,7 +332,7 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
   }
   if (WiFi.isConnected()) {
    bConnect_CL = 1;
-    Serial.println("Client Connection");
+    Serial.println("Client Connected");
     LEDflash(LED(Green));
   }
   else
@@ -409,7 +429,7 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
     Serial.println(" NMEA2000 Initialized failed");
   
 }
-//===============================================Loop==============================
+//=================================== Loop ==============================//
 void loop()
 { 
   LEDoff();
@@ -463,7 +483,7 @@ void loop()
 ArduinoOTA.handle();
 
 // Status AP 
-  Serial.printf("Soft-AP IP address = %s\n", WiFi.softAPIP().toString());
+  Serial.printf("Soft-AP IP address: %s\n", WiFi.softAPIP().toString());
   sCL_Status = sWifiStatus(WiFi.status());
 
  delay(500);

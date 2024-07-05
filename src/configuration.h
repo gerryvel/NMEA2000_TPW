@@ -8,8 +8,17 @@
 #define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 5
 #define N2K_SOURCE 15
 
-//Configuration Refresh Page x Sec.
-#define PAGE_REFRESH 10 
+//Configuration Web Page 
+#define PAGE_REFRESH 10 // x Sec.
+#define WEB_TITEL "NMEA2000TPW"
+
+//Configuration mit Webinterface
+struct Web_Config
+{
+	char wAP_SSID[64];
+	char wAP_Password[12];
+};
+Web_Config tAP_Config;
 
 //Configuration AP 
 #define HostName        "NMEA2000TPW"
@@ -29,8 +38,8 @@ IPAddress SELF_IP;
 
 //Configuration Client (Network Data Windsensor)
 //#define 
-String CL_SSID = "NoWa";					// Standard NoWa 
-#define CL_PASSWORD  "12345678"				
+String CL_SSID = "";					// Standard NoWa 
+String CL_PASSWORD = "";			
 int iSTA_on = 0;                            // Status STA-Mode
 int bConnect_CL = 0;
 bool bClientConnected = 0;

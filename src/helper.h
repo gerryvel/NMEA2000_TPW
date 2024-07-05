@@ -10,6 +10,8 @@
 #include <Wire.h>
 #include <WiFi.h>
 #include "configuration.h"
+#include <ArduinoJson.h>
+#include <Preferences.h>
 
 void ShowTime(){
 	time_t now = time(NULL);
@@ -20,8 +22,6 @@ void ShowTime(){
 	printf("Zeit: %s\n", buff);
 }
 
-#define WEB_TITEL "NMEA2000 TPW"
-
 void freeHeapSpace(){
 	static unsigned long last = millis();
 	if (millis() - last > 5000) {
@@ -29,7 +29,7 @@ void freeHeapSpace(){
 		Serial.printf("\n[MAIN] Free heap: %d bytes\n", ESP.getFreeHeap());
 	}
 }
-
+/***************************** WiFi Diagnose **************************/
 void WiFiDiag(void) {
   Serial.println("\nWifi-Diag:");
   AP_IP = WiFi.softAPIP();
@@ -65,6 +65,8 @@ void WiFiDiag(void) {
   }
 }
 
+/***************************** Filesystem **************************/
+
 void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
     Serial.printf("Listing directory: %s\r\n", dirname);
 
@@ -96,6 +98,79 @@ void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
     }
 }
 
+void readConfig(String filename) {
+  JsonDocument testDocument;
+	File configFile = LittleFS.open(filename);
+	if (configFile)
+	{
+		Serial.println("opened config file");
+		DeserializationError error = deserializeJson(testDocument, configFile);
+
+		// Test if parsing succeeds.
+		if (error)
+		{
+			Serial.print(F("deserializeJson() failed: "));
+			Serial.println(error.f_str());
+			return;
+		}
+
+		Serial.println("deserializeJson ok");
+		{
+			Serial.println("Lese Daten aus Config - Datei");
+			strcpy(tAP_Config.wAP_SSID, testDocument["SSID"] | "NoWa");
+			strcpy(tAP_Config.wAP_Password, testDocument["Password"] | "12345678");
+			Serial.println(tAP_Config.wAP_SSID);
+		}
+		configFile.close();
+		Serial.println("Config - Datei geschlossen");
+	}
+
+	else
+	{
+		Serial.println("failed to load json config");
+	}
+}
+
+
+bool writeConfig(String json)
+{
+	Serial.println(json);
+
+	Serial.println("neue Konfiguration speichern");
+
+	File configFile = LittleFS.open("/config.json", FILE_WRITE);
+	if (configFile)
+	{
+		Serial.println("Config - Datei öffnen");
+		File configFile = LittleFS.open("/config.json", FILE_WRITE);
+		if (configFile)
+		{
+			Serial.println("Config - Datei zum Schreiben geöffnet");
+			JsonDocument testDocument;
+			Serial.println("JSON - Daten übergeben");
+			DeserializationError error = deserializeJson(testDocument, json);
+			// Test if parsing succeeds.
+			if (error)
+			{
+				Serial.print(F("deserializeJson() failed: "));
+				Serial.println(error.f_str());
+				// bei Memory - Fehler den <Wert> in StaticJsonDocument<200> testDocument; erhöhen
+				return false;
+			}
+			Serial.println("Konfiguration schreiben...");
+			serializeJson(testDocument, configFile);
+			Serial.println("Konfiguration geschrieben...");
+
+			// neue Config in Serial ausgeben zur Kontrolle
+			serializeJsonPretty(testDocument, Serial);
+
+			Serial.println("Config - Datei geschlossen");
+			configFile.close();
+		}
+	}
+	return true;
+}
+/***************************** I2C Bus **************************/
 void I2C_scan(void){
   byte error, address;
   int nDevices;
@@ -156,6 +231,25 @@ String sWifiStatus(int Status)
     case WL_DISCONNECTED:return "Nicht verbunden";
     default:return "unbekannt";
   }
+}
+
+String processor(const String& var)
+{
+	if (var == "CONFIGPLACEHOLDER")
+	{
+		String buttons = "";
+		buttons += "<form onSubmit = \"event.preventDefault(); formToJson(this);\">";
+		buttons += "<p class=\"CInput\"><label>SSID </label><input type = \"text\" name = \"SSID\" value=\"";
+		buttons += tAP_Config.wAP_SSID;
+		buttons += "\"/></p>";
+		buttons += "<p class=\"CInput\"><label>Password </label><input type = \"text\" name = \"Password\" value=\"";
+		buttons += tAP_Config.wAP_Password;
+		buttons += "\"/></p>";
+		buttons += "<p><input type=\"submit\" value=\"Speichern\"></p>";
+		buttons += "</form>";
+		return buttons;
+	}
+	return String();
 }
 
 #endif   
