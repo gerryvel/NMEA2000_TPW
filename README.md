@@ -1,9 +1,9 @@
 # NMEA2000_TPW Version 2.0
 
-Basics for this Pojekt is "NMEA2000-TempPressure" from @HOMBERGER and "NMEA0183-to-NMEA2000" with ESP32 @AndrasSzep.
+Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger) and "NMEA0183-to-NMEA2000" with ESP32 [@AndrasSzep](https://github.com/AndrasSzep).
 
 This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
-Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" @norbert-walter and send to NMEA2000.
+Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" [@norbert-walter](https://github.com/norbert-walter) and send to NMEA2000.
 
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
@@ -46,11 +46,12 @@ Aisler PCB Layout https://aisler.net/p/NZFHAMAJ
 
 # Website
 
-![image](https://user-images.githubusercontent.com/17195231/228060438-5684a891-3952-4b01-8499-b57e9f5e0bac.jpeg)
+![IMG_2500](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/b117fe6d-a43f-4831-a43e-61374d73174b)
 
-![image](https://user-images.githubusercontent.com/17195231/228060533-b21ea270-33f6-4de0-9d59-917f8d27dbc2.jpeg)
+![IMG_2499](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/c33b525f-c8b4-41a1-ae78-1a0f6be4a08a)
 
-![image](https://user-images.githubusercontent.com/17195231/228060619-1ddb1600-8da0-468c-b6b3-252db2e3b783.jpeg)
+![IMG_2497](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/aac53487-2c57-44ec-a7cf-06ccbd9c7413)
+
 
 # Plotter
 
