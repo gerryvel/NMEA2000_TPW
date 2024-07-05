@@ -30,7 +30,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # PCB
 
-Aisler PCB Layout https://aisler.net/p/NZFHAMAJ
+Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Hardware
 
@@ -52,6 +52,7 @@ Aisler PCB Layout https://aisler.net/p/NZFHAMAJ
 
 ![IMG_2497](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/aac53487-2c57-44ec-a7cf-06ccbd9c7413)
 
+![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/f34b5f2e-7c5c-434d-bbc7-f006c7c9dbe9)
 
 # Plotter
 
