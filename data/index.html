@@ -11,7 +11,7 @@
 <body>
     <p class="label">Temperatur: %sTemp% &deg;C</p>
     <p class="label">Luftdruck: %sPress% mbar</p>
-    <p class="label">Windgeschwindigkeit: %sWSpeed% m/s</p>
+    <p class="label">Windgeschwindigkeit: %sWSpeed% kn</p>
     <canvas data-type="radial-gauge"
             data-width="300"
             data-height="300"
@@ -29,7 +29,7 @@
         {"from": 20, "to": 60, "color": "rgba(0, 255, 0, 1)"},
         {"from": 130, "to": 230, "color": "rgba(140, 180, 60, 1)"},
         {"from": 300, "to": 340, "color": "rgba(255, 01, 0, 1)"}
-    ]'
+        ]'
             data-color-plate="#777"
             data-color-major-ticks="#ddd"
             data-color-minor-ticks="#ddd"
@@ -47,9 +47,49 @@
             data-animation-duration="1500"
             data-animation-rule="linear"
             data-value-text='%sWDirection% &deg;'
-            data-value='%sWGaugeDirection%'></canvas>
-
-            <canvas data-type="radial-gauge"
+            data-value='%sWGaugeDirection%'
+	></canvas>
+    <canvas data-type="radial-gauge"
+            data-width="300"
+            data-height="300"
+            data-units="kn"
+            data-title="Windgeschwindigkeit"
+            data-min-value="0"
+            data-start-angle="70"
+            data-ticks-angle="220"
+            data-value-box="true"
+            data-max-value="60"
+            data-major-ticks="0,10,12,30,40,50,60"
+            data-minor-ticks="5"
+            data-stroke-ticks="yes"
+            data-highlights='[
+        {"from": 0, "to": 6, "color": "rgba(0, 191, 255, .75)"},
+        {"from": 6, "to": 15, "color": "rgba(0, 255, 0, .75)"},
+        {"from": 15, "to": 27, "color": "rgba(0, 255, 0, .75)"},
+        {"from": 27, "to": 40, "color": "rgba(255, 01, 0, .75)"},
+        {"from": 40, "to": 60, "color": "rgba(205, 38, 38, .75)"}
+        ]'
+            data-color-plate="#777"
+            data-color-major-ticks="#ddd"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#eee"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-plate="#222"
+            data-border-shadow-width="0"
+            data-borders="yes"
+            data-needle-type="arrow"
+            data-needle-width="3"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-value-text='%sWSpeed% kn'
+            data-value='%sWSpeed%'
+></canvas>  
+    <br>
+    <canvas data-type="radial-gauge"
             data-width="300"
             data-height="300"
             data-units="mbar"
@@ -66,7 +106,7 @@
         {"from": 800, "to": 900, "color": "rgba(255, 01, 0, 1)"},
         {"from": 900, "to": 1000, "color": "rgba(140, 180, 60, 1)"},
         {"from": 1000, "to": 1100, "color": "rgba(0, 255, 0, 1)"}
-    ]'
+        ]'
             data-color-plate="#777"
             data-color-major-ticks="#ddd"
             data-color-minor-ticks="#ddd"
@@ -84,7 +124,46 @@
             data-animation-duration="1500"
             data-animation-rule="linear"
             data-value-text='%sPress% mbar'
-            data-value='%sPress%'></canvas>       
+            data-value='%sPress%'
+	></canvas>       
+    
+    <canvas data-type="radial-gauge"
+            data-width="300"
+            data-height="300"
+            data-units="&deg;C"
+            data-title="Temperatur"
+            data-min-value="0"
+            data-start-angle="70"
+            data-ticks-angle="220"
+            data-value-box="true"
+            data-max-value="50"
+            data-major-ticks="0,10,12,30,40,50"
+            data-minor-ticks="5"
+            data-stroke-ticks="yes"
+            data-highlights='[
+            {"from": 0, "to": 15, "color": "rgba(0, 191, 255, .75)"},
+            {"from": 15, "to": 30, "color": "rgba(0, 255, 0, .75)"},
+            {"from": 30, "to": 50, "color": "rgba(255, 01, 0, .75)"}
+            ]'
+            data-color-plate="#777"
+            data-color-major-ticks="#ddd"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#eee"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-plate="#222"
+            data-border-shadow-width="0"
+            data-borders="yes"
+            data-needle-type="arrow"
+            data-needle-width="3"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-value-text='%sTemp% &deg;C'
+            data-value='%sTemp%'
+	></canvas>  
     <ul class="bottomnav">
         <li><a class="active" href="index.html">Home</a></li>
         <li><a href="settings.html">Settings</a></li>
