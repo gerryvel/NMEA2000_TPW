@@ -1,4 +1,4 @@
-# NMEA2000_TPW Version 2.0
+# NMEA2000_TPW Version 2.1
 
 Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger) and "NMEA0183-to-NMEA2000" with ESP32 [@AndrasSzep](https://github.com/AndrasSzep).
 
@@ -46,11 +46,9 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Website
 
-![IMG_2500](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/b117fe6d-a43f-4831-a43e-61374d73174b)
+![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/3d27c48d-9003-4b28-b112-30b1559b3bdd)
 
-![IMG_2499](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/c33b525f-c8b4-41a1-ae78-1a0f6be4a08a)
-
-![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/6ca69eeb-1d45-469e-bc1b-94e285fbf626)
+![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/cf0d31f0-2dc2-4f43-9a57-4670f1886f26)
 
 ![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/f34b5f2e-7c5c-434d-bbc7-f006c7c9dbe9)
 
