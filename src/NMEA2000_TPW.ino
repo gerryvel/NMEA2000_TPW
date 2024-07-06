@@ -37,6 +37,7 @@
 #include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h> 
+#include "web.h"
 
 // N2k
 #include <N2kMsg.h>
@@ -53,36 +54,6 @@
 
 // BMP 388
 Adafruit_BMP3XX bmp;
-
-// Set web server port number to 80
-AsyncWebServer server(80);
-AsyncEventSource events("/events");
-
-// Info Board for HTML-Output
-BoardInfo boardInfo;
-String sBoardInfo;
-
-//Variables for website
-String sCL_Status = sWifiStatus(WiFi.status());
-String replaceVariable(const String& var){
-	if (var == "sWDirection")return String(dVWR_WindDirectionM,1);
-	if (var == "sWGaugeDirection")return String(dVWR_WindDirectionM, 1);
-	if (var == "sWSpeed")return String(dVWR_WindSpeedkn,1);
-	if (var == "sTemp")return String(fbmp_temperature, 1);
-  if (var == "sPress")return String(fbmp_pressure/100, 0);
-	if (var == "sBoardInfo")return sBoardInfo;
-  if (var == "sFS_Space")return String(LittleFS.usedBytes());
-	if (var == "sAP_IP")return WiFi.softAPIP().toString();
-  if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
-  if (var == "sCL_Addr")return WiFi.localIP().toString();
-  if (var == "sCL_Status")return String(sCL_Status);
-  if (var == "sI2C_Status")return String(sI2C_Status);
-  if (var == "sBMP_Status")return String(sBMP_Status);
-  if (var == "sCL_SSID")return String(CL_SSID);
-  if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
-  if (var == "CONFIGPLACEHOLDER")return processor(var);
-  return "NoVariable";
-}
 
 // NMEA 0183 Stream
 WiFiClient nmeaclient;
@@ -150,10 +121,7 @@ const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environme
                                                    0
                                                  };
 
-#define TempSendOffset 0 // Send time offsets
-#define PressSendOffset 50 // Send time offsets
-#define WindSendOffset 100 // Send time offsets
-#define SlowDataUpdatePeriod 1000 // Time between CAN Messages sent
+
 
 bool IsTimeToUpdate(unsigned long NextUpdate){
   return (NextUpdate < millis());
@@ -274,46 +242,6 @@ void setup()
   WiFi.hostname(HostName);
   Serial.println("Set Hostname done");
 
-  server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(LittleFS, "/favicon.ico", "image/x-icon");
-	});
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
-		request->send(LittleFS, "/index.html", String(), false, replaceVariable);
-	});
-	server.on("/system.html", HTTP_GET, [](AsyncWebServerRequest* request) {
-		request->send(LittleFS, "/system.html", String(), false, replaceVariable);
-	});
-  server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest* request) {
-		request->send(LittleFS, "/settings.html", String(), false, replaceVariable);
-	});
-	server.on("/ueber.html", HTTP_GET, [](AsyncWebServerRequest* request) {
-		request->send(LittleFS, "/ueber.html", String(), false, replaceVariable);
-	});
-	server.on("/gauge.min.js", HTTP_GET, [](AsyncWebServerRequest* request) {
-		request->send(LittleFS, "/gauge.min.js");
-	});
-	server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request) {
-		request->send(LittleFS, "/style.css", "text/css");
-	});
-  server.on("/settings.html", HTTP_POST, [](AsyncWebServerRequest *request)
-	{
-		int count = request->params();
-		Serial.printf("Anzahl: %i\n", count);
-		for (int i = 0;i < count;i++)
-		{
-			AsyncWebParameter* p = request->getParam(i);
-			Serial.print("PWerte von der Internet - Seite: ");
-			Serial.print("Param name: ");
-			Serial.println(p->name());
-			Serial.print("Param value: ");
-			Serial.println(p->value());
-			Serial.println("------");
-			// p->value in die config schreiben
-			writeConfig(p->value());
-		}
-		request->send(200, "text/plain", "Daten gespeichert");
-	});
-
 WiFiDiag();
 
 // Anmelden mit WiFi als Client an Windmesser
@@ -391,6 +319,8 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
   MDNSResponder mdns;
   MDNS.begin(HostName);
   MDNS.addService("http", "tcp", 80);
+
+  website();
 
   //***********************************************Setup NMEA2000 system*******************************************
   // Reserve enough buffer for sending all messages. This does not work on small memory devices like Uno or Mega

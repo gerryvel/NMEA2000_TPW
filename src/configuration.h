@@ -7,6 +7,10 @@
 #define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 
 #define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 5
 #define N2K_SOURCE 15
+#define TempSendOffset 0 // Send time offsets
+#define PressSendOffset 50 // Send time offsets
+#define WindSendOffset 100 // Send time offsets
+#define SlowDataUpdatePeriod 1000 // Time between CAN Messages sent
 
 //Configuration Web Page 
 #define PAGE_REFRESH 10 // x Sec.

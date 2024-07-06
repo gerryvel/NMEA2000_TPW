@@ -233,23 +233,4 @@ String sWifiStatus(int Status)
   }
 }
 
-String processor(const String& var)
-{
-	if (var == "CONFIGPLACEHOLDER")
-	{
-		String buttons = "";
-		buttons += "<form onSubmit = \"event.preventDefault(); formToJson(this);\">";
-		buttons += "<p class=\"CInput\"><label>SSID </label><input type = \"text\" name = \"SSID\" value=\"";
-		buttons += tAP_Config.wAP_SSID;
-		buttons += "\"/></p>";
-		buttons += "<p class=\"CInput\"><label>Password </label><input type = \"text\" name = \"Password\" value=\"";
-		buttons += tAP_Config.wAP_Password;
-		buttons += "\"/></p>";
-		buttons += "<p><input type=\"submit\" value=\"Speichern\"></p>";
-		buttons += "</form>";
-		return buttons;
-	}
-	return String();
-}
-
 #endif   

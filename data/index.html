@@ -48,6 +48,43 @@
             data-animation-rule="linear"
             data-value-text='%sWDirection% &deg;'
             data-value='%sWGaugeDirection%'></canvas>
+
+            <canvas data-type="radial-gauge"
+            data-width="300"
+            data-height="300"
+            data-units="mbar"
+            data-title="Luftdruck"
+            data-min-value="800"
+            data-start-angle="70"
+            data-ticks-angle="220"
+            data-value-box="true"
+            data-max-value="1100"
+            data-major-ticks="800,850,900,950,1000,1050,1100"
+            data-minor-ticks="10"
+            data-stroke-ticks="yes"
+            data-highlights='[
+        {"from": 800, "to": 900, "color": "rgba(255, 01, 0, 1)"},
+        {"from": 900, "to": 1000, "color": "rgba(140, 180, 60, 1)"},
+        {"from": 1000, "to": 1100, "color": "rgba(0, 255, 0, 1)"}
+    ]'
+            data-color-plate="#777"
+            data-color-major-ticks="#ddd"
+            data-color-minor-ticks="#ddd"
+            data-color-title="#eee"
+            data-color-units="#ccc"
+            data-color-numbers="#eee"
+            data-color-plate="#222"
+            data-border-shadow-width="0"
+            data-borders="yes"
+            data-needle-type="arrow"
+            data-needle-width="3"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            data-animation-duration="1500"
+            data-animation-rule="linear"
+            data-value-text='%sPress% mbar'
+            data-value='%sPress%'></canvas>       
     <ul class="bottomnav">
         <li><a class="active" href="index.html">Home</a></li>
         <li><a href="settings.html">Settings</a></li>
