@@ -50,7 +50,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ![IMG_2499](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/c33b525f-c8b4-41a1-ae78-1a0f6be4a08a)
 
-![IMG_2497](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/aac53487-2c57-44ec-a7cf-06ccbd9c7413)
+![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/6ca69eeb-1d45-469e-bc1b-94e285fbf626)
 
 ![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/f34b5f2e-7c5c-434d-bbc7-f006c7c9dbe9)
 
