@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 
+// Versionierung
+#define Version "V2.1 vom 06.07.2024"  // Version
+
 // Configuration N2k
 #define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 
 #define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 5

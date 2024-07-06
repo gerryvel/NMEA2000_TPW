@@ -54,6 +54,7 @@ String replaceVariable(const String& var){
   	if (var == "sBMP_Status")return String(sBMP_Status);
   	if (var == "sCL_SSID")return String(CL_SSID);
   	if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
+	if (var == "sVersion")return Version;
   	if (var == "CONFIGPLACEHOLDER")return processor(var);
   return "NoVariable";
 }
