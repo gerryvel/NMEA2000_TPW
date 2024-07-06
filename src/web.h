@@ -43,18 +43,18 @@ String replaceVariable(const String& var){
 	if (var == "sWGaugeDirection")return String(dVWR_WindDirectionM, 1);
 	if (var == "sWSpeed")return String(dVWR_WindSpeedkn,1);
 	if (var == "sTemp")return String(fbmp_temperature, 1);
-  if (var == "sPress")return String(fbmp_pressure/100, 0);
+  	if (var == "sPress")return String(fbmp_pressure/100, 0);
 	if (var == "sBoardInfo")return sBoardInfo;
-  if (var == "sFS_Space")return String(LittleFS.usedBytes());
+  	if (var == "sFS_Space")return String(LittleFS.usedBytes());
 	if (var == "sAP_IP")return WiFi.softAPIP().toString();
-  if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
-  if (var == "sCL_Addr")return WiFi.localIP().toString();
-  if (var == "sCL_Status")return String(sCL_Status);
-  if (var == "sI2C_Status")return String(sI2C_Status);
-  if (var == "sBMP_Status")return String(sBMP_Status);
-  if (var == "sCL_SSID")return String(CL_SSID);
-  if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
-  if (var == "CONFIGPLACEHOLDER")return processor(var);
+  	if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
+ 	if (var == "sCL_Addr")return WiFi.localIP().toString();
+ 	if (var == "sCL_Status")return String(sCL_Status);
+  	if (var == "sI2C_Status")return String(sI2C_Status);
+  	if (var == "sBMP_Status")return String(sBMP_Status);
+  	if (var == "sCL_SSID")return String(CL_SSID);
+  	if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
+  	if (var == "CONFIGPLACEHOLDER")return processor(var);
   return "NoVariable";
 }
 void website(){
