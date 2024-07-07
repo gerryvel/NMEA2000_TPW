@@ -1,4 +1,4 @@
-# NMEA2000_TPW Version 2.1
+# TPW Senso Modul Version 2.1
 
 Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger) and "NMEA0183-to-NMEA2000" with ESP32 [@AndrasSzep](https://github.com/AndrasSzep).
 
