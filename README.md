@@ -59,7 +59,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 # Versions
 
 - 2.1 Update Website Gauge's
-- 2.0 Comlete Website update, Windsensor Stream read update
+- 2.0 Comlete Website update, Windsensor Stream read update (code and html files)
 - 1.3 Update Windsensor Wlan connect code
 - 1.2 Update Website
 - 1.1 Update PCB
