@@ -1,4 +1,4 @@
-# NMEA2000_TPW Version 2.1
+# TPW Sensor Modul
 
 Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger) and "NMEA0183-to-NMEA2000" with ESP32 [@AndrasSzep](https://github.com/AndrasSzep).
 
@@ -56,3 +56,11 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ![image](https://github.com/gerryvel/NMEA2000_TPW/blob/89836d41f83f9eaae73e8502d0ef879308bd933f/4DEDE642-D2EE-429E-9A56-A173FFFC7A6C.jpeg)
 
+# Versions
+
+- 2.1 Update Website Gauge's
+- 2.0 Comlete Website update, Windsensor Stream read update (code and html files)
+- 1.3 Update Windsensor Wlan connect code
+- 1.2 Update Website
+- 1.1 Update PCB
+- 1.0 working Version
