@@ -47,3 +47,8 @@ void LEDoff() {
   digitalWrite(LED(Red), 0);
 }
 
+void LEDonAll() {
+  digitalWrite(LED(Blue), 1);
+  digitalWrite(LED(Green), 1);
+  digitalWrite(LED(Red), 1);
+}
