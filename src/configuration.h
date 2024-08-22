@@ -62,11 +62,12 @@ String sBMP_Status = "";
 String sI2C_Status = "";
 
 //Definiton NMEA0183
-double dVWR_WindDirectionM = 0; // Relative Windrichtung in Grad (zur Schiffsnase)
-double dVWR_WindAngle = 0;      // relativer Wind
-double dVWR_WindSpeedkn = 0;    // Relative Windgeschwindigkeit in Knoten
-double dVWR_WindSpeedms = 0;    // Relative Windgeschwindigkeit in m/s
-double dVWR_WindSpeedkm = 0;    // Relative Windgeschwindigkeit in km/h
+double dMWV_WindAngle = 0;      // Relative Windrichtung
+double dMWV_WindSpeed = 0;      // Relative Windgeschwindigkeit
+double dVWR_WindDirectionM = 0; // Absolute Windrichtung in Grad (zur Schiffsnase)
+double dVWR_WindSpeedkn = 0;    // Absolute Windgeschwindigkeit in Knoten
+double dVWR_WindSpeedms = 0;    // Absolute Windgeschwindigkeit in m/s
+double dVWR_WindSpeedkm = 0;    // Absolute Windgeschwindigkeit in km/h
 double dXDR_Kraengung = 0;
 
 //Configuration NMEA0183
