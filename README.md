@@ -26,7 +26,8 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # Wiring diagram
 
-[Schaltplan TPW.pdf](https://github.com/user-attachments/files/16917942/Schaltplan.TPW.pdf)
+![grafik](https://github.com/user-attachments/assets/ed22c02f-b8a3-47e3-8b4a-da89745346ac)
+
 
 # PCB
 
