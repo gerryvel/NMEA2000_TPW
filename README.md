@@ -26,7 +26,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # Wiring diagram
 
-[SchaltplanTPW_kiCad.pdf](https://github.com/gerryvel/NMEA2000_TPW/files/11401880/SchaltplanTPW_kiCad.pdf)
+[Schaltplan TPW.pdf](https://github.com/user-attachments/files/16917942/Schaltplan.TPW.pdf)
 
 # PCB
 
@@ -58,7 +58,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Versions
 
-- 2.2 Update read values from windsensor
+- 2.2 Update read values from windsensor, Update PCB
 - 2.1 Update Website Gauge's
 - 2.0 Comlete Website update, Windsensor Stream read update (code and html files)
 - 1.3 Update Windsensor Wlan connect code
