@@ -132,7 +132,7 @@ const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environme
                                                    130314L, // Pressure
                                                    130306L, // Wind
                                                    0
-                                                 };
+                                                 }; 
 
 
 
