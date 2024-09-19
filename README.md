@@ -26,7 +26,8 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # Wiring diagram
 
-[SchaltplanTPW_kiCad.pdf](https://github.com/gerryvel/NMEA2000_TPW/files/11401880/SchaltplanTPW_kiCad.pdf)
+![grafik](https://github.com/user-attachments/assets/ed22c02f-b8a3-47e3-8b4a-da89745346ac)
+
 
 # PCB
 
@@ -34,14 +35,18 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Hardware
 
-![PNG-Bild](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/3f11f60e-832c-4a33-9e59-35a974e494bd)
-![_com apple Pasteboard dirmnK](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/51dbb481-9931-4788-9c1b-f460ad98ce15)
+![grafik](https://github.com/user-attachments/assets/eecf0db0-d7b9-4051-9207-430e125e7a3d)
+
 
 # Partlist:
 
 - Adafruit Huzzah! ESP32 (for programming need USB-Adapter)[Link](https://www.exp-tech.de/plattformen/internet-of-things-iot/9350/adafruit-huzzah32-esp32-breakout-board)
 - SN65HVD230 [Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
 - Traco-Power TSR 1-2450 for 12V / 5V [Link](https://www.reichelt.de/dc-dc-wandler-tsr-1-1-w-5-v-1000-ma-sil-to-220-tsr-1-2450-p116850.html?search=tsr+1-24)
+- P4SMAJ26CA, SMA Bidirectional TVS Diode, 26V, 400W
+- PESD5V0L2BT, Dual bidirectional TVS diode
+- B360, SMD-Diode
+- EPCO B82789C0513, EMI 2-inductor filter
 - Case Wago 789
 
 # Website
@@ -58,6 +63,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Versions
 
+- 2.2 Update read values from windsensor, Update PCB
 - 2.1 Update Website Gauge's
 - 2.0 Comlete Website update, Windsensor Stream read update (code and html files)
 - 1.3 Update Windsensor Wlan connect code
