@@ -7,8 +7,8 @@ const int LEDBoard = 13;   //Adafruit Huzzah32
 
 enum LED {
   Red = 25, 
-  Green = 33, 
-  Blue = 26
+  Green = 26, 
+  Blue = 33
   };
 
 void LEDblink(int PIN = LED()){
@@ -28,9 +28,10 @@ void LEDflash(int PIN = LED()){
    while(1)   // blockiert dank der TaskPause nicht 
    {
       digitalWrite(PIN,HIGH);  // LED ein
-      taskPause(50);   // gibt Rechenzeit ab    
+      delay(5);
+      // taskPause(5);   // gibt Rechenzeit ab    
       digitalWrite(PIN,LOW);   // LED aus
-      taskPause(5);   // gibt Rechenzeit ab    
+      taskPause(1000);   // gibt Rechenzeit ab    
    }
    taskEnd();   
 }
@@ -39,16 +40,19 @@ void LEDInit() {
   pinMode(LED(Red),   OUTPUT);
   pinMode(LED(Blue),  OUTPUT);
   pinMode(LED(Green), OUTPUT);
+  digitalWrite(LED(Red), 1);
+  delay(250);
+  digitalWrite(LED(Red), 0);
+  digitalWrite(LED(Blue), 1);
+  delay(250);
+  digitalWrite(LED(Blue), 0);
+  digitalWrite(LED(Green), 1);
+  delay(250);
+  digitalWrite(LED(Green), 0);
 }
 
 void LEDoff() {
   digitalWrite(LED(Blue), 0);
   digitalWrite(LED(Green), 0);
   digitalWrite(LED(Red), 0);
-}
-
-void LEDonAll() {
-  digitalWrite(LED(Blue), 1);
-  digitalWrite(LED(Green), 1);
-  digitalWrite(LED(Red), 1);
 }

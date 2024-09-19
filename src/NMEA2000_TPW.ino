@@ -234,9 +234,6 @@ void setup()
   I2C_scan();
 //LED
   LEDInit();
-  LEDonAll();
-  delay(100);
-  LEDoff();
 // Boardinfo	
   sBoardInfo = boardInfo.ShowChipIDtoString();
 
@@ -379,7 +376,7 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
 //=================================== Loop ==============================//
 void loop()
 { 
-  LEDoff();
+  // LEDoff();
   // Listen NMEA0183 or reconnect Wifi
   bConnect_CL = WiFi.status() == WL_CONNECTED ? 1 : 0;
   Serial.print("WL Connection Status: ");
@@ -403,7 +400,6 @@ void loop()
       while (WiFi.status() != WL_CONNECTED && WLcount < 50){
         delay(50);
         Serial.printf(".");
-        LEDflash(LED(Red));
         if (UpCount >= 20)  // just keep terminal from scrolling sideways
         {
           UpCount = 0;
@@ -418,8 +414,8 @@ void loop()
 
  { // LED visu Wifi
     switch (WiFi.status()){
-      case 0: LEDblink(LED(Blue)); break;  // WL_IDLE_STATUS
-      case 3: LEDblink(LED(Green)); break;  // WL_CONNECTED
+      case 0: LEDflash(LED(Blue)); break;  // WL_IDLE_STATUS
+      case 3: LEDflash(LED(Green)); break;  // WL_CONNECTED
       case 4:                              // WL_CONNECT_FAILED
       case 5:                              // WL_CONNECTION_LOST
       case 6: LEDblink(LED(Red)); break;  // WL_DISCONNECTED
