@@ -39,9 +39,9 @@ String processor(const String& var)
 //Variables for website
 String sCL_Status = sWifiStatus(WiFi.status());
 String replaceVariable(const String& var){
-	if (var == "sWDirection")return String(dVWR_WindDirectionM,1);
-	if (var == "sWGaugeDirection")return String(dVWR_WindDirectionM, 1);
-	if (var == "sWSpeed")return String(dVWR_WindSpeedkn,1);
+	if (var == "sWDirection")return String(dMWV_WindAngle,1);
+	if (var == "sWGaugeDirection")return String(dMWV_WindAngle, 1);
+	if (var == "sWSpeed")return String(dMWV_WindSpeed,1);
 	if (var == "sTemp")return String(fbmp_temperature, 1);
   	if (var == "sPress")return String(fbmp_pressure/100, 0);
 	if (var == "sBoardInfo")return sBoardInfo;

@@ -73,13 +73,6 @@ void read_nmea0183()
       if (c == '\n' || bufferIndex >= sizeof(buffer) - 1) {
         buffer[bufferIndex] = '\0'; // Abschluss der Zeichenkette
 
-          float TwindDirection = 0.0;
-          float TwindSpeedkn = 0.0;
-          float TwindSpeedms =0.0;
-
-          float MwindDirection = 0.0;
-          float MwindSpeedkn = 0.0;
-          float MwindSpeedms =0.0;
         // Überprüfen, ob es sich um eine VWR-Nachricht handelt
         if (strstr(buffer, "VWR") != NULL) {
           // Beispiel: "$IIVWR,090.0,R,005.5,N,002.8,M,009.0,K*50" oder $WIVWR,30.76,L,4.33,N,2.23,M,8.03,K*77
@@ -89,7 +82,7 @@ void read_nmea0183()
           Serial.printf("VWR Windrichtung: %f °\n ", TwindDirection);
           Serial.printf("VWR Windgeschwindigkeit: %f kn\n", TwindSpeedkn);
           Serial.printf("VWR Windgeschwindigkeit. %f m/s\n\n", TwindSpeedms);
-          dVWR_WindDirectionM = DegToRad(TwindDirection);
+          dVWR_WindDirection = DegToRad(TwindDirection);
           dVWR_WindSpeedkn = TwindSpeedkn;
           dVWR_WindSpeedms = TwindSpeedms;
         }       
@@ -168,10 +161,9 @@ void SendN2kWind(void){
     Serial.print("N2k Wind Data: ");
     Serial.printf("Windrichtung: %f ° - Windgeschw: %f kn\n", dMWV_WindAngle, dMWV_WindSpeed);
 
-    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeed, dMWV_WindAngle, tN2kWindReference::N2kWind_Apparent); // WindReference: AWA, AWS
+    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeed, dMWV_WindAngle, tN2kWindReference::N2kWind_Apparent); // WindReference: AWA, AWS 
     NMEA2000.SendMsg(N2kMsg);
-    Serial.print("N2k sende Wind: ");
-    Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
+    Serial.printf("%s\nData: %s, PGN: %i, Priority: %i, SourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
 
@@ -186,7 +178,7 @@ void SendN2kTemperatur(void){
 
     SetN2kPGN130312(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
     NMEA2000.SendMsg(N2kMsg);
-    Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
+    Serial.printf("%s\nData: %s, PGN: %i, Priority: %i, SourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
 
@@ -201,8 +193,7 @@ void SendN2kPressure(void){
 
     SetN2kPGN130314(N2kMsg, 0, 0, N2kps_Atmospheric, (fbmp_pressure));
     NMEA2000.SendMsg(N2kMsg);
-    Serial.print("N2k sende Pressure & Altitude: ");
-    Serial.printf("%s\nData: %s\nPGN: %i\nPriority: %i\nSourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
+    Serial.printf("%s\nData: %s, PGN: %i, Priority: %i, SourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
 

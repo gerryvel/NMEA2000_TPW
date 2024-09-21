@@ -61,10 +61,19 @@ float fbmp_altitude = 0;
 String sBMP_Status = "";
 String sI2C_Status = "";
 
+//Definitions Wind Data
+float TwindDirection = 0.0;
+float TwindSpeedkn = 0.0;
+float TwindSpeedms = 0.0;
+
+float MwindDirection = 0.0;
+float MwindSpeedkn = 0.0;
+float MwindSpeedms = 0.0;
+
 //Definiton NMEA0183
-double dMWV_WindAngle = 0;      // Relative Windrichtung
+double dMWV_WindAngle = 0;      // Relative Windrichtung in rad
 double dMWV_WindSpeed = 0;      // Relative Windgeschwindigkeit
-double dVWR_WindDirectionM = 0; // Absolute Windrichtung in Grad (zur Schiffsnase)
+double dVWR_WindDirection = 0; // Absolute Windrichtung in rad
 double dVWR_WindSpeedkn = 0;    // Absolute Windgeschwindigkeit in Knoten
 double dVWR_WindSpeedms = 0;    // Absolute Windgeschwindigkeit in m/s
 double dVWR_WindSpeedkm = 0;    // Absolute Windgeschwindigkeit in km/h
