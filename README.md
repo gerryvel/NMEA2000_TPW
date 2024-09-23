@@ -63,6 +63,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Versions
 
+- 2.3 Update Windvalues for N2k (0-180 / 0- -180)
 - 2.2 Update read values from windsensor, Update PCB
 - 2.1 Update Website Gauge's
 - 2.0 Comlete Website update, Windsensor Stream read update (code and html files)
