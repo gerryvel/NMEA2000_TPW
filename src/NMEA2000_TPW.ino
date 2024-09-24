@@ -93,8 +93,8 @@ void read_nmea0183()
           Serial.printf("MWV Windrichtung: %f °\n", MwindDirection);
           Serial.printf("MWV Windgeschwindigkeit: %f \n\n", MwindSpeedkn);
 
-if (MwindDirection > 180.1)    // Windrichtung 0- +180 STB und 0 - -180 BB
-MwindDirection = MwindDirection - 360.0;
+            if (MwindDirection > 180.1)    // Windrichtung 0- +180 STB und 0 - -180 BB
+            MwindDirection = MwindDirection - 360.0;
 
           dMWV_WindAngle = DegToRad(MwindDirection);
           dMWV_WindSpeed = MwindSpeedkn;
