@@ -20,7 +20,7 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 # Wiring diagram
 
-![grafik](https://github.com/user-attachments/assets/ed22c02f-b8a3-47e3-8b4a-da89745346ac)
+![grafik](https://github.com/user-attachments/assets/cedf11dc-f76e-48c0-939f-1261e12a5e92)
 
 # PCB
 
