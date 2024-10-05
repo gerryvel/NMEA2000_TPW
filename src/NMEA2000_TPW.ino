@@ -79,7 +79,7 @@ void read_nmea0183()
        
           sscanf(buffer, "$%*[^,],%f,%*[^,],%f,N,%f,M,", &TwindDirection, &TwindSpeedkn, &TwindSpeedms);    
             // Speichern Daten in Variablen
-          Serial.printf("VWR Windrichtung: %f °\n ", TwindDirection);
+          Serial.printf("VWR Windrichtung: %f °\n", TwindDirection);
           Serial.printf("VWR Windgeschwindigkeit: %f kn\n", TwindSpeedkn);
           Serial.printf("VWR Windgeschwindigkeit. %f m/s\n\n", TwindSpeedms);
           dVWR_WindDirection = DegToRad(TwindDirection);
@@ -93,8 +93,8 @@ void read_nmea0183()
           Serial.printf("MWV Windrichtung: %f °\n", MwindDirection);
           Serial.printf("MWV Windgeschwindigkeit: %f \n\n", MwindSpeedkn);
 
-            if (MwindDirection > 180.1)    // Windrichtung 0- +180 STB und 0 - -180 BB
-            MwindDirection = MwindDirection - 360.0;
+            //if (MwindDirection > 180.1)    // Windrichtung 0- +180 STB und 0 - -180 BB
+            //MwindDirection = MwindDirection - 360.0;
 
           dMWV_WindAngle = DegToRad(MwindDirection);
           dMWV_WindSpeed = MwindSpeedkn;
@@ -388,6 +388,7 @@ void loop()
       Serial.println("Wifi connect failed!\n");
       bConnect_CL = 0;
       Serial.printf("Reconnecting to %s\n", CL_SSID);
+
       WiFi.reconnect();    // wifi down, reconnect here
       delay(500);
       int WLcount = 0;
@@ -395,6 +396,7 @@ void loop()
       while (WiFi.status() != WL_CONNECTED && WLcount < 50){
         delay(50);
         Serial.printf(".");
+        LEDflash(LED(Blue));
         if (UpCount >= 20)  // just keep terminal from scrolling sideways
         {
           UpCount = 0;
@@ -411,7 +413,7 @@ void loop()
     switch (WiFi.status()){
       case 0: LEDflash(LED(Blue)); break;  // WL_IDLE_STATUS
       case 3: LEDflash(LED(Green)); break;  // WL_CONNECTED
-      case 4:                              // WL_CONNECT_FAILED
+      case 4:                               // WL_CONNECT_FAILED
       case 5:                              // WL_CONNECTION_LOST
       case 6: LEDblink(LED(Red)); break;  // WL_DISCONNECTED
       default: LEDoff();
