@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 // Versionierung
-#define Version "V2.3 vom 22.09.2024"  // Version
+#define Version "V2.4 vom 11.10.2024"  // Version
 
 // Configuration N2k
 #define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 
@@ -45,8 +45,9 @@ IPAddress SELF_IP;
 
 //Configuration Client (Network Data Windsensor)
 //#define 
-String CL_SSID = "";					// Standard NoWa 
-String CL_PASSWORD = "";			
+String CL_SSID = "";					// Standard NoWa 			
+String CL_PASSWORD = "";				// Standard 12345678
+
 int iSTA_on = 0;                            // Status STA-Mode
 int bConnect_CL = 0;
 bool bClientConnected = 0;
@@ -67,12 +68,13 @@ float TwindSpeedkn = 0.0;
 float TwindSpeedms = 0.0;
 
 float MwindDirection = 0.0;
-float MwindSpeedkn = 0.0;
+float MwindSpeed = 0.0;
 float MwindSpeedms = 0.0;
 
 //Definiton NMEA0183
 double dMWV_WindAngle = 0;      // Relative Windrichtung in rad
 double dMWV_WindSpeed = 0;      // Relative Windgeschwindigkeit
+int dMWV_Reference = 0;		// Referenz 
 double dVWR_WindDirection = 0; // Absolute Windrichtung in rad
 double dVWR_WindSpeedkn = 0;    // Absolute Windgeschwindigkeit in Knoten
 double dVWR_WindSpeedms = 0;    // Absolute Windgeschwindigkeit in m/s

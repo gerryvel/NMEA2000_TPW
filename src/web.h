@@ -35,7 +35,6 @@ String processor(const String& var)
 	return String();
 }
 
-
 //Variables for website
 String sCL_Status = sWifiStatus(WiFi.status());
 String replaceVariable(const String& var){
@@ -48,7 +47,7 @@ String replaceVariable(const String& var){
   	if (var == "sFS_Space")return String(LittleFS.usedBytes());
 	if (var == "sAP_IP")return WiFi.softAPIP().toString();
   	if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
- 	if (var == "sCL_Addr")return WiFi.localIP().toString();
+ 	if (var == "sCL_Addr")return CL_IP.toString();		
  	if (var == "sCL_Status")return String(sCL_Status);
   	if (var == "sI2C_Status")return String(sI2C_Status);
   	if (var == "sBMP_Status")return String(sBMP_Status);

@@ -19,7 +19,7 @@
   you have to write handler for it and add it to the NMEA0183Handlers variable
   initialization. NMEA0183.h add ParseTCPMessage function from Andras Szap.
 
-  // Version 2.0, 24.06.2024, gerryvel Gerry Sebb
+  V2.4 vom 11.10.2024, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
@@ -48,6 +48,7 @@
 #include "NMEA0183.h"
 #include <NMEA0183Msg.h>
 #include <NMEA0183Messages.h>
+#include <NMEA0183Stream.h>
 
 // Can Bus
 #include <NMEA2000_CAN.h>  // This will automatically choose right CAN library and create suitable NMEA2000 object
@@ -55,74 +56,14 @@
 // BMP 388
 Adafruit_BMP3XX bmp;
 
-// NMEA 0183 Stream
-WiFiClient nmeaclient;
-char buffer[128]; // Puffer zur Speicherung der empfangenen Daten
-int bufferIndex = 0;
-
 static ETSTimer intervalTimer;
 
-/***************************** Funktionen **************************/
-void read_nmea0183()
-{
-  if (nmeaclient.connected()) {
-    while (nmeaclient.available()) {
-      char c = nmeaclient.read();
-      Serial.write(c);
-
-      if (c == '\n' || bufferIndex >= sizeof(buffer) - 1) {
-        buffer[bufferIndex] = '\0'; // Abschluss der Zeichenkette
-
-        // Überprüfen, ob es sich um eine VWR-Nachricht handelt
-        if (strstr(buffer, "VWR") != NULL) {
-          // Beispiel: "$IIVWR,090.0,R,005.5,N,002.8,M,009.0,K*50" oder $WIVWR,30.76,L,4.33,N,2.23,M,8.03,K*77
-       
-          sscanf(buffer, "$%*[^,],%f,%*[^,],%f,N,%f,M,", &TwindDirection, &TwindSpeedkn, &TwindSpeedms);    
-            // Speichern Daten in Variablen
-          Serial.printf("VWR Windrichtung: %f °\n", TwindDirection);
-          Serial.printf("VWR Windgeschwindigkeit: %f kn\n", TwindSpeedkn);
-          Serial.printf("VWR Windgeschwindigkeit. %f m/s\n\n", TwindSpeedms);
-          dVWR_WindDirection = DegToRad(TwindDirection);
-          dVWR_WindSpeedkn = TwindSpeedkn;
-          dVWR_WindSpeedms = TwindSpeedms;
-        }       
-        else if (strstr(buffer, "MWV") != NULL) {
-          // $WIMWV,333.33,T,0.00,K,A*23
-          sscanf(buffer, "$%*[^,],%f,%*[^,],%f,K,", &MwindDirection, &MwindSpeedkn);    
-            // Speichern Daten in Variablen
-          Serial.printf("MWV Windrichtung: %f °\n", MwindDirection);
-          Serial.printf("MWV Windgeschwindigkeit: %f \n\n", MwindSpeedkn);
-
-            //if (MwindDirection > 180.1)    // Windrichtung 0- +180 STB und 0 - -180 BB
-            //MwindDirection = MwindDirection - 360.0;
-
-          dMWV_WindAngle = DegToRad(MwindDirection);
-          dMWV_WindSpeed = MwindSpeedkn;
-        }
-
-        // Puffer zurücksetzen
-        bufferIndex = 0;
-      } else {
-        buffer[bufferIndex++] = c;
-      }
-    }
-  } else {
-    Serial.println("Verbindung zum NMEA-Server verloren");
-    nmeaclient.stop();
-
-    // Versuchen, die Verbindung wiederherzustellen
-    if (nmeaclient.connect(SERVER_HOST_NAME, TCP_PORT)) {
-      Serial.println("Verbunden mit NMEA-Server");
-    } else {
-      Serial.println("Verbindung zum NMEA-Server fehlgeschlagen");
-    }
-  }
-  
-}
+/***************************** NMEA2000 **************************/
 
 String NMEA_Info; // formatted Output NMEA2000-Message
 int NodeAddress = 0; // To store last Node Address
 Preferences preferences; // Nonvolatile storage on ESP32 - To store LastDeviceAddress
+
 // Set the information for other bus devices, which messages we support
 const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environmental parameters
                                                    130312L, // Temperature
@@ -163,9 +104,9 @@ void SendN2kWind(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);      
     Serial.print("N2k Wind Data: ");
-    Serial.printf("Windrichtung: %f ° - Windgeschw: %f kn\n", dMWV_WindAngle, dMWV_WindSpeed);
+    Serial.printf("Windrichtung: %f ° - Windgeschw: %f kn, Referenz: %i\n", dMWV_WindAngle, dMWV_WindSpeed, dMWV_Reference);
 
-    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeed, dMWV_WindAngle, tN2kWindReference::N2kWind_Apparent); // WindReference: AWA, AWS 
+    SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeed, dMWV_WindAngle, tN2kWindReference(dMWV_Reference)); // WindReference: AWA, AWS 
     NMEA2000.SendMsg(N2kMsg);
     Serial.printf("%s\nData: %s, PGN: %i, Priority: %i, SourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
@@ -213,14 +154,14 @@ void setup()
 		Serial.println("An Error has occurred while mounting LittleFS");
 		return;
 	}
-	Serial.println("Speicher LittleFS benutzt:");
+	Serial.println("Memory LittleFS used:");
 	Serial.println(LittleFS.usedBytes());
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
   readConfig("/config.json");
 	CL_SSID = tAP_Config.wAP_SSID;
 	CL_PASSWORD = tAP_Config.wAP_Password;
-  Serial.println("Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD);
+  Serial.println("Configdata WIFI-Client:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD);
 
   freeHeapSpace();
 
@@ -239,11 +180,12 @@ void setup()
     WiFi.softAPConfig(IP, Gateway, NMask);
     Serial.println("");
     Serial.println("Network " + String(AP_SSID) + " running");
-//    Serial.println("AP IP address: " + WiFi.softAPIP());
+    LEDon(LED(Green));
     delay(1000);
   } else {
       Serial.println("Starting AP failed.");
-      digitalWrite(LED(Red), HIGH);  
+      LEDoff(LED(Green));
+      LEDon(LED(Red));  
       delay(1000); 
       ESP.restart();
   }
@@ -258,9 +200,11 @@ Serial.println("Client Connection");
   WiFi.disconnect(true);
   delay(1000);   
   int count = 0; // Init Counter WFIConnect  
-WiFi.begin(CL_SSID, CL_PASSWORD);
+
+WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   while (WiFi.status() != WL_CONNECTED)
   {
+    LEDon(LED(Blue));
     delay(500);
     Serial.print(".");
     LEDflash(LED(Red));
@@ -270,10 +214,10 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
   if (WiFi.isConnected()) {
    bConnect_CL = 1;
     Serial.println("Client Connected");
-    LEDflash(LED(Green));
   }
   else
     Serial.println("Client Connection failed");
+    LEDoff(LED(Blue));
     WiFi.reconnect(); 
 
 // Start OTA
@@ -311,19 +255,24 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
 
 // Mit dem NMEA-Server verbinden
   if (nmeaclient.connect(SERVER_HOST_NAME, TCP_PORT)) {
-    Serial.println("Verbunden mit NMEA-Server");
+    Serial.println("Connection to NMEA-Server ready");
   } else {
-    Serial.println("Verbindung zum NMEA-Server fehlgeschlagen");
+    Serial.println("Connection to NMEA-Server failure");
   }
 
+// Start NMEA0183 stream handling
+  NMEA0183.SetMessageStream(&nmeaclient);
+  NMEA0183.Open();
+  Serial.println("NMEA0183 started");
+
 // BMP38x begin & setup
-  if (!bmp.begin_I2C())
+  if (!bmp.begin_I2C()) 
   {
     Serial.println("Could not find a valid BMP3 sensor, check wiring!");
   }
-    bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-    bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-    bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3); 
+  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3); 
 
   MDNSResponder mdns;
   MDNS.begin(HostName);
@@ -367,28 +316,30 @@ WiFi.begin(CL_SSID, CL_PASSWORD);
   else
     Serial.println(" NMEA2000 Initialized failed");
   
+  // Setup LED off
+  LEDoff_RGB();
 }
 //=================================== Loop ==============================//
 void loop()
 { 
-  // LEDoff();
   // Listen NMEA0183 or reconnect Wifi
   bConnect_CL = WiFi.status() == WL_CONNECTED ? 1 : 0;
-  Serial.print("WL Connection Status: ");
-  Serial.println(WL_CONNECTED);
-  Serial.print("bConnect Client: ");
-  Serial.println(bConnect_CL);
+  Serial.printf("WLAN Status: %s \n", sWifiStatus(WiFi.status()));
+  Serial.printf("bConnect Client: %i \n", bConnect_CL);
   { // Listen NMEA0183
     if (bConnect_CL == 1){ // Connected an listen
       Serial.printf("Wifi %s connencted!\n", CL_SSID);
-      read_nmea0183();
+      // LEDflash(LED(Green));
+      flashLED(LED(Green), 5);
+      //read_nmea0183();
+      NMEA0183_ParseMessages();
       delay(100);
     }
     else{
       Serial.println("Wifi connect failed!\n");
       bConnect_CL = 0;
       Serial.printf("Reconnecting to %s\n", CL_SSID);
-
+      LEDoff(LED(Green));
       WiFi.reconnect();    // wifi down, reconnect here
       delay(500);
       int WLcount = 0;
@@ -396,7 +347,8 @@ void loop()
       while (WiFi.status() != WL_CONNECTED && WLcount < 50){
         delay(50);
         Serial.printf(".");
-        LEDflash(LED(Blue));
+        //LEDflash(LED(Red));
+        flashLED(LED(Red), 5);
         if (UpCount >= 20)  // just keep terminal from scrolling sideways
         {
           UpCount = 0;
@@ -405,21 +357,11 @@ void loop()
         ++UpCount;
         ++WLcount;
       }
-      WiFiDiag();
     }
   }
 
- { // LED visu Wifi
-    switch (WiFi.status()){
-      case 0: LEDflash(LED(Blue)); break;  // WL_IDLE_STATUS
-      case 3: LEDflash(LED(Green)); break;  // WL_CONNECTED
-      case 4:                               // WL_CONNECT_FAILED
-      case 5:                              // WL_CONNECTION_LOST
-      case 6: LEDblink(LED(Red)); break;  // WL_DISCONNECTED
-      default: LEDoff();
-    }
-  }
-
+  NMEA0183_reconnect();
+  
 ArduinoOTA.handle();
 
 // Status AP 
@@ -429,19 +371,19 @@ ArduinoOTA.handle();
  delay(500);
 
  //Read BMP
-     if (!bmp.performReading()) {
-      Serial.println("Lesefehler BMP");
+     if (!bmp.performReading()) {       
+      Serial.println("BMP reading error");
       sBMP_Status = "BMP Lesefehler";
-      LEDflash(LED(Red));
-      delay(200);
-      return;
+      LEDflash(LED(Blue));
     }
     else {
-      sBMP_Status = "BMP Lesen erfolgreich";
+      Serial.println("BMP read successful");
+      sBMP_Status = "BMP lesen erfolgreich";
       fbmp_pressure = bmp.readPressure();
       fbmp_temperature = bmp.readTemperature();
       fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-      LEDflash(LED(Blue));
+      // LEDblink(LED(Blue));
+      flashLED(LED(Blue), 5);
       delay(100);
     }
 

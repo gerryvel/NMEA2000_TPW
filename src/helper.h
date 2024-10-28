@@ -183,12 +183,13 @@ void I2C_scan(void){
     if (error == 0) 
     {
       Serial.print("I2C device found at address 0x");
-      sI2C_Status = "Device gefunden";
       if (address<16) 
       {
         Serial.print("0");
       }
       Serial.println(address,HEX);
+      String I2CAdress = String(address,HEX);
+      sI2C_Status = "Device gefunden an " + I2CAdress;
       nDevices++;
     }
     else if (error==4) 
