@@ -1,3 +1,14 @@
 {
-    "idf.portWin": "COM4"
+    "idf.portWin": "COM4",
+    "idf.adapterTargetName": "esp32",
+    "idf.espIdfPathWin": "C:\\Users\\gerryadmin\\esp\\esp-idf",
+    "idf.pythonBinPathWin": "C:\\Users\\gerryadmin\\.espressif\\python_env\\idf5.0_py3.8_env\\Scripts\\python.exe",
+    "idf.toolsPathWin": "C:\\Users\\gerryadmin\\.espressif",
+    "idf.customExtraPaths": "C:\\Users\\gerryadmin\\.espressif\\tools\\xtensa-esp-elf-gdb\\11.2_20220823\\xtensa-esp-elf-gdb\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\riscv32-esp-elf-gdb\\11.2_20220823\\riscv32-esp-elf-gdb\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\xtensa-esp32-elf\\esp-2022r1-11.2.0\\xtensa-esp32-elf\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\xtensa-esp32s2-elf\\esp-2022r1-11.2.0\\xtensa-esp32s2-elf\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\xtensa-esp32s3-elf\\esp-2022r1-11.2.0\\xtensa-esp32s3-elf\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\riscv32-esp-elf\\esp-2022r1-11.2.0\\riscv32-esp-elf\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\esp32ulp-elf\\2.35_20220830\\esp32ulp-elf\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\cmake\\3.24.0\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\openocd-esp32\\v0.11.0-esp32-20221026\\openocd-esp32\\bin;C:\\Users\\gerryadmin\\.espressif\\tools\\ninja\\1.10.2;C:\\Users\\gerryadmin\\.espressif\\tools\\idf-exe\\1.0.3;C:\\Users\\gerryadmin\\.espressif\\tools\\ccache\\4.6.2\\ccache-4.6.2-windows-x86_64;C:\\Users\\gerryadmin\\.espressif\\tools\\dfu-util\\0.9\\dfu-util-0.9-win64;C:\\Users\\gerryadmin\\.espressif\\tools\\esp-rom-elfs\\20220823",
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "C:\\Users\\gerryadmin\\.espressif\\tools\\openocd-esp32\\v0.11.0-esp32-20221026/openocd-esp32/share/openocd/scripts",
+        "IDF_CCACHE_ENABLE": "1",
+        "ESP_ROM_ELF_DIR": "C:\\Users\\gerryadmin\\.espressif\\tools\\esp-rom-elfs\\20220823/"
+    },
+    "idf.gitPathWin": "C:\\Users\\gerryadmin\\.espressif\\tools\\idf-git\\2.30.1\\cmd\\git.exe"
 }
