@@ -30,7 +30,7 @@ String processor(const String& var)
 		buttons += "<p class=\"CInput\"><label>Password </label><input type = \"text\" name = \"Password\" value=\"";
 		buttons += tWeb_Config.wAP_Password;
 		buttons += "\"/></p>";
-		buttons += "<p class=\"CInput\"><label>Sensortyp </label><input type = \"text\" name = \"BMP280 = 0, BMP388 = 1\" value=\"";
+		buttons += "<p class=\"CInput\"><label>Sensortyp </label><input type = \"text\" name = \"BMP\" value=\"";
 		buttons += tWeb_Config.wBMP_Sensortype;
 		buttons += "\"/></p>";
 		buttons += "<p><input type=\"submit\" value=\"Speichern\"></p>";
@@ -66,6 +66,9 @@ String replaceVariable(const String& var){
 void website(){
 server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(LittleFS, "/favicon.ico", "image/x-icon");
+	});
+server.on("/logo80.jpg", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(LittleFS, "/logo80.jpg", "image/jpg");
 	});
 server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/index.html", String(), false, replaceVariable);

@@ -19,23 +19,11 @@
         <br />
     <p class="label">Sensor: %sBMP_Status%</p>
         <br />
-    <p class="label">%sVersion%</p>
+    <p class="label">Informationen zum ESP32 - Board:<br />
+        %sBoardInfo%</p>
+        <p class="label">LittleFS, benutzte Bytes:<br />
+            %sFS_Space%</p>
         <br />
-
-    <button class="button" onclick="reboot_handler()">Neustart</button>
-    </p>
-
-    <p id="status"></p>
-    <script>
-        function reboot_handler() 
-        {
-        document.getElementById("status").innerHTML = "Invoking Reboot ...";
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/reboot", true);
-        xhr.send();
-        setTimeout(function(){ window.open("/reboot","_self"); }, 500);
-        }
-    </script>
 
     <ul class="bottomnav">
         <li><a href="/">Home</a></li>

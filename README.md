@@ -57,7 +57,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Versions
 
-- 2.4 Update windvalues and add windsensortemp for N2k
+- 2.4 Update windvalues and add windsensortemp for N2k, website cosmetic
 - 2.3 Update windvalues for N2k
 - 2.2 Update read values from windsensor, Update PCB
 - 2.1 Update website Gauge's
