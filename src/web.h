@@ -7,6 +7,7 @@
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include "helper.h"
+#include "NMEA0183Stream.h"
 
 // Set web server port number to 80
 AsyncWebServer server(80);
@@ -15,6 +16,7 @@ AsyncEventSource events("/events");
 // Info Board for HTML-Output
 BoardInfo boardInfo;
 String sBoardInfo;
+bool IsRebootRequired = false;
 
 String processor(const String& var)
 {
@@ -23,10 +25,13 @@ String processor(const String& var)
 		String buttons = "";
 		buttons += "<form onSubmit = \"event.preventDefault(); formToJson(this);\">";
 		buttons += "<p class=\"CInput\"><label>SSID </label><input type = \"text\" name = \"SSID\" value=\"";
-		buttons += tAP_Config.wAP_SSID;
+		buttons += tWeb_Config.wAP_SSID;
 		buttons += "\"/></p>";
 		buttons += "<p class=\"CInput\"><label>Password </label><input type = \"text\" name = \"Password\" value=\"";
-		buttons += tAP_Config.wAP_Password;
+		buttons += tWeb_Config.wAP_Password;
+		buttons += "\"/></p>";
+		buttons += "<p class=\"CInput\"><label>Sensortyp </label><input type = \"text\" name = \"BMP280 = 0, BMP388 = 1\" value=\"";
+		buttons += tWeb_Config.wBMP_Sensortype;
 		buttons += "\"/></p>";
 		buttons += "<p><input type=\"submit\" value=\"Speichern\"></p>";
 		buttons += "</form>";
@@ -38,21 +43,22 @@ String processor(const String& var)
 //Variables for website
 String sCL_Status = sWifiStatus(WiFi.status());
 String replaceVariable(const String& var){
-	if (var == "sWDirection")return String(dMWV_WindAngle,1);
-	if (var == "sWGaugeDirection")return String(dMWV_WindAngle, 1);
+	if (var == "sWDirection")return String(WindAngle,1);
+	if (var == "sWGaugeDirection")return String(WindAngle, 1);
 	if (var == "sWSpeed")return String(dMWV_WindSpeed,1);
 	if (var == "sTemp")return String(fbmp_temperature, 1);
   	if (var == "sPress")return String(fbmp_pressure/100, 0);
 	if (var == "sBoardInfo")return sBoardInfo;
   	if (var == "sFS_Space")return String(LittleFS.usedBytes());
-	if (var == "sAP_IP")return WiFi.softAPIP().toString();
+	if (var == "sAP_IP")return String(WiFi.softAPIP());
   	if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
- 	if (var == "sCL_Addr")return CL_IP.toString();		
+ 	if (var == "sCL_Addr")return String(CL_IP);		
  	if (var == "sCL_Status")return String(sCL_Status);
   	if (var == "sI2C_Status")return String(sI2C_Status);
   	if (var == "sBMP_Status")return String(sBMP_Status);
   	if (var == "sCL_SSID")return String(CL_SSID);
   	if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
+	if (var == "sBMP")return String(sBMP);
 	if (var == "sVersion")return Version;
   	if (var == "CONFIGPLACEHOLDER")return processor(var);
   return "NoVariable";
@@ -72,6 +78,10 @@ server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 	});
 server.on("/ueber.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/ueber.html", String(), false, replaceVariable);
+	});
+server.on("/reboot", HTTP_GET, [](AsyncWebServerRequest * request) {
+    	request->send(LittleFS, "/reboot.html", String(), false, processor);
+		IsRebootRequired = true;
 	});
 server.on("/gauge.min.js", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/gauge.min.js");

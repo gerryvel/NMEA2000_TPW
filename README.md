@@ -1,6 +1,6 @@
 # TPW Sensor Modul
 
-Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger) and "NMEA0183-to-NMEA2000" with ESP32 [@AndrasSzep](https://github.com/AndrasSzep).
+Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger).
 
 This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
 Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" [@norbert-walter](https://github.com/norbert-walter) and send to NMEA2000.
@@ -57,11 +57,12 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 # Versions
 
-- 2.3 Update Windvalues for N2k
+- 2.4 Update windvalues and add windsensortemp for N2k
+- 2.3 Update windvalues for N2k
 - 2.2 Update read values from windsensor, Update PCB
-- 2.1 Update Website Gauge's
+- 2.1 Update website Gauge's
 - 2.0 Complete Website update, Windsensor Stream read update (code and html files)
-- 1.3 Update Windsensor Wlan connect code
-- 1.2 Update Website
+- 1.3 Update windsensor Wlan connect code
+- 1.2 Update website
 - 1.1 Update PCB
 - 1.0 working Version

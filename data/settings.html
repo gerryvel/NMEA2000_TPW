@@ -10,29 +10,49 @@
     <br />
     <p class="label">WLAN Windmesser</br>
         SSID: %sCL_SSID%</br>
-        Passwort: %sCL_PASSWORD%</p>
+        Passwort: %sCL_PASSWORD%
+    </p>
+    <p class="label">Sensor Typ: %sBMP%</br>
+    </p>
     </br>    
     <p class="CInput">Neue Daten:</br>
         %CONFIGPLACEHOLDER%
     <script>
-        function formToJson(form) {
+        function formToJson(form) 
+        {
             var xhr = new XMLHttpRequest();
             var SSID = form.SSID.value;
             var Password = form.Password.value;
+            var BMP = form.BMP.value;
 
             var jsonFormInfo = JSON.stringify({
                 SSID: SSID,
                 Password: Password,
+                BMP: BMP,
             });
 
             xhr.open("POST", "/settings.html?save=" + jsonFormInfo, true);
             /* window.alert("Json function send end"); */
             xhr.send();
             window.alert("Gespeichert!");
+        }   
+    </script>
+    </p>  
+    <p class="label">Nach &Auml;nderung neu starten!</p>
+    <button class="button" onclick="reboot_handler()">Neustart</button>
+    </p>
+    <p id="status"></p>
+    <script>
+        function reboot_handler() 
+        {
+        document.getElementById("status").innerHTML = "Invoking Reboot ...";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/reboot", true);
+        xhr.send();
+        setTimeout(function(){ window.open("/reboot","_self"); }, 500);
         }
     </script>
-    </p>
-    <p class="label">Nach &Auml;nderung neu starten!</p>
+
     <ul class="bottomnav">
         <li><a href="/">Home</a></li>
         <li><a class="active" href="settings.html">Settings</a></li>

@@ -4,6 +4,15 @@
 #include <Arduino.h>
 #include "configuration.h"
 
+// NMEA0183
+#include "NMEA0183.h"
+#include <NMEA0183Msg.h>
+#include <NMEA0183Messages.h>
+
+// N2k
+#include <N2kMsg.h>
+#include <N2kMessages.h>
+
 // NMEA 0183 Stream
 tNMEA0183 NMEA0183;  // NMEA stream for NMEA0183 receiving
 WiFiClient nmeaclient;
@@ -31,23 +40,28 @@ void NMEA0183_read()
           Serial.printf("VWR Windrichtung: %f °\n", TwindDirection);
           Serial.printf("VWR Windgeschwindigkeit: %f kn\n", TwindSpeedkn);
           Serial.printf("VWR Windgeschwindigkeit. %f m/s\n\n", TwindSpeedms);
-          dVWR_WindDirection = DegToRad(TwindDirection);
-          dVWR_WindSpeedkn = TwindSpeedkn;
-          dVWR_WindSpeedms = TwindSpeedms;
+          // dVWR_WindDirection = DegToRad(TwindDirection);
+          // dVWR_WindSpeedkn = TwindSpeedkn;
+          // dVWR_WindSpeedms = TwindSpeedms;
 
         }       
         else if (strstr(buffer, "MWV") != NULL) {
           // $WIMWV,333.33,T,0.00,K,A*23
-          sscanf(buffer, "$%*[^,],%f,%c,%f,%c,", &MwindDirection, &Reference, &MwindSpeed, &MWVSpeedUnit);    //sscanf(buffer, "$%*[^,],%f,%[^,],%f,K,", &MwindDirection, &MwindSpeedkn); 
+          sscanf(buffer, "$%*[^,],%f,%c,%f,%c,", &MwindDirection, &Reference, &MwindSpeed, &MWVSpeedUnit);  
             // Speichern Daten in Variablen
           Serial.printf("MWV Windrichtung: %f ° %s\n", MwindDirection, Reference);
           Serial.printf("MWV Windgeschwindigkeit: %f %c\n\n", MwindSpeed, MWVSpeedUnit);
 
-            //if (MwindDirection > 180.1)    // Windrichtung 0- +180 STB und 0 - -180 BB
-            //MwindDirection = MwindDirection - 360.0;
+          // dMWV_WindAngle = DegToRad(MwindDirection);
+          // dMWV_WindSpeed = MwindSpeed;
+        }
+         else if (strstr(buffer, "WST") != NULL) {
+          // $PWWST,C,0,x.x,A*hh<CR><LF>
+          sscanf(buffer, "$%*[^,],%*[^,],%*[^,],%f,", &fWindSensorTemp);  
+            // Speichern Daten in Variablen
+          Serial.printf("Wind Sensor Temperatur: %f °\n", fWindSensorTemp);
 
-          dMWV_WindAngle = DegToRad(MwindDirection);
-          dMWV_WindSpeed = MwindSpeed;
+          dWindSensorTemp = fWindSensorTemp;
         }
 
         // Puffer zurücksetzen
@@ -56,18 +70,7 @@ void NMEA0183_read()
         buffer[bufferIndex++] = c;
       }
     }
-  } else {
-    Serial.println("Verbindung zum NMEA-Server verloren");
-    nmeaclient.stop();
-
-    // Versuchen, die Verbindung wiederherzustellen
-    if (nmeaclient.connect(SERVER_HOST_NAME, TCP_PORT)) {
-      Serial.println("Verbunden mit NMEA-Server");
-    } else {
-      Serial.println("Verbindung zum NMEA-Server fehlgeschlagen");
-    }
-  }
-  
+  } 
 }
 
 void NMEA0183_reconnect(){
@@ -83,11 +86,12 @@ void NMEA0183_reconnect(){
   }
 }
 
-void HandleMWV(const tNMEA0183Msg &NMEA0183Msg) {
-  double WindAngle;
+double WindAngle;
+double WindSpeed;
+
+void HandleMWV(const tNMEA0183Msg &NMEA0183Msg) {  
   tNMEA0183WindReference Reference;
   tN2kWindReference WindReference;
-  double WindSpeed;
   tN2kMsg N2kMsg;
   
   Serial.println("MWV Message: ");

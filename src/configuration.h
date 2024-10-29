@@ -10,9 +10,10 @@
 #define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 
 #define ESP32_CAN_RX_PIN GPIO_NUM_5  // Set CAN RX port to 5
 #define N2K_SOURCE 15
-#define TempSendOffset 0 // Send time offsets
+#define Temp1SendOffset 0 // Send time offsets
 #define PressSendOffset 50 // Send time offsets
 #define WindSendOffset 100 // Send time offsets
+#define Temp2SendOffset 150 // Send time offsets
 #define SlowDataUpdatePeriod 1000 // Time between CAN Messages sent
 
 //Configuration Web Page 
@@ -24,8 +25,9 @@ struct Web_Config
 {
 	char wAP_SSID[64];
 	char wAP_Password[12];
+	char wBMP_Sensortype[1];
 };
-Web_Config tAP_Config;
+Web_Config tWeb_Config;
 
 //Configuration AP 
 #define HostName        "NMEA2000TPW"
@@ -52,15 +54,20 @@ int iSTA_on = 0;                            // Status STA-Mode
 int bConnect_CL = 0;
 bool bClientConnected = 0;
 
-//Confuration Sensors bmp
+//Confuration I2C
 #define BMP_SDA 21                      //Standard 21
 #define BMP_SCL 22                      //Standard 22
+// Configuratin Sensors
 #define SEALEVELPRESSURE_HPA (1013.25)  //1013.25
+bool Sensortyp = 0;             // BMP280 = 0, BMP3xx = 1
 float fbmp_temperature = 0;
 float fbmp_pressure = 0;
 float fbmp_altitude = 0;
+float fWindSensorTemp = 0;
+
 String sBMP_Status = "";
 String sI2C_Status = "";
+String sBMP = "";
 
 //Definitions Wind Data
 float TwindDirection = 0.0;
@@ -80,6 +87,7 @@ double dVWR_WindSpeedkn = 0;    // Absolute Windgeschwindigkeit in Knoten
 double dVWR_WindSpeedms = 0;    // Absolute Windgeschwindigkeit in m/s
 double dVWR_WindSpeedkm = 0;    // Absolute Windgeschwindigkeit in km/h
 double dXDR_Kraengung = 0;
+double dWindSensorTemp = 0;
 
 //Configuration NMEA0183
 #define SERVER_HOST_NAME "192.168.5.1"		//"192.168.76.34"

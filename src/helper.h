@@ -117,9 +117,10 @@ void readConfig(String filename) {
 		Serial.println("deserializeJson ok");
 		{
 			Serial.println("Lese Daten aus Config - Datei");
-			strcpy(tAP_Config.wAP_SSID, testDocument["SSID"] | "NoWa");
-			strcpy(tAP_Config.wAP_Password, testDocument["Password"] | "12345678");
-			Serial.println(tAP_Config.wAP_SSID);
+			strcpy(tWeb_Config.wAP_SSID, testDocument["SSID"] | "NoWa");
+			strcpy(tWeb_Config.wAP_Password, testDocument["Password"] | "12345678");
+      strcpy(tWeb_Config.wBMP_Sensortype, testDocument["BMP"] | "0");
+			Serial.println(tWeb_Config.wAP_SSID);
 		}
 		configFile.close();
 		Serial.println("Config - Datei geschlossen");
@@ -171,6 +172,7 @@ bool writeConfig(String json)
 	return true;
 }
 /***************************** I2C Bus **************************/
+
 void I2C_scan(void){
   byte error, address;
   int nDevices;
@@ -189,7 +191,7 @@ void I2C_scan(void){
       }
       Serial.println(address,HEX);
       String I2CAdress = String(address,HEX);
-      sI2C_Status = "Device gefunden an " + I2CAdress;
+      sI2C_Status = "Device gefunden an 0x" + I2CAdress;
       nDevices++;
     }
     else if (error==4) 

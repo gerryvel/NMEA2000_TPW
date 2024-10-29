@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head> 
+<body>
+  <h1>
+  Wartezeit für Reboot, WiFi und Webserver Initialisierung<br>Aufruf der home page in <span id="countdown">15</span> Sekunden...
+</h1>
+<script type="text/javascript">
+  var seconds = 15;
+  function countdown() {
+    seconds = seconds - 1;
+    if (seconds <= 0) {
+      window.location = "/";
+    } else {
+      document.getElementById("countdown").innerHTML = seconds;
+      window.setTimeout("countdown()", 1000);
+    }
+  }
+  countdown();
+</script>
+<ul class="bottomnav">
+    <li><a href="/">Home</a></li>
+    <li><a class="active" href="settings.html">Settings</a></li>
+    <li><a href="system.html">System</a></li>
+    <li class="right"><a href="ueber.html">About</a></li>
+</ul>
+</body>
+</html>

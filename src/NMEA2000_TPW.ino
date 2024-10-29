@@ -11,13 +11,8 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-  NMEA2000 Temperature and Barometric Pressure with BMP280.
+  NMEA2000 Temperature and Barometric Pressure with BMP280 or 388.
   Reads messages from NMEA0183 WindSensor and forwards them to the N2k bus.
-  The messages, which will be handled has been defined on NMEA0183Handlers.cpp
-  on NMEA0183Handlers variable initialization. So this does not automatically
-  handle all NMEA0183 messages. If there is no handler for some message you need,
-  you have to write handler for it and add it to the NMEA0183Handlers variable
-  initialization. NMEA0183.h add ParseTCPMessage function from Andras Szap.
 
   V2.4 vom 11.10.2024, gerryvel Gerry Sebb
 */
@@ -28,6 +23,7 @@
 #include "helper.h"
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP3XX.h>
+#include <Adafruit_BMP280.h>
 #include <wire.h>
 #include <Preferences.h>
 #include <WiFi.h>
@@ -53,8 +49,9 @@
 // Can Bus
 #include <NMEA2000_CAN.h>  // This will automatically choose right CAN library and create suitable NMEA2000 object
 
-// BMP 388
-Adafruit_BMP3XX bmp;
+// BMP
+Adafruit_BMP280 bmp280;
+Adafruit_BMP3XX bmp3xx;
 
 static ETSTimer intervalTimer;
 
@@ -66,7 +63,7 @@ Preferences preferences; // Nonvolatile storage on ESP32 - To store LastDeviceAd
 
 // Set the information for other bus devices, which messages we support
 const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environmental parameters
-                                                   130312L, // Temperature
+                                                   130316L, // Temperature
                                                    130314L, // Pressure
                                                    130306L, // Wind
                                                    0
@@ -104,7 +101,7 @@ void SendN2kWind(void){
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);      
     Serial.print("N2k Wind Data: ");
-    Serial.printf("Windrichtung: %f ° - Windgeschw: %f kn, Referenz: %i\n", dMWV_WindAngle, dMWV_WindSpeed, dMWV_Reference);
+    Serial.printf("Windrichtung: %f ° - Windgeschw: %f m/s, Referenz: %i\n", dMWV_WindAngle, dMWV_WindSpeed, dMWV_Reference);
 
     SetN2kPGN130306(N2kMsg, 0, dMWV_WindSpeed, dMWV_WindAngle, tN2kWindReference(dMWV_Reference)); // WindReference: AWA, AWS 
     NMEA2000.SendMsg(N2kMsg);
@@ -112,17 +109,32 @@ void SendN2kWind(void){
   }
 }
 
-void SendN2kTemperatur(void){
-  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, TempSendOffset);
+void SendN2kCabinTemperatur(void){
+  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, Temp1SendOffset);
   tN2kMsg N2kMsg;
 
   if (IsTimeToUpdate(SlowDataUpdated)){
     SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
     Serial.print("N2k Temperatur Data: ");
-    Serial.printf("Temperatur: %3.1f °C\n", fbmp_temperature);
+    Serial.printf("Temperatur: %3.1f °C\n", fbmp_temperature);  // Cabin temperature
 
-    SetN2kPGN130312(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
-    NMEA2000.SendMsg(N2kMsg);
+    SetN2kPGN130316(N2kMsg, 0, 0, N2kts_MainCabinTemperature, CToKelvin(fbmp_temperature), N2kDoubleNA);
+    NMEA2000.SendMsg(N2kMsg);  
+    Serial.printf("%s\nData: %s, PGN: %i, Priority: %i, SourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
+  }
+}
+
+void SendN2kOutdoorTemperatur(void){
+  static unsigned long SlowDataUpdated = InitNextUpdate(SlowDataUpdatePeriod, Temp2SendOffset);
+  tN2kMsg N2kMsg;
+
+  if (IsTimeToUpdate(SlowDataUpdated)){
+    SetNextUpdate(SlowDataUpdated, SlowDataUpdatePeriod);
+    Serial.print("N2k Temperatur Data: ");
+    Serial.printf("Temperatur: %3.1f °C\n", fWindSensorTemp);  // Outdoor temperature
+
+    SetN2kPGN130316(N2kMsg, 0, 0, N2kts_OutsideTemperature, CToKelvin(fWindSensorTemp), N2kDoubleNA);
+    NMEA2000.SendMsg(N2kMsg);  
     Serial.printf("%s\nData: %s, PGN: %i, Priority: %i, SourceAdress: %i\n\n", "NMEA - Message:", (char*)N2kMsg.Data, (int)N2kMsg.PGN, (int)N2kMsg.Priority, (int)N2kMsg.Source);
   }
 }
@@ -159,9 +171,10 @@ void setup()
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
   readConfig("/config.json");
-	CL_SSID = tAP_Config.wAP_SSID;
-	CL_PASSWORD = tAP_Config.wAP_Password;
-  Serial.println("Configdata WIFI-Client:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD);
+	CL_SSID = tWeb_Config.wAP_SSID;
+	CL_PASSWORD = tWeb_Config.wAP_Password;
+  // Sensortyp = tWeb_Config.wBMP_Sensortype;
+  Serial.println("Configdata WIFI-Client:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp);
 
   freeHeapSpace();
 
@@ -265,15 +278,28 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   NMEA0183.Open();
   Serial.println("NMEA0183 started");
 
-// BMP38x begin & setup
-  if (!bmp.begin_I2C()) 
+// BMP begin & setup
+  if (Sensortyp == 0){
+      sBMP = "BMP280";
+    if (!bmp280.begin()) 
   {
-    Serial.println("Could not find a valid BMP3 sensor, check wiring!");
+    Serial.println("Could not find a valid BMP280 sensor, check wiring!");
   }
-  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3); 
+  } else {
+      sBMP = "BMP388";
+    if (!bmp3xx.begin_I2C()) 
+  {
+    Serial.println("Could not find a valid BMP3xx sensor, check wiring!");
+  }
+  bmp3xx.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+  bmp3xx.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  bmp3xx.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  bmp3xx.setOutputDataRate(BMP3_ODR_50_HZ); 
+  }
 
+
+
+// MDNS
   MDNSResponder mdns;
   MDNS.begin(HostName);
   MDNS.addService("http", "tcp", 80);
@@ -333,6 +359,7 @@ void loop()
       flashLED(LED(Green), 5);
       //read_nmea0183();
       NMEA0183_ParseMessages();
+      NMEA0183_read();
       delay(100);
     }
     else{
@@ -370,27 +397,41 @@ ArduinoOTA.handle();
 
  delay(500);
 
- //Read BMP
-     if (!bmp.performReading()) {       
+ //Read BMP  
+  if (Sensortyp == 0)
+  {
+    fbmp_temperature = bmp280.readTemperature();
+    fbmp_pressure = bmp280.readPressure();
+    flashLED(LED(Blue), 5);
+  } else {
+    if (!bmp3xx.performReading()) 
+    {       
       Serial.println("BMP reading error");
       sBMP_Status = "BMP Lesefehler";
       LEDflash(LED(Blue));
-    }
-    else {
+    } else {
       Serial.println("BMP read successful");
       sBMP_Status = "BMP lesen erfolgreich";
-      fbmp_pressure = bmp.readPressure();
-      fbmp_temperature = bmp.readTemperature();
-      fbmp_altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+      fbmp_pressure = bmp3xx.readPressure();
+      fbmp_temperature = bmp3xx.readTemperature();
+      fbmp_altitude = bmp3xx.readAltitude(SEALEVELPRESSURE_HPA);
       // LEDblink(LED(Blue));
       flashLED(LED(Blue), 5);
       delay(100);
     }
+  }
 
   //N2K
     SendN2kWind();
     SendN2kPressure();
-    SendN2kTemperatur();
+    SendN2kCabinTemperatur();
+    SendN2kOutdoorTemperatur();
     NMEA2000.ParseMessages();
     CheckSourceAddressChange();
+
+if (IsRebootRequired) {
+		Serial.println("Rebooting ESP32: "); 
+		delay(1000); // give time for reboot page to load
+		ESP.restart();
+		}
 }
