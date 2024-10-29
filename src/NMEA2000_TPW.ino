@@ -355,9 +355,7 @@ void loop()
   { // Listen NMEA0183
     if (bConnect_CL == 1){ // Connected an listen
       Serial.printf("Wifi %s connencted!\n", CL_SSID);
-      // LEDflash(LED(Green));
       flashLED(LED(Green), 5);
-      //read_nmea0183();
       NMEA0183_ParseMessages();
       NMEA0183_read();
       delay(100);

@@ -24,38 +24,18 @@ int bufferIndex = 0;
 void NMEA0183_read()
 {
   if (nmeaclient.connected()) {
-    while (nmeaclient.available()) {
+    while (nmeaclient.available()) 
+    {
       char c = nmeaclient.read();
       Serial.write(c);
 
-      if (c == '\n' || bufferIndex >= sizeof(buffer) - 1) {
+      if (c == '\n' || bufferIndex >= sizeof(buffer) - 1) 
+      {
         buffer[bufferIndex] = '\0'; // Abschluss der Zeichenkette
 
-        // Überprüfen, ob es sich um eine VWR-Nachricht handelt
-        if (strstr(buffer, "VWR") != NULL) {
-          // Beispiel: "$IIVWR,090.0,R,005.5,N,002.8,M,009.0,K*50" oder $WIVWR,30.76,L,4.33,N,2.23,M,8.03,K*77
-       
-          sscanf(buffer, "$%*[^,],%f,%*[^,],%f,N,%f,M,", &TwindDirection, &TwindSpeedkn, &TwindSpeedms);    
-            // Speichern Daten in Variablen
-          Serial.printf("VWR Windrichtung: %f °\n", TwindDirection);
-          Serial.printf("VWR Windgeschwindigkeit: %f kn\n", TwindSpeedkn);
-          Serial.printf("VWR Windgeschwindigkeit. %f m/s\n\n", TwindSpeedms);
-          // dVWR_WindDirection = DegToRad(TwindDirection);
-          // dVWR_WindSpeedkn = TwindSpeedkn;
-          // dVWR_WindSpeedms = TwindSpeedms;
-
-        }       
-        else if (strstr(buffer, "MWV") != NULL) {
-          // $WIMWV,333.33,T,0.00,K,A*23
-          sscanf(buffer, "$%*[^,],%f,%c,%f,%c,", &MwindDirection, &Reference, &MwindSpeed, &MWVSpeedUnit);  
-            // Speichern Daten in Variablen
-          Serial.printf("MWV Windrichtung: %f ° %s\n", MwindDirection, Reference);
-          Serial.printf("MWV Windgeschwindigkeit: %f %c\n\n", MwindSpeed, MWVSpeedUnit);
-
-          // dMWV_WindAngle = DegToRad(MwindDirection);
-          // dMWV_WindSpeed = MwindSpeed;
-        }
-         else if (strstr(buffer, "WST") != NULL) {
+        // Überprüfen, ob es sich um eine WST-Nachricht handelt              
+        if (strstr(buffer, "WST") != NULL) 
+         {
           // $PWWST,C,0,x.x,A*hh<CR><LF>
           sscanf(buffer, "$%*[^,],%*[^,],%*[^,],%f,", &fWindSensorTemp);  
             // Speichern Daten in Variablen
@@ -70,7 +50,7 @@ void NMEA0183_read()
         buffer[bufferIndex++] = c;
       }
     }
-  } 
+  }  
 }
 
 void NMEA0183_reconnect(){
