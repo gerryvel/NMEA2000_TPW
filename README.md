@@ -2,14 +2,14 @@
 
 Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger).
 
-This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
+This repository shows how to measure temperature and barometric pressure with a BMP280 or BMP388 sensor and send it to NMEA2000 network.
 Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" [@norbert-walter](https://github.com/norbert-walter) and send to NMEA2000.
 
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
 The project requires the NMEA2000 and the NMEA2000_esp32 libraries from Timo Lappalainen: https://github.com/ttlappalainen. Both libraries have to be downloaded and installed.
 
-For the BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
+For the BMP 280 and BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
