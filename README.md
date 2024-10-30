@@ -41,7 +41,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 - PESD1CAN, Dual bidirectional TVS diode [Link](https://www.reichelt.de/can-bus-esd-schutzdiode-tvs-24-v-sot-23-3-pesd-1can-p219293.html?&trstct=pos_0&nbc=1)
 - B360, SMD-Diode [Link](https://www.reichelt.de/schottkydiode-60-v-3-a-do-214ab-smc-b-360-f-p95202.html?&trstct=pos_1&nbc=1)
 - EPCO B82789C0513, EMI 2-inductor filter [Link](https://www.reichelt.de/smd-power-induktivitaet-1812-51-h-epco-b82789c0513-p245680.html?&trstct=pos_0&nbc=1)
-- Case Wago 789-120
+- Wago-Case: [Link](https://www.wago.com/de/zubehoer/gehaeuse-55-mm/p/789-120)
 
 # Website
 
