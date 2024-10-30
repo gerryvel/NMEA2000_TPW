@@ -62,10 +62,9 @@ int NodeAddress = 0; // To store last Node Address
 Preferences preferences; // Nonvolatile storage on ESP32 - To store LastDeviceAddress
 
 // Set the information for other bus devices, which messages we support
-const unsigned long TransmitMessages[] PROGMEM = { 130310L, // Outside Environmental parameters
-                                                   130316L, // Temperature
+const unsigned long TransmitMessages[] PROGMEM = { 130306L, // Wind
                                                    130314L, // Pressure
-                                                   130306L, // Wind
+						   130316L, // Temperature
                                                    0
                                                  }; 
 
