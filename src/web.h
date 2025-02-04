@@ -30,7 +30,7 @@ String processor(const String& var)
 		buttons += "<p class=\"CInput\"><label>Password </label><input type = \"text\" name = \"Password\" value=\"";
 		buttons += tWeb_Config.wAP_Password;
 		buttons += "\"/></p>";
-		buttons += "<p class=\"CInput\"><label>Sensortyp </label><input type = \"text\" name = \"BMP\" value=\"";
+		buttons += "<p class=\"CInput\"><label>Sensortyp<br>BMP280: 0, BMP388: 1</label><input type = \"text\" name = \"BMP\" value=\"";
 		buttons += tWeb_Config.wBMP_Sensortype;
 		buttons += "\"/></p>";
 		buttons += "<p><input type=\"submit\" value=\"Speichern\"></p>";
