@@ -49,8 +49,8 @@ String replaceVariable(const String& var){
 	if (var == "sTemp")return String(fbmp_temperature, 1);
   	if (var == "sPress")return String(fbmp_pressure/100, 0);
 	if (var == "sBoardInfo")return sBoardInfo;
-  	if (var == "sFS_Total")return String(LittleFS.totalBytes());
-	if (var == "sFS_Used")return String(LittleFS.usedBytes());
+  	if (var == "sFS_totalBytes")return String(LittleFS.totalBytes());
+	if (var == "sFS_usedBytes")return String(LittleFS.usedBytes());
 	if (var == "sAP_IP")return WiFi.softAPIP().toString();
   	if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
  	if (var == "sCL_Addr")return String(CL_IP);		
