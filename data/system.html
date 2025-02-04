@@ -8,7 +8,7 @@
 </HEAD>
 <BODY>
     <br />
-    <p class="label">Eigene IP-Adresse - AP: %sAP_IP% <br />
+    <p class="label">Eigene IP-Adresse - AP: %sAP_IP%<br />
         Clients am AP: %sAP_Clients%</p>
         <br />
     <p class="label">Verbindung zum Windmesser:<br />
@@ -17,12 +17,13 @@
         <br />
     <p class="label">I2C: %sI2C_Status%</p>
         <br />
-    <p class="label">Sensor: %sBMP_Status%</p>
+    <p class="label">Sensor: %sBMP_Status%<br>
+                     Sensortyp: %sBMP%</p>
         <br />
     <p class="label">Informationen zum ESP32 - Board:<br />
         %sBoardInfo%</p>
-        <p class="label">LittleFS, benutzte Bytes:<br />
-            %sFS_Space%</p>
+        <p class="label">LittleFS, benutzte Bytes: %sFS_usedBytes%<br />
+                        Little FS, gesamte bytes; %sFS_totalBytes%</p>
         <br />
 
     <ul class="bottomnav">

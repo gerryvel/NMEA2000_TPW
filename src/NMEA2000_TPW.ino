@@ -14,7 +14,7 @@
   NMEA2000 Temperature and Barometric Pressure with BMP280 or 388.
   Reads messages from NMEA0183 WindSensor and forwards them to the N2k bus.
 
-  V2.4 vom 11.10.2024, gerryvel Gerry Sebb
+  V2.5 vom 05.02.2025, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
@@ -168,6 +168,7 @@ void setup()
 	}
 	Serial.println("Memory LittleFS used:");
 	Serial.println(LittleFS.usedBytes());
+
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
   readConfig("/config.json");
@@ -175,8 +176,6 @@ void setup()
 	CL_PASSWORD = tWeb_Config.wAP_Password;
   // Sensortyp = tWeb_Config.wBMP_Sensortype;
   Serial.println("Configdata WIFI-Client:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp);
-
-  freeHeapSpace();
 
 // I2C
   Wire.begin(BMP_SDA, BMP_SCL);
@@ -400,6 +399,7 @@ ArduinoOTA.handle();
   {
     fbmp_temperature = bmp280.readTemperature();
     fbmp_pressure = bmp280.readPressure();
+    sBMP_Status = "BMP lesen erfolgreich";
     flashLED(LED(Blue), 5);
   } else {
     if (!bmp3xx.performReading()) 
@@ -426,6 +426,8 @@ ArduinoOTA.handle();
     SendN2kOutdoorTemperatur();
     NMEA2000.ParseMessages();
     CheckSourceAddressChange();
+
+    freeHeapSpace();
 
 if (IsRebootRequired) {
 		Serial.println("Rebooting ESP32: "); 
