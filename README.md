@@ -2,14 +2,14 @@
 
 Idea and basics for this Pojekt is "NMEA2000-TempPressure" from [@AK-Homberger](https://github.com/AK-Homberger).
 
-This repository shows how to measure temperature and barometric pressure with a BMP388 sensor and send it to NMEA2000 network.
+This repository shows how to measure temperature and barometric pressure with a BMP280 or BMP388 sensor and send it to NMEA2000 network.
 Additional work a Gateway with inputs NMEA0183 TCP-Stream from my Windsensor "NoWa" or "Yachta" [@norbert-walter](https://github.com/norbert-walter) and send to NMEA2000.
 
 The data is sent to NMEA2000 network with PGN130310 and PGN130306 (Outside Environmental Parameters and Wind).
 
 The project requires the NMEA2000 and the NMEA2000_esp32 libraries from Timo Lappalainen: https://github.com/ttlappalainen. Both libraries have to be downloaded and installed.
 
-For the BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
+For the BMP 280 and BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
@@ -41,7 +41,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 - PESD1CAN, Dual bidirectional TVS diode [Link](https://www.reichelt.de/can-bus-esd-schutzdiode-tvs-24-v-sot-23-3-pesd-1can-p219293.html?&trstct=pos_0&nbc=1)
 - B360, SMD-Diode [Link](https://www.reichelt.de/schottkydiode-60-v-3-a-do-214ab-smc-b-360-f-p95202.html?&trstct=pos_1&nbc=1)
 - EPCO B82789C0513, EMI 2-inductor filter [Link](https://www.reichelt.de/smd-power-induktivitaet-1812-51-h-epco-b82789c0513-p245680.html?&trstct=pos_0&nbc=1)
-- Case Wago 789-120
+- Wago-Case: [Link](https://www.wago.com/de/zubehoer/gehaeuse-55-mm/p/789-120)
 
 # Website
 
