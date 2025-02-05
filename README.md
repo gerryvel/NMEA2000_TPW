@@ -5,7 +5,7 @@ This repository shows how to measure the
 - temperature
 - barometric pressure
 - Windspeed
-- Windderection
+- Winddirection
 
 and send it as NNMEA2000 meassage.
 - PGN 130306 // Wind
