@@ -64,7 +64,7 @@ Preferences preferences; // Nonvolatile storage on ESP32 - To store LastDeviceAd
 // Set the information for other bus devices, which messages we support
 const unsigned long TransmitMessages[] PROGMEM = { 130306L, // Wind
                                                    130314L, // Pressure
-						   130316L, // Temperature
+						                                       130316L, // Temperature
                                                    0
                                                  }; 
 
