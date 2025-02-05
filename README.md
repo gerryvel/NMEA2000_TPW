@@ -3,7 +3,7 @@
 ![ESP32](https://img.shields.io/badge/ESP32-grey?logo=Espressif)
 ![Relaise](https://img.shields.io/github/release-date/gerryvel/NMEA2000_TPW?)
 ![lastcommit](https://img.shields.io/github/last-commit/gerryvel/NMEA2000_TPW)
-![OBP](https://img.shields.io/badge/OpenSailing-OpenBoatsProjects-blue)
+![OBP](https://img.shields.io/badge/Sailing_with-OpenBoatsProjects-blue)
 
 ## Description
 This repository shows how to measure the 
