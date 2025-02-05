@@ -2,8 +2,6 @@
 
 ![Relaise](https://img.shields.io/github/release-date/gerryvel/NMEA2000_TPW?logo=Espressif)
 ![OBP](https://img.shields.io/badge/OpenSailing-OpenBoatsProjects-blue)
-[![Forum](https://img.shields.io/badge/Forum-Segeln--Forum.de-green)](link=https%3A%2F%2Fwww.segeln-forum.de%2Fboard%2F195-open-boat-projects-org%2F)
-
 
 ## Description
 This repository shows how to measure the 
