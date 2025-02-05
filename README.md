@@ -1,5 +1,6 @@
 # MotorData NMEA2000
 
+![ESP32](https://img.shields.io/badge/ESP32-red/logo=Espressif)
 ![Relaise](https://img.shields.io/github/release-date/gerryvel/NMEA2000_TPW?logo=Espressif)
 ![lastcommit](https://img.shields.io/github/last-commit/gerryvel/NMEA2000_TPW)
 ![OBP](https://img.shields.io/badge/OpenSailing-OpenBoatsProjects-blue)
