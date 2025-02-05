@@ -1,4 +1,4 @@
-# MotorData NMEA2000
+# Temperature, pressure and wind Data > NMEA2000
 
 ![ESP32](https://img.shields.io/badge/ESP32-grey?logo=Espressif)
 ![Relaise](https://img.shields.io/github/release-date/gerryvel/NMEA2000_TPW?)
