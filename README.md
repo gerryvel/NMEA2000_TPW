@@ -70,11 +70,13 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Website
 
-![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/3d27c48d-9003-4b28-b112-30b1559b3bdd)
+![image](https://github.com/user-attachments/assets/2b8e89f9-d2a3-47f2-bbf2-cd615b5d90e5)
 
-![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/cf0d31f0-2dc2-4f43-9a57-4670f1886f26)
+![image](https://github.com/user-attachments/assets/af58fc51-cfb6-4261-87ed-f0f26ac6562f)
 
-![grafik](https://github.com/gerryvel/NMEA2000_TPW/assets/17195231/f34b5f2e-7c5c-434d-bbc7-f006c7c9dbe9)
+![image](https://github.com/user-attachments/assets/00d9eccb-10b5-46a5-80f0-ec5d4e828286)
+
+![image](https://github.com/user-attachments/assets/4aa34d83-4a18-4e49-a44e-8f938734aab4)
 
 ## Plotter
 
