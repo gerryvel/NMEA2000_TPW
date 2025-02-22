@@ -26,6 +26,7 @@ void freeHeapSpace(){
 	static unsigned long last = millis();
 	if (millis() - last > 5000) {
 		last = millis();
+    sHeapspace = ESP.getFreeHeap();
 		Serial.printf("\n[MAIN] Free heap: %d bytes\n", ESP.getFreeHeap());
 	}
 }

@@ -19,6 +19,7 @@
 //Configuration Web Page 
 #define PAGE_REFRESH 10 // x Sec.
 #define WEB_TITEL "NMEA2000TPW"
+String sHeapspace = "";
 
 //Configuration mit Webinterface
 struct Web_Config

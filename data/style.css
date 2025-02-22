@@ -13,7 +13,7 @@ body {
 }
 
 h1 {
-    color: #00ff00;
+    color: hwb(190 0% 0%);
     padding: 2vh;
     margin: 50px auto 30px;
 }
