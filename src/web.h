@@ -79,6 +79,9 @@ server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
 server.on("/system.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/system.html", String(), false, replaceVariable);
 	});
+	server.on("/werte.html", HTTP_GET, [](AsyncWebServerRequest* request) {
+		request->send(LittleFS, "/werte.html", String(), false, replaceVariable);
+	});
 server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest* request) {
 		request->send(LittleFS, "/settings.html", String(), false, replaceVariable);
 	});
