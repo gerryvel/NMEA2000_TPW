@@ -45,9 +45,11 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 
 ## Wiring diagram
 
-![grafik](https://github.com/user-attachments/assets/cedf11dc-f76e-48c0-939f-1261e12a5e92)
+![grafik](https://github.com/user-attachments/assets/257c9db6-b10b-49b5-b961-62005ee69b86)
 
 ## PCB
+
+![grafik](https://github.com/user-attachments/assets/72afa8dd-eff7-4257-9bc2-7faa45f0822f)
 
 Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
