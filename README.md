@@ -50,12 +50,11 @@ The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes fro
 ## PCB
 
 ![grafik](https://github.com/user-attachments/assets/72afa8dd-eff7-4257-9bc2-7faa45f0822f)
-
+![grafik](https://github.com/user-attachments/assets/eecf0db0-d7b9-4051-9207-430e125e7a3d)
 Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Hardware
 
-![grafik](https://github.com/user-attachments/assets/eecf0db0-d7b9-4051-9207-430e125e7a3d)
 ![image](https://github.com/user-attachments/assets/d963e551-218a-4069-a39e-241a050174c5)
 
 ## Partlist:
@@ -64,6 +63,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 - C2	C22µ	~	Capacitor_Tantalum_SMD
 - D1	P4SMAJ26CA
 - D2	B360 [Link](https://www.reichelt.de/schottkydiode-60-v-3-a-do-214ab-smc-b-360-f-p95202.html?&trstct=pos_1&nbc=1)
+- D3  PRTR5V0U2X
 - D4	PESD1CAN	[Link](https://www.reichelt.de/can-bus-esd-schutzdiode-tvs-24-v-sot-23-3-pesd-1can-p219293.html?&trstct=pos_0&nbc=1)
 - D5	LED_RBKG	[Link](https://www.reichelt.de/led-5-mm-bedrahtet-4-pin-rot-gruen-blau-700-1300-300-mcd-60-kbt-l-154a4surkq-p231040.html?&trstct=pol_0&nbc=1)
 - FL1	EPCO B82789C0513 [Link](https://www.reichelt.de/smd-power-induktivitaet-1812-51-h-epco-b82789c0513-p245680.html?&trstct=pos_0&nbc=1)
