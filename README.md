@@ -38,19 +38,18 @@ For the BMP 280 and BMP388 the Adafruit BMP3xx library has to be installed via t
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
-
 For the ESP32 CAN bus, i used the SN65HVD230 chip as transceiver. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
-
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.
+Its the same wiring and PCB with BD Sensor, you can leave out unnecessary components.
 
 ## Wiring diagram
 
-![grafik](https://github.com/user-attachments/assets/257c9db6-b10b-49b5-b961-62005ee69b86)
+![grafik](https://github.com/user-attachments/assets/c94c40d6-61f4-460a-b482-a9fa740c704d)
 
 ## PCB
 
-![grafik](https://github.com/user-attachments/assets/72afa8dd-eff7-4257-9bc2-7faa45f0822f)
-![grafik](https://github.com/user-attachments/assets/eecf0db0-d7b9-4051-9207-430e125e7a3d)
+![grafik](https://github.com/user-attachments/assets/b2db9dc3-f5c1-4a7a-bda1-19af36b861a6)
+![grafik](https://github.com/user-attachments/assets/a24e7ffe-c044-4a33-8241-e3bee8e4e843)
 Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Hardware
