@@ -4,7 +4,8 @@
 #include <Arduino.h>
 
 // Versionierung
-#define Version "V2.5 vom 05.02.2025"  // Version
+#define VersionSoftware "2.5.0.0 (2025-02-05)"  // Version
+#define VersionHardware "2.3.0.0 (2024-11-30)"  // Version Hardware
 
 // Configuration N2k
 #define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 

@@ -11,5 +11,6 @@
         "ESP_ROM_ELF_DIR": "C:\\Users\\gerryadmin\\.espressif\\tools\\esp-rom-elfs\\20220823/"
     },
     "idf.gitPathWin": "C:\\Users\\gerryadmin\\.espressif\\tools\\idf-git\\2.30.1\\cmd\\git.exe",
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "idf.currentSetup": "C:\\Users\\gerryadmin\\esp\\esp-idf"
 }
