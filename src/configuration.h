@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 // Versionierung
-#define VersionSoftware "2.5.0.0 (2025-02-05)"  // Version
+#define VersionSoftware "2.5.1.0 (2025-02-21)"  // Version
 #define VersionHardware "2.3.0.0 (2024-11-30)"  // Version Hardware
 
 // Configuration N2k
