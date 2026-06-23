@@ -62,7 +62,8 @@ String replaceVariable(const String& var){
   	if (var == "sCL_SSID")return String(CL_SSID);
   	if (var == "sCL_PASSWORD")return String(CL_PASSWORD);
 	if (var == "sBMP")return String(sBMP);
-	if (var == "sVersion")return Version;
+	if (var == "sVersionSoftware")return VersionSoftware;
+	if (var == "sVersionHardware")return VersionHardware;
   	if (var == "CONFIGPLACEHOLDER")return processor(var);
   return "NoVariable";
 }

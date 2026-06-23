@@ -12,5 +12,5 @@
     },
     "idf.gitPathWin": "C:\\Users\\gerryadmin\\.espressif\\tools\\idf-git\\2.30.1\\cmd\\git.exe",
     "C_Cpp.errorSquiggles": "disabled",
-    "idf.pythonInstallPath": "C:\\Users\\gerryadmin\\.espressif\\tools\\idf-python\\3.8.7\\python.exe"
+    "idf.currentSetup": "C:\\Users\\gerryadmin\\esp\\esp-idf"
 }

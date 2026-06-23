@@ -158,7 +158,7 @@ void setup()
 {
   Serial.begin(115200);
 
-  Serial.printf("TPW Sensor setup %s start\n", Version);
+  Serial.printf("TPW Sensor setup %s start\n", VersionSoftware);
 
 //Filesystem
 	if (!LittleFS.begin(true)) {
@@ -313,8 +313,8 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   NMEA2000.SetProductInformation("TPW 01", // Manufacturer's Model serial code
                                  107, // Manufacturer's product code
                                  "TPW Sensor Module",  // Manufacturer's Model ID
-                                 "2.2.0.0 (2024-08-22)",  // Manufacturer's Software version code
-                                 "2.0.0.0 (2023-01-26)" // Manufacturer's Model version
+                                 VersionSoftware,  // Manufacturer's Software version code
+                                 VersionHardware // Manufacturer's Model version
                                 );
   // Set device information
   NMEA2000.SetDeviceInformation(8, // Unique number. Use e.g. Serial number.
