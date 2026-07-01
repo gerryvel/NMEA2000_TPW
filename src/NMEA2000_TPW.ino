@@ -174,7 +174,7 @@ void setup()
 	CL_SSID = tWeb_Config.wAP_SSID;
 	CL_PASSWORD = tWeb_Config.wAP_Password;
   // Sensortyp = tWeb_Config.wBMP_Sensortype;
-  Serial.println("Configdata WIFI-Client:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp);
+  Serial.println("Config read:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp);
 
 // I2C
   Wire.begin(BMP_SDA, BMP_SCL);
@@ -310,7 +310,7 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   NMEA2000.SetN2kCANReceiveFrameBufSize(250);
   NMEA2000.SetN2kCANSendFrameBufSize(250);
 
-  NMEA2000.SetProductInformation("TPW 01", // Manufacturer's Model serial code
+  NMEA2000.SetProductInformation("TPW01", // Manufacturer's Model serial code
                                  107, // Manufacturer's product code
                                  "TPW Sensor Module",  // Manufacturer's Model ID
                                  VersionSoftware,  // Manufacturer's Software version code

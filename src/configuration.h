@@ -4,8 +4,8 @@
 #include <Arduino.h>
 
 // Versionierung
-#define VersionSoftware "2.5.1.0 (2025-02-21)"  // Version
-#define VersionHardware "2.3.0.0 (2024-11-30)"  // Version Hardware
+#define VersionSoftware "2.5.2.0 (2026-06-01)"  // Version
+#define VersionHardware "2.5.0.0 (2026-04-30)"  // Version Hardware
 
 // Configuration N2k
 #define ESP32_CAN_TX_PIN GPIO_NUM_4  // Set CAN TX port to 4 
@@ -19,7 +19,7 @@
 
 //Configuration Web Page 
 #define PAGE_REFRESH 10 // x Sec.
-#define WEB_TITEL "NMEA2000TPW"
+#define WEB_TITEL "TPW 01"
 String sHeapspace = "";
 
 //Configuration mit Webinterface
@@ -32,8 +32,8 @@ struct Web_Config
 Web_Config tWeb_Config;
 
 //Configuration AP 
-#define HostName        "NMEA2000TPW"
-#define AP_SSID         "NMEA2000TPW"  // SSID Name
+#define HostName        "TPW01"
+#define AP_SSID         "TPW01"  // SSID Name
 #define AP_PASSWORD     "12345678"    // SSID Password - Set to NULL to have an open AP
 const int   channel        = 10;                // WiFi Channel number between 1 and 13
 const bool  hide_SSID      = false;             // To disable SSID broadcast -> SSID will not appear in a basic WiFi scan

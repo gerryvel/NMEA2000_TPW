@@ -117,14 +117,14 @@ void readConfig(String filename) {
 
 		Serial.println("deserializeJson ok");
 		{
-			Serial.println("Lese Daten aus Config - Datei");
+			Serial.println("Read data from config file");
 			strcpy(tWeb_Config.wAP_SSID, testDocument["SSID"] | "NoWa");
 			strcpy(tWeb_Config.wAP_Password, testDocument["Password"] | "12345678");
       strcpy(tWeb_Config.wBMP_Sensortype, testDocument["BMP"] | "0");
 			Serial.println(tWeb_Config.wAP_SSID);
 		}
 		configFile.close();
-		Serial.println("Config - Datei geschlossen");
+		Serial.println("Config file closed");
 	}
 
 	else
@@ -138,18 +138,18 @@ bool writeConfig(String json)
 {
 	Serial.println(json);
 
-	Serial.println("neue Konfiguration speichern");
+	Serial.println("Saving new configuration");
 
 	File configFile = LittleFS.open("/config.json", FILE_WRITE);
 	if (configFile)
 	{
-		Serial.println("Config - Datei öffnen");
+		Serial.println("Opening config file");
 		File configFile = LittleFS.open("/config.json", FILE_WRITE);
 		if (configFile)
 		{
-			Serial.println("Config - Datei zum Schreiben geöffnet");
+			Serial.println("Config file opened for writing");
 			JsonDocument testDocument;
-			Serial.println("JSON - Daten übergeben");
+			Serial.println("Passing JSON data");
 			DeserializationError error = deserializeJson(testDocument, json);
 			// Test if parsing succeeds.
 			if (error)
@@ -159,14 +159,14 @@ bool writeConfig(String json)
 				// bei Memory - Fehler den <Wert> in StaticJsonDocument<200> testDocument; erhöhen
 				return false;
 			}
-			Serial.println("Konfiguration schreiben...");
+			Serial.println("Writing configuration...");
 			serializeJson(testDocument, configFile);
-			Serial.println("Konfiguration geschrieben...");
+			Serial.println("Configuration written...");
 
 			// neue Config in Serial ausgeben zur Kontrolle
 			serializeJsonPretty(testDocument, Serial);
 
-			Serial.println("Config - Datei geschlossen");
+			Serial.println("Config file closed");
 			configFile.close();
 		}
 	}
@@ -197,8 +197,8 @@ void I2C_scan(void){
     }
     else if (error==4) 
     {
-      Serial.print("Unknow error at address 0x");
-      sI2C_Status = "Device Fehler";
+      Serial.print("Unknown error at address 0x");
+      sI2C_Status = "Device error";
       if (address<16) 
       {
         Serial.print("0");
@@ -207,7 +207,7 @@ void I2C_scan(void){
       nDevices++;
     }
     else if (error==4) {
-      Serial.print("Unknow error at address 0x");
+      Serial.print("Unknown error at address 0x");
       if (address<16) {
         Serial.print("0");
       }
@@ -216,7 +216,7 @@ void I2C_scan(void){
   }
   if (nDevices == 0) {
     Serial.println("No I2C devices found\n");
-    sI2C_Status = "Nichts gefunden";
+    sI2C_Status = "Nothing found";
   }
   else {
     Serial.println("done\n");
