@@ -372,7 +372,7 @@ void loop()
         Serial.printf(".");
         //LEDflash(LED(Red));
         flashLED(LED(Red), 5);
-        if (UpCount >= 20)  // just keep terminal from scrolling sideways
+        if (UpCount >= 5)  // just keep terminal from scrolling sideways
         {
           UpCount = 0;
           Serial.printf("\n");
