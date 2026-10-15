@@ -56,7 +56,7 @@ String replaceVariable(const String& var){
 	if (var == "sAP_IP")return WiFi.softAPIP().toString();
   	if (var == "sAP_Clients")return String(WiFi.softAPgetStationNum());
  	if (var == "sCL_Addr")return WiFi.localIP().toString();		
- 	if (var == "sCL_Status")return String(sCL_Status);
+ 	if (var == "sCL_Status")return sWifiStatus(WiFi.status());
   	if (var == "sI2C_Status")return String(sI2C_Status);
   	if (var == "sBMP_Status")return String(sBMP_Status);
   	if (var == "sCL_SSID")return String(CL_SSID);

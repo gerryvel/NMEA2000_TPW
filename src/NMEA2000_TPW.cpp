@@ -51,6 +51,7 @@
 
 // BMP
 Adafruit_BMP280 bmp280;
+Adafruit_Sensor *bmp280_temp = bmp280.getTemperatureSensor();
 Adafruit_BMP3XX bmp3xx;
 
 static ETSTimer intervalTimer;
@@ -174,7 +175,7 @@ void setup()
   readConfig("/config.json");
     CL_SSID = tWeb_Config.wAP_SSID;
 	  CL_PASSWORD = tWeb_Config.wAP_Password;
-    Sensortyp = tWeb_Config.wBMP_Sensortype;
+    Sensortyp = atoi(tWeb_Config.wBMP_Sensortype) != 0;
     Serial.println("\nAP-Configdata : Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp + " read from file");
     
     File f = LittleFS.open("/config.json", "r");
@@ -292,6 +293,13 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
       Serial.println("BMP280 sensor selected!");
       sBMP = "BMP280";
     if (!bmp280.begin()) 
+     /* Default settings from datasheet. */
+      bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                         Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                         Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                         Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                         Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+      bmp280_temp->printSensorDetails();                   
   {
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
   }
@@ -300,12 +308,12 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
       sBMP = "BMP388";
     if (!bmp3xx.begin_I2C()) 
   {
-    Serial.println("Could not find a valid BMP3xx sensor, check wiring!");
+      Serial.println("Could not find a valid BMP3xx sensor, check wiring!");
   }
-  bmp3xx.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  bmp3xx.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  bmp3xx.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-  bmp3xx.setOutputDataRate(BMP3_ODR_50_HZ); 
+      bmp3xx.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+      bmp3xx.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+      bmp3xx.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+      bmp3xx.setOutputDataRate(BMP3_ODR_50_HZ); 
   }
 
 
@@ -361,7 +369,7 @@ void loop()
 { 
   // Listen NMEA0183 or reconnect Wifi
   bConnect_CL = WiFi.status() == WL_CONNECTED ? 1 : 0;
-  Serial.printf("WLAN Status: %s \n", sWifiStatus(WiFi.status()));
+  Serial.printf("WLAN Status: %s \n", sWifiStatus(WiFi.status()).c_str());
   Serial.printf("bConnect Client: %i \n", bConnect_CL);
   { // Listen NMEA0183
     if (bConnect_CL == 1){ // Connected an listen
@@ -411,15 +419,17 @@ ArduinoOTA.handle();
   {
     fbmp_temperature = bmp280.readTemperature();
     fbmp_pressure = bmp280.readPressure();
+    fbmp_altitude = bmp280.readAltitude(SEALEVELPRESSURE_HPA);
     Serial.println("BMP280 read successful");
     sBMP_Status = "BMP280 lesen erfolgreich";
     flashLED(LED(Blue), 5);
   } else {
     if (!bmp3xx.performReading()) 
     {       
-      Serial.println("BMP reading error");
-      sBMP_Status = "BMP Lesefehler";
+      Serial.println("BMP3xx reading error");
+      sBMP_Status = "BMP3xx Lesefehler";
       LEDflash(LED(Blue));
+      return;
     } else {
       Serial.println("BMP388 read successful");
       sBMP_Status = "BMP388 lesen erfolgreich";
@@ -431,6 +441,8 @@ ArduinoOTA.handle();
       delay(100);
     }
   }
+
+Serial.printf("Temperatur: %3.1f °C, Druck: %3.1f hPa, Höhe: %3.1f m\n", fbmp_temperature, fbmp_pressure / 100.0, fbmp_altitude);
 
   //N2K
     SendN2kWind();
