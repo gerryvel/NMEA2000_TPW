@@ -121,7 +121,6 @@ void readConfig(String filename) {
 			strcpy(tWeb_Config.wAP_SSID, testDocument["SSID"] | "NoWa");
 			strcpy(tWeb_Config.wAP_Password, testDocument["Password"] | "12345678");
       strcpy(tWeb_Config.wBMP_Sensortype, testDocument["BMP"] | "0");
-			Serial.println(tWeb_Config.wAP_SSID);
 		}
 		configFile.close();
 		Serial.println("Config file closed");
@@ -226,13 +225,13 @@ void I2C_scan(void){
 String sWifiStatus(int Status)
 {
   switch(Status){
-    case WL_IDLE_STATUS:return "Warten";
-    case WL_NO_SSID_AVAIL:return "Keine SSID vorhanden";
-    case WL_SCAN_COMPLETED:return "Scan komlett";
-    case WL_CONNECTED:return "Verbunden";
-    case WL_CONNECT_FAILED:return "Verbindung fehlerhaft";
-    case WL_CONNECTION_LOST:return "Verbindung verloren";
-    case WL_DISCONNECTED:return "Nicht verbunden";
+    case WL_IDLE_STATUS:return "Warten"; break;
+    case WL_NO_SSID_AVAIL:return "Keine SSID vorhanden"; break;
+    case WL_SCAN_COMPLETED:return "Scan komlett"; break;
+    case WL_CONNECTED:return "Verbunden"; break;
+    case WL_CONNECT_FAILED:return "Verbindung fehlerhaft"; break;
+    case WL_CONNECTION_LOST:return "Verbindung verloren"; break;
+    case WL_DISCONNECTED:return "Nicht verbunden"; break;
     default:return "unbekannt";
   }
 }

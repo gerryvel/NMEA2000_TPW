@@ -27,7 +27,7 @@ struct Web_Config
 {
 	char wAP_SSID[64];
 	char wAP_Password[12];
-	char wBMP_Sensortype[1];
+	char wBMP_Sensortype[4];
 };
 Web_Config tWeb_Config;
 
