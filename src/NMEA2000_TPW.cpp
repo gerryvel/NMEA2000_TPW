@@ -170,11 +170,22 @@ void setup()
 
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
+	
   readConfig("/config.json");
-	CL_SSID = tWeb_Config.wAP_SSID;
-	CL_PASSWORD = tWeb_Config.wAP_Password;
-  // Sensortyp = tWeb_Config.wBMP_Sensortype;
-  Serial.println("Config read:\n Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp);
+    CL_SSID = tWeb_Config.wAP_SSID;
+	  CL_PASSWORD = tWeb_Config.wAP_Password;
+    Sensortyp = tWeb_Config.wBMP_Sensortype;
+    Serial.println("\nAP-Configdata : Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp + " read from file");
+    
+    File f = LittleFS.open("/config.json", "r");
+  if (!f) {
+    Serial.println("config.json konnte nicht geöffnet werden!"); 
+  } else {
+    String content = f.readString();
+    Serial.println("\nconfig.json Inhalt:");
+    Serial.println(content);
+    f.close();
+  }
 
 // I2C
   Wire.begin(BMP_SDA, BMP_SCL);
@@ -220,7 +231,7 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
     Serial.print(".");
     LEDflash(LED(Red));
    count++;
-    if (count = 10) break;
+    if (count == 20) break;
   }
   if (WiFi.isConnected()) {
    bConnect_CL = 1;
@@ -278,12 +289,14 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
 
 // BMP begin & setup
   if (Sensortyp == 0){
+      Serial.println("BMP280 sensor selected!");
       sBMP = "BMP280";
     if (!bmp280.begin()) 
   {
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
   }
   } else {
+      Serial.println("BMP388 sensor selected!");
       sBMP = "BMP388";
     if (!bmp3xx.begin_I2C()) 
   {
@@ -364,15 +377,15 @@ void loop()
       Serial.printf("Reconnecting to %s\n", CL_SSID);
       LEDoff(LED(Green));
       WiFi.reconnect();    // wifi down, reconnect here
-      delay(500);
+      delay(100);
       int WLcount = 0;
-     int UpCount = 0;
-      while (WiFi.status() != WL_CONNECTED && WLcount < 50){
+      int UpCount = 0;
+      while (WiFi.status() != WL_CONNECTED && WLcount < 10){
         delay(50);
         Serial.printf(".");
         //LEDflash(LED(Red));
         flashLED(LED(Red), 5);
-        if (UpCount >= 5)  // just keep terminal from scrolling sideways
+        if (UpCount >= 10)  // just keep terminal from scrolling sideways
         {
           UpCount = 0;
           Serial.printf("\n");
@@ -391,14 +404,15 @@ ArduinoOTA.handle();
   Serial.printf("Soft-AP IP address: %s\n", WiFi.softAPIP().toString());
   sCL_Status = sWifiStatus(WiFi.status());
 
- delay(500);
+ delay(100);
 
  //Read BMP  
   if (Sensortyp == 0)
   {
     fbmp_temperature = bmp280.readTemperature();
     fbmp_pressure = bmp280.readPressure();
-    sBMP_Status = "BMP lesen erfolgreich";
+    Serial.println("BMP280 read successful");
+    sBMP_Status = "BMP280 lesen erfolgreich";
     flashLED(LED(Blue), 5);
   } else {
     if (!bmp3xx.performReading()) 
@@ -407,8 +421,8 @@ ArduinoOTA.handle();
       sBMP_Status = "BMP Lesefehler";
       LEDflash(LED(Blue));
     } else {
-      Serial.println("BMP read successful");
-      sBMP_Status = "BMP lesen erfolgreich";
+      Serial.println("BMP388 read successful");
+      sBMP_Status = "BMP388 lesen erfolgreich";
       fbmp_pressure = bmp3xx.readPressure();
       fbmp_temperature = bmp3xx.readTemperature();
       fbmp_altitude = bmp3xx.readAltitude(SEALEVELPRESSURE_HPA);
