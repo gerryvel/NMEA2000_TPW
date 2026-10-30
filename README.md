@@ -51,8 +51,8 @@ Its the same wiring and PCB with BD Sensor, you can leave out unnecessary compon
 
 ## PCB
 
-![grafik](https://github.com/user-attachments/assets/b2db9dc3-f5c1-4a7a-bda1-19af36b861a6)
-![grafik](https://github.com/user-attachments/assets/a8c57d70-1ce9-4763-8204-975a02830829)
+<img width="1160" height="773" alt="grafik" src="https://github.com/user-attachments/assets/ed3ccd58-ff18-47ac-b4b7-6941b0b2d114" />
+<img width="1160" height="773" alt="grafik" src="https://github.com/user-attachments/assets/34ed084e-6f81-4a3e-bd95-f52bfd55db79" />
 
 Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
