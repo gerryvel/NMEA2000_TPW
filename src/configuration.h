@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 // Versionierung
-#define VersionSoftware "2.5.3.0 (2026-10-15)"  // Version
+#define VersionSoftware "2.6.0.0 (2026-10-30)"  // Version
 #define VersionHardware "2.5.0.0 (2026-04-30)"  // Version Hardware
 
 // Configuration N2k
@@ -59,9 +59,17 @@ bool bClientConnected = 0;
 //Confuration I2C
 #define BMP_SDA 21                      //Standard 21
 #define BMP_SCL 22                      //Standard 22
-// Configuratin Sensors
+// Configuration Sensors
 #define SEALEVELPRESSURE_HPA (1013.25)  //1013.25
-bool Sensortyp = 0;             // BMP280 = 0, BMP3xx = 1
+enum SensorType : int {
+  SENSOR_UNKNOWN = -1,
+  SENSOR_BMP280 = 0,
+  SENSOR_BMP3XX = 1,
+  SENSOR_BME280 = 2
+};
+int Sensortyp = SENSOR_UNKNOWN;
+uint8_t SensorI2CAddress = 0;
+bool sensorReady = false;
 float fbmp_temperature = 0;
 float fbmp_pressure = 0;
 float fbmp_altitude = 0;

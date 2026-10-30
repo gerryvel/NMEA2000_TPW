@@ -14,7 +14,7 @@
   NMEA2000 Temperature and Barometric Pressure with BMP280 or 388.
   Reads messages from NMEA0183 WindSensor and forwards them to the N2k bus.
 
-  V2.5.1 vom 21.02.2026, gerryvel Gerry Sebb
+  V2.6.0 vom 30.10.2026, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
@@ -24,6 +24,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP3XX.h>
 #include <Adafruit_BMP280.h>
+#include <Adafruit_BME280.h>
 #include <wire.h>
 #include <Preferences.h>
 #include <WiFi.h>
@@ -53,6 +54,7 @@
 Adafruit_BMP280 bmp280;
 Adafruit_Sensor *bmp280_temp = bmp280.getTemperatureSensor();
 Adafruit_BMP3XX bmp3xx;
+Adafruit_BME280 bme280;
 
 static ETSTimer intervalTimer;
 
@@ -175,7 +177,11 @@ void setup()
   readConfig("/config.json");
     CL_SSID = tWeb_Config.wAP_SSID;
 	  CL_PASSWORD = tWeb_Config.wAP_Password;
-    Sensortyp = atoi(tWeb_Config.wBMP_Sensortype) != 0;
+    Sensortyp = atoi(tWeb_Config.wBMP_Sensortype);
+    if (Sensortyp < SENSOR_BMP280 || Sensortyp > SENSOR_BME280) {
+      Serial.println("Invalid sensor type in config; defaulting to BMP280.");
+      Sensortyp = SENSOR_BMP280;
+    }
     Serial.println("\nAP-Configdata : Client SSID: " + CL_SSID + " , Passwort: " + CL_PASSWORD + " , Sensortyp: " + Sensortyp + " read from file");
     
     File f = LittleFS.open("/config.json", "r");
@@ -191,6 +197,9 @@ void setup()
 // I2C
   Wire.begin(BMP_SDA, BMP_SCL);
   I2C_scan();
+  Serial.println("Sensortyp: " + sBMP + ", I2C-Adresse: 0x" +
+                 String(SensorI2CAddress, HEX));
+
 //LED
   LEDInit();
 // Boardinfo	
@@ -289,31 +298,48 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   Serial.println("NMEA0183 started");
 
 // BMP begin & setup
-  if (Sensortyp == 0){
+  if (Sensortyp == SENSOR_BMP280 && SensorI2CAddress != 0){
       Serial.println("BMP280 sensor selected!");
       sBMP = "BMP280";
-    if (!bmp280.begin()) 
-     /* Default settings from datasheet. */
-      bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
-                         Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
-                         Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
-                         Adafruit_BMP280::FILTER_X16,      /* Filtering. */
-                         Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
-      bmp280_temp->printSensorDetails();                   
-  {
-    Serial.println("Could not find a valid BMP280 sensor, check wiring!");
+    if (!bmp280.begin(SensorI2CAddress)) {
+      Serial.println("BMP280 initialization failed!");
+      sBMP_Status = "BMP280 Initialisierung fehlgeschlagen";
+    } else {
+      sensorReady = true;
+      bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,
+                         Adafruit_BMP280::SAMPLING_X2,
+                         Adafruit_BMP280::SAMPLING_X16,
+                         Adafruit_BMP280::FILTER_X16,
+                         Adafruit_BMP280::STANDBY_MS_500);
+      bmp280_temp->printSensorDetails();
+    }
   }
-  } else {
-      Serial.println("BMP388 sensor selected!");
-      sBMP = "BMP388";
-    if (!bmp3xx.begin_I2C()) 
-  {
-      Serial.println("Could not find a valid BMP3xx sensor, check wiring!");
-  }
+  if (Sensortyp == SENSOR_BMP3XX && SensorI2CAddress != 0) {
+      Serial.println("BMP3xx sensor selected!");
+    if (!bmp3xx.begin_I2C(SensorI2CAddress)) {
+      Serial.println("BMP3xx initialization failed!");
+      sBMP_Status = "BMP3xx Initialisierung fehlgeschlagen";
+    } else {
+      sensorReady = true;
       bmp3xx.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
       bmp3xx.setPressureOversampling(BMP3_OVERSAMPLING_4X);
       bmp3xx.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-      bmp3xx.setOutputDataRate(BMP3_ODR_50_HZ); 
+      bmp3xx.setOutputDataRate(BMP3_ODR_50_HZ);
+    }
+  }
+  if (Sensortyp == SENSOR_BME280 && SensorI2CAddress != 0) {
+      Serial.println("BME280 sensor selected!");
+    if (!bme280.begin(SensorI2CAddress)) {
+      Serial.println("BME280 initialization failed!");
+      sBMP_Status = "BME280 Initialisierung fehlgeschlagen";
+    } else {
+      sensorReady = true;
+      bme280.setSampling(Adafruit_BME280::MODE_FORCED,
+                         Adafruit_BME280::SAMPLING_X1,
+                         Adafruit_BME280::SAMPLING_X1,
+                         Adafruit_BME280::SAMPLING_X1,
+                         Adafruit_BME280::FILTER_OFF);
+    }
   }
 
 
@@ -414,8 +440,8 @@ ArduinoOTA.handle();
 
  delay(100);
 
- //Read BMP  
-  if (Sensortyp == 0)
+ //Read BMx  
+  if (sensorReady && Sensortyp == SENSOR_BMP280)
   {
     fbmp_temperature = bmp280.readTemperature();
     fbmp_pressure = bmp280.readPressure();
@@ -423,23 +449,26 @@ ArduinoOTA.handle();
     Serial.println("BMP280 read successful");
     sBMP_Status = "BMP280 lesen erfolgreich";
     flashLED(LED(Blue), 5);
-  } else {
-    if (!bmp3xx.performReading()) 
-    {       
-      Serial.println("BMP3xx reading error");
-      sBMP_Status = "BMP3xx Lesefehler";
-      LEDflash(LED(Blue));
-      return;
-    } else {
-      Serial.println("BMP388 read successful");
-      sBMP_Status = "BMP388 lesen erfolgreich";
+  } 
+  
+  if (sensorReady && Sensortyp == SENSOR_BMP3XX) {
       fbmp_pressure = bmp3xx.readPressure();
       fbmp_temperature = bmp3xx.readTemperature();
       fbmp_altitude = bmp3xx.readAltitude(SEALEVELPRESSURE_HPA);
-      // LEDblink(LED(Blue));
+      Serial.println("BMP388 read successful");
+      sBMP_Status = "BMP388 lesen erfolgreich";
       flashLED(LED(Blue), 5);
       delay(100);
     }
+
+  if (sensorReady && Sensortyp == SENSOR_BME280) {
+    bme280.takeForcedMeasurement();
+    fbmp_temperature = bme280.readTemperature();
+    fbmp_pressure = bme280.readPressure();
+    fbmp_altitude = bme280.readAltitude(SEALEVELPRESSURE_HPA);
+    Serial.println("BME280 read successful");
+    sBMP_Status = "BME280 lesen erfolgreich";
+    flashLED(LED(Blue), 5);
   }
 
 Serial.printf("Temperatur: %3.1f °C, Druck: %3.1f hPa, Höhe: %3.1f m\n", fbmp_temperature, fbmp_pressure / 100.0, fbmp_altitude);

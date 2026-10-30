@@ -173,52 +173,121 @@ bool writeConfig(String json)
 }
 /***************************** I2C Bus **************************/
 
+bool readI2CRegister(uint8_t address, uint8_t reg, uint8_t &value) {
+  Wire.beginTransmission(address);
+  Wire.write(reg);
+  if (Wire.endTransmission(false) != 0) {
+    return false;
+  }
+  if (Wire.requestFrom(address, static_cast<uint8_t>(1)) != 1) {
+    return false;
+  }
+  value = Wire.read();
+  return true;
+}
+
+int detectSensorType(uint8_t address, uint8_t &chipId) {
+  if (readI2CRegister(address, 0x00, chipId) &&
+      chipId == 0x50) {
+    return SENSOR_BMP3XX;
+  }
+  if (readI2CRegister(address, 0xD0, chipId)) {
+    if (chipId == 0x58) {
+      return SENSOR_BMP280;
+    }
+    if (chipId == 0x60) {
+      return SENSOR_BME280;
+    }
+  }
+  return SENSOR_UNKNOWN;
+}
+
+const char *sensorTypeName(int sensorType) {
+  switch (sensorType) {
+    case SENSOR_BMP280: return "BMP280";
+    case SENSOR_BMP3XX: return "BMP388";
+    case SENSOR_BME280: return "BME280";
+    default: return "Unbekannt";
+  }
+}
+
 void I2C_scan(void){
   byte error, address;
-  int nDevices;
+  int nDevices = 0;
+  int detectedSensors = 0;
+  int detectedType = SENSOR_UNKNOWN;
+  uint8_t detectedAddress = 0;
+  uint8_t detectedChipId = 0;
+  String foundAddresses = "";
+  SensorI2CAddress = 0;
+  sensorReady = false;
+
   Serial.println("Scanning...");
-  nDevices = 0;
-  for(address = 1; address < 127; address++ ) 
-  {
+  for(address = 1; address < 127; address++ ) {
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
-    if (error == 0) 
-    {
+    if (error == 0) {
       Serial.print("I2C device found at address 0x");
-      if (address<16) 
-      {
+      if (address < 16) {
         Serial.print("0");
       }
       Serial.println(address,HEX);
-      String I2CAdress = String(address,HEX);
-      sI2C_Status = "Device gefunden an 0x" + I2CAdress;
+      if (foundAddresses.length() > 0) {
+        foundAddresses += ", ";
+      }
+      foundAddresses += "0x" + String(address, HEX);
       nDevices++;
-    }
-    else if (error==4) 
-    {
+      if (address == 0x76 || address == 0x77) {
+        uint8_t chipId = 0;
+        const int sensorType = detectSensorType(address, chipId);
+        if (sensorType != SENSOR_UNKNOWN) {
+          Serial.printf("Supported sensor chip ID 0x%02X at address 0x%02X\n",
+                        chipId, address);
+          detectedSensors++;
+          detectedType = sensorType;
+          detectedAddress = address;
+          detectedChipId = chipId;
+        }
+      }
+    } else if (error == 4) {
       Serial.print("Unknown error at address 0x");
-      sI2C_Status = "Device error";
-      if (address<16) 
-      {
+      if (address < 16) {
         Serial.print("0");
       }
       Serial.println(address,HEX);
-      nDevices++;
     }
-    else if (error==4) {
-      Serial.print("Unknown error at address 0x");
-      if (address<16) {
-        Serial.print("0");
-      }
-      Serial.println(address,HEX);
-    }    
   }
-  if (nDevices == 0) {
+
+  if (detectedSensors == 1) {
+    Sensortyp = detectedType;
+    SensorI2CAddress = detectedAddress;
+    const char *sensorName = Sensortyp == SENSOR_BMP280 ? "BMP280" :
+                             Sensortyp == SENSOR_BMP3XX && detectedChipId == 0x50 ?
+                               "BMP388" :
+                             Sensortyp == SENSOR_BMP3XX ? "BMP3xx" : "BME280";
+    sBMP = sensorName;
+    sI2C_Status = String("Sensor ") + sensorName + " an 0x" +
+                  String(SensorI2CAddress, HEX) + " (Chip-ID 0x" +
+                  String(detectedChipId, HEX) + ")";
+    sBMP_Status = "Sensor erkannt; Initialisierung ausstehend";
+    Serial.println(sI2C_Status);
+  } else if (detectedSensors > 1) {
+    sBMP = String(sensorTypeName(Sensortyp)) + " (Konfiguration)";
+    sBMP_Status = "Mehrere Sensoren; automatische Auswahl abgebrochen";
+    sI2C_Status = "Mehrere unterstützte Sensoren gefunden; automatische Auswahl abgebrochen";
+    Serial.println(sI2C_Status);
+  } else if (nDevices == 0) {
     Serial.println("No I2C devices found\n");
     sI2C_Status = "Nothing found";
+    sBMP = String(sensorTypeName(Sensortyp)) + " (Konfiguration)";
+    sBMP_Status = "Kein Sensor erkannt; Webkonfiguration bleibt ausgewählt";
   }
   else {
-    Serial.println("done\n");
+    sI2C_Status = "I2C-Geräte: " + foundAddresses +
+                  "; kein unterstützter Sensor erkannt";
+    sBMP = String(sensorTypeName(Sensortyp)) + " (Konfiguration)";
+    sBMP_Status = "Sensortyp unbekannt; Webkonfiguration bleibt ausgewählt";
+    Serial.println(sI2C_Status);
   }
 }
 
