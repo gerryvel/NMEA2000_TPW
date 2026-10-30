@@ -47,7 +47,7 @@ Its the same wiring and PCB with BD Sensor, you can leave out unnecessary compon
 
 ## Wiring diagram
 
-![grafik](https://github.com/user-attachments/assets/c94c40d6-61f4-460a-b482-a9fa740c704d)
+<img width="3508" height="2480" alt="grafik" src="https://github.com/user-attachments/assets/10006c01-fe9c-4f64-ac4e-ad6bb5114e0e" />
 
 ## PCB
 
