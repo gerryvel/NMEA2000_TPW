@@ -19,7 +19,10 @@ and send it as NNMEA2000 meassage.
 - PGN 130314 // Pressure
 - PGN 130316 // Temperature 
 
-In addition, all data and part of the configuration are displayed as a website.
+In addition, all data and a part of the configuration are displayed as a website.
+The environmental sensor is automatically detected (i2c Adress and register) and selected.
+No sensor is detected (but i2c Adress ist detected) this can be set in the setting.
+The connection parameters to the wind sensor can also be set in the settig site.
 
 ## Based on the work of
 
@@ -34,10 +37,10 @@ This project is part of [OpenBoatProject](https://open-boat-projects.org/)
 
 ## TPW Sensor Modul
 
-For the BMP 280 and BMP388 the Adafruit BMP3xx library has to be installed via the library manager.
+For the BMP 280, BME280 or BMP388 the Adafruit BMP280, BME280 and BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
-The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector.
+The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector. You need CP2102 Connection Modul for programming.
 For the ESP32 CAN bus, i used the SN65HVD230 chip as transceiver. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.
 Its the same wiring and PCB with BD Sensor, you can leave out unnecessary components.
@@ -75,7 +78,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 - U1	TSR_1-2450	[Link](https://www.reichelt.de/dc-dc-wandler-tsr-1-1-w-5-v-1000-ma-sil-to-220-tsr-1-2450-p116850.html?search=tsr+1-24)
 - U2	ESP32-Huzzah	[Link](https://www.exp-tech.de/plattformen/internet-of-things-iot/9350/adafruit-huzzah32-esp32-breakout-board)
 - U3	SN65HVD230	[Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
-- U4	BMP388	[Link](https://www.bluedot.space/products/bmp388/)
+- U4	BMP388	[Link](https://www.bluedot.space/products/bmp388/) (or BMP280 or BME280)
 
 ## Website
 
@@ -95,7 +98,8 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Versions
 
-- 2.5 Update and add website details
+- 2.6 Add BME280 and autoload the correct sensor setup, update website 
+- 2.5 Minor update and add website details
 - 2.4 Update windvalues and add windsensortemp for N2k, website cosmetic
 - 2.3 Update windvalues for N2k
 - 2.2 Update read values from windsensor, Update PCB
