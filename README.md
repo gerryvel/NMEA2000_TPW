@@ -22,7 +22,7 @@ and send it as NNMEA2000 meassage.
 In addition, all data and a part of the configuration are displayed as a website.
 The environmental sensor is automatically detected (i2c Adress and register) and selected.
 No sensor is detected (but i2c Adress ist detected) this can be set in the setting.
-The connection parameters to the wind sensor can also be set in the settig site.
+The connection parameters to the wind sensor can also be set in the setting site.
 
 ## Based on the work of
 
