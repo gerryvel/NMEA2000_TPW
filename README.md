@@ -58,7 +58,8 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Hardware
 
-![image](https://github.com/user-attachments/assets/d963e551-218a-4069-a39e-241a050174c5)
+<img width="2491" height="2069" alt="image" src="https://github.com/user-attachments/assets/985a6f71-9ebc-456d-ac57-fc6bdfd0f39b" />
+
 
 ## Partlist:
 
