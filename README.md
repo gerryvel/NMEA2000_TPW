@@ -1,4 +1,4 @@
-# Temperature, pressure and wind Data > NMEA2000
+# Temperature, pressure and wind data to NMEA2000
 
 ![ESP32](https://img.shields.io/badge/ESP32-grey?logo=Espressif)
 ![KiCad](https://img.shields.io/badge/KiCad-darkblue?logo=KiCad)
