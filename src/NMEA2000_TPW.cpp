@@ -14,7 +14,7 @@
   NMEA2000 Temperature and Barometric Pressure with BMP280 or 388.
   Reads messages from NMEA0183 WindSensor and forwards them to the N2k bus.
 
-  V2.7.0 vom 16.11.2026, gerryvel Gerry Sebb
+  V3.0.0 vom 16.11.2026, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
