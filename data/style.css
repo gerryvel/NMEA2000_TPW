@@ -47,6 +47,10 @@ a.button:active {
         border: 2px inset #CCCCCC;
     }
 
+p.history-link {
+    margin-bottom: 70px;
+}
+
 /*Setupeingaben*/
 .label {
     font-size: 1.2rem;
@@ -117,6 +121,9 @@ ul.bottomnav {
         }
 
 @media screen and (max-width: 600px) {
+    p.history-link {
+        margin-bottom: 260px;
+    }
     ul.bottomnav li.right,
     ul.bottomnav li {
         float: none;

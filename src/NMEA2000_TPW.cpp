@@ -14,7 +14,7 @@
   NMEA2000 Temperature and Barometric Pressure with BMP280 or 388.
   Reads messages from NMEA0183 WindSensor and forwards them to the N2k bus.
 
-  V2.6.0 vom 30.10.2026, gerryvel Gerry Sebb
+  V2.7.0 vom 16.11.2026, gerryvel Gerry Sebb
 */
 
 #include <Arduino.h>
@@ -35,6 +35,7 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h> 
 #include "web.h"
+#include "history.h"
 
 // N2k
 #include <N2kMsg.h>
@@ -170,6 +171,7 @@ void setup()
 	}
 	Serial.println("Memory LittleFS used:");
 	Serial.println(LittleFS.usedBytes());
+  History::begin();
 
 	File root = LittleFS.open("/");
   listDir(LittleFS, "/", 3);
@@ -350,6 +352,7 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   MDNS.addService("http", "tcp", 80);
 
   website();
+  History::registerRoutes(server);
 
   //***********************************************Setup NMEA2000 system*******************************************
   // Reserve enough buffer for sending all messages. This does not work on small memory devices like Uno or Mega
@@ -472,6 +475,7 @@ ArduinoOTA.handle();
   }
 
 Serial.printf("Temperatur: %3.1f °C, Druck: %3.1f hPa, Höhe: %3.1f m\n", fbmp_temperature, fbmp_pressure / 100.0, fbmp_altitude);
+  History::update(sensorReady, fbmp_temperature, fbmp_pressure);
 
   //N2K
     SendN2kWind();

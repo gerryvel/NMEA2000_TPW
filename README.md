@@ -40,6 +40,12 @@ This project is part of [OpenBoatProject](https://open-boat-projects.org/)
 For the BMP 280, BME280 or BMP388 the Adafruit BMP280, BME280 and BMP3xx library has to be installed via the library manager.
 For HTML-Files use LittleFS Filesystem, you find her in /data directory.
 
+The website includes a 12-hour temperature and pressure history. It records a
+valid sensor reading every five minutes in LittleFS and starts a new history
+after each restart; no clock or internet connection is required. The graph uses
+fixed scales of 0–50 °C and 800–1100 mbar. Upload the `data` directory to the
+device's filesystem after updating the firmware.
+
 The ESP32 in this project is an Adafruit Huzzah! ESP32. This is a small module without USB connector. You need CP2102 Connection Modul for programming.
 For the ESP32 CAN bus, i used the SN65HVD230 chip as transceiver. The correct GPIO ports are defined in the main sketch. For this project, I use the pins GPIO4 for CAN RX and GPIO5 for CAN TX.
 The 12 Volt is reduced to 5 Volt with a DC Step-Down_Converter. 12V DC comes from the N2k Bus Connector with the M12 Connector.

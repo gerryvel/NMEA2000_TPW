@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Temperatur- und Luftdruckverlauf</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        main { max-width: 800px; margin: auto; padding: 0 12px 70px; }
+        canvas { display: block; width: 100%; height: auto; background: #f5f3f4; }
+        h2 { margin-bottom: 8px; }
+        #status { font-size: 1rem; }
+        @media screen and (max-width: 600px) {
+            main { padding-bottom: 270px; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <p id="status" role="status">Messwerte werden geladen ...</p>
+        <h2>Temperatur (&deg;C)</h2>
+        <canvas id="temperature" width="760" height="250" role="img"
+                aria-label="Temperaturverlauf, feste Skala von 0 bis 50 Grad Celsius"></canvas>
+        <h2>Luftdruck (mbar)</h2>
+        <canvas id="pressure" width="760" height="250" role="img"
+                aria-label="Luftdruckverlauf, feste Skala von 800 bis 1100 Millibar"></canvas>
+        <p id="summary" class="label" style="max-width: 100%"></p>
+    </main>
+    <ul class="bottomnav">
+        <li><a href="/">Home</a></li>
+        <li><a class="active" href="verlauf.html">Verlauf</a></li>
+        <li><a href="werte.html">Werte</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="system.html">System</a></li>
+        <li class="right"><a href="ueber.html">About</a></li>
+    </ul>
+    <script>
+        const duration = 12 * 60 * 60;
+
+        function drawChart(id, entries, now, field, minimum, maximum, step, color) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext("2d");
+            const left = 55, right = canvas.width - 18;
+            const top = 15, bottom = canvas.height - 35;
+            const x = seconds => left + (seconds - (now - duration)) / duration * (right - left);
+            const y = value => bottom - (value - minimum) / (maximum - minimum) * (bottom - top);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "12px sans-serif";
+            ctx.fillStyle = "#333";
+            ctx.strokeStyle = "#ccc";
+            ctx.textAlign = "right";
+            ctx.textBaseline = "middle";
+            for (let value = minimum; value <= maximum; value += step) {
+                const position = y(value);
+                ctx.beginPath();
+                ctx.moveTo(left, position);
+                ctx.lineTo(right, position);
+                ctx.stroke();
+                ctx.fillText(value, left - 7, position);
+            }
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+            for (let hours = 12; hours >= 0; hours -= 3) {
+                const position = x(now - hours * 3600);
+                ctx.beginPath();
+                ctx.moveTo(position, top);
+                ctx.lineTo(position, bottom);
+                ctx.stroke();
+                ctx.fillText(hours === 0 ? "jetzt" : "-" + hours + " h", position, bottom + 8);
+            }
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(left, top, right - left, bottom - top);
+            ctx.clip();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2;
+            let previous = null;
+            entries.forEach(entry => {
+                if (!Number.isFinite(entry.seconds) || !Number.isFinite(entry[field]) ||
+                    entry.seconds < now - duration || entry.seconds > now) return;
+                const px = x(entry.seconds), py = y(entry[field]);
+                if (previous && entry.seconds - previous.seconds <= 450) {
+                    ctx.beginPath();
+                    ctx.moveTo(previous.x, previous.y);
+                    ctx.lineTo(px, py);
+                    ctx.stroke();
+                }
+                ctx.beginPath();
+                ctx.arc(px, py, 2.5, 0, 2 * Math.PI);
+                ctx.fill();
+                previous = { x: px, y: py, seconds: entry.seconds };
+            });
+            ctx.restore();
+        }
+
+        async function refreshHistory() {
+            const status = document.getElementById("status");
+            try {
+                const response = await fetch("/history.json", { cache: "no-store" });
+                if (!response.ok) throw new Error("HTTP " + response.status);
+                const data = await response.json();
+                if (!Number.isFinite(data.now) || !Array.isArray(data.samples)) {
+                    throw new Error("Ungültige Daten");
+                }
+                const entries = data.samples.filter(entry =>
+                    Number.isFinite(entry.seconds) &&
+                    entry.seconds >= data.now - duration && entry.seconds <= data.now);
+                drawChart("temperature", entries, data.now, "temperature", 0, 50, 10, "#d45b36");
+                drawChart("pressure", entries, data.now, "pressure", 800, 1100, 50, "#267095");
+                status.textContent = entries.length
+                    ? entries.length + " Messwerte der letzten 12 Stunden"
+                    : "Noch keine Messwerte vorhanden.";
+                document.getElementById("summary").textContent =
+                    "Messung alle 5 Minuten. Nach einem Neustart beginnt die Aufzeichnung neu.";
+            } catch (error) {
+                status.textContent = "Verlauf konnte nicht geladen werden: " + error.message;
+            }
+        }
+
+        refreshHistory();
+        setInterval(refreshHistory, 60000);
+    </script>
+</body>
+</html>
