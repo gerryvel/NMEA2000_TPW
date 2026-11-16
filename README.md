@@ -69,8 +69,8 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Partlist:
 
-- C1	C10µ	~	Capacitor_Tantalum_SMD
-- C2	C22µ	~	Capacitor_Tantalum_SMD
+- C1	C10µ	Capacitor_Tantalum_SMD
+- C2	C22µ	Capacitor_Tantalum_SMD
 - D1	P4SMAJ26CA
 - D2	B360 [Link](https://www.reichelt.de/schottkydiode-60-v-3-a-do-214ab-smc-b-360-f-p95202.html?&trstct=pos_1&nbc=1)
 - D3  PRTR5V0U2X
@@ -105,6 +105,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Versions
 
+- 3.0 add History for temperatur and pressure
 - 2.6 Add BME280 and autoload the correct sensor setup, update website 
 - 2.5 Minor update and add website details
 - 2.4 Update windvalues and add windsensortemp for N2k, website cosmetic
