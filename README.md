@@ -89,20 +89,21 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 - R2	10k	
 - U1	TSR_1-2450	[Link](https://www.reichelt.de/dc-dc-wandler-tsr-1-1-w-5-v-1000-ma-sil-to-220-tsr-1-2450-p116850.html?search=tsr+1-24)
 - U2	ESP32-Huzzah	[Link](https://www.exp-tech.de/plattformen/internet-of-things-iot/9350/adafruit-huzzah32-esp32-breakout-board)
-- U3	SN65HVD230	[Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
+<img width="2360" height="1496" alt="image" src="https://github.com/user-attachments/assets/ca995366-0170-4e72-8322-01b5df64b32e" />
+ U3	SN65HVD230	[Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
 - U4	BMP388	[Link](https://www.bluedot.space/products/bmp388/) (or BMP280 or BME280)
 
 ## Website
 
-![image](https://github.com/user-attachments/assets/d66d5005-02a2-4a91-b0ae-c3d0371b7c9a)
+<img width="2360" height="1478" alt="image" src="https://github.com/user-attachments/assets/af021c06-97b2-4965-9ca1-ca693c57e0b8" />
 
-![image](https://github.com/user-attachments/assets/0574ecb9-dd29-49df-a165-b50f09276e46)
+<img width="2360" height="1470" alt="image" src="https://github.com/user-attachments/assets/152e8d1a-5d64-4f22-b5c6-a79b62ca1637" />
 
-<img width="2360" height="1461" alt="image" src="https://github.com/user-attachments/assets/f99f3a4a-3a3d-4b05-894d-1449853bf7ce" />
+<img width="2360" height="1496" alt="image" src="https://github.com/user-attachments/assets/16fe0962-6458-47d1-970c-b4b278dc0c19" />
 
-<img width="2360" height="1494" alt="image" src="https://github.com/user-attachments/assets/30817cc7-05d2-4738-b3d8-3e07eb4694ea" />
+<img width="2360" height="1489" alt="image" src="https://github.com/user-attachments/assets/dce2b176-03d7-476f-aa85-e3e2ca526e08" />
 
-<img width="2360" height="1443" alt="image" src="https://github.com/user-attachments/assets/ccf11d72-e252-4743-b1ee-79eea68a8d14" />
+ <img width="2360" height="1480" alt="image" src="https://github.com/user-attachments/assets/9f7c32ac-a3cb-43f0-8179-8649e985be8d" />
 
 ## Plotter
 
