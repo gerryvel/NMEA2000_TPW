@@ -89,11 +89,12 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 - R2	10k	
 - U1	TSR_1-2450	[Link](https://www.reichelt.de/dc-dc-wandler-tsr-1-1-w-5-v-1000-ma-sil-to-220-tsr-1-2450-p116850.html?search=tsr+1-24)
 - U2	ESP32-Huzzah	[Link](https://www.exp-tech.de/plattformen/internet-of-things-iot/9350/adafruit-huzzah32-esp32-breakout-board)
-<img width="2360" height="1496" alt="image" src="https://github.com/user-attachments/assets/ca995366-0170-4e72-8322-01b5df64b32e" />
- U3	SN65HVD230	[Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
+- U3	SN65HVD230	[Link](https://www.reichelt.de/high-speed-can-transceiver-1-mbit-s-3-3-v-so-8-sn-65hvd230d-p58427.html?&trstct=pos_0&nbc=1)
 - U4	BMP388	[Link](https://www.bluedot.space/products/bmp388/) (or BMP280 or BME280)
 
 ## Website
+
+<img width="2360" height="1496" alt="image" src="https://github.com/user-attachments/assets/ca995366-0170-4e72-8322-01b5df64b32e" />
 
 <img width="2360" height="1478" alt="image" src="https://github.com/user-attachments/assets/af021c06-97b2-4965-9ca1-ca693c57e0b8" />
 
