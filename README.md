@@ -103,7 +103,7 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 <img width="2360" height="1489" alt="image" src="https://github.com/user-attachments/assets/dce2b176-03d7-476f-aa85-e3e2ca526e08" />
 
- <img width="2360" height="1480" alt="image" src="https://github.com/user-attachments/assets/9f7c32ac-a3cb-43f0-8179-8649e985be8d" />
+<img width="2360" height="1480" alt="image" src="https://github.com/user-attachments/assets/9f7c32ac-a3cb-43f0-8179-8649e985be8d" />
 
 ## Plotter
 
