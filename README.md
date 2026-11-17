@@ -108,6 +108,9 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ![image](https://github.com/gerryvel/NMEA2000_TPW/blob/89836d41f83f9eaae73e8502d0ef879308bd933f/4DEDE642-D2EE-429E-9A56-A173FFFC7A6C.jpeg)
 
+<img width="2584" height="1821" alt="image" src="https://github.com/user-attachments/assets/5c7e84ee-8c9f-4f75-8a61-07f13ed669a4" />
+
+
 ## Versions
 
 - 3.0 add History for temperatur and pressure
