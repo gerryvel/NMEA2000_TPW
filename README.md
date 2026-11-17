@@ -94,8 +94,6 @@ Aisler PCB Layout [link](https://aisler.net/p/NZFHAMAJ)
 
 ## Website
 
-<img width="2360" height="1496" alt="image" src="https://github.com/user-attachments/assets/ca995366-0170-4e72-8322-01b5df64b32e" />
-
 <img width="2360" height="1478" alt="image" src="https://github.com/user-attachments/assets/af021c06-97b2-4965-9ca1-ca693c57e0b8" />
 
 <img width="2360" height="1470" alt="image" src="https://github.com/user-attachments/assets/152e8d1a-5d64-4f22-b5c6-a79b62ca1637" />
