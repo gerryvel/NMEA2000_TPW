@@ -59,6 +59,7 @@ bool bClientConnected = 0;
 //Confuration I2C
 #define BMP_SDA 21                      //Standard 21
 #define BMP_SCL 22                      //Standard 22
+
 // Configuration Sensors
 #define SEALEVELPRESSURE_HPA (1013.25)  //1013.25
 enum SensorType : int {

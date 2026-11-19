@@ -360,7 +360,7 @@ WiFi.begin((const char*)CL_SSID.c_str(), (const char*)CL_PASSWORD.c_str());
   NMEA2000.SetN2kCANReceiveFrameBufSize(250);
   NMEA2000.SetN2kCANSendFrameBufSize(250);
 
-  NMEA2000.SetProductInformation("TPW01", // Manufacturer's Model serial code
+  NMEA2000.SetProductInformation("TPW01.2611", // Manufacturer's Model serial code
                                  107, // Manufacturer's product code
                                  "TPW Sensor Module",  // Manufacturer's Model ID
                                  VersionSoftware,  // Manufacturer's Software version code
